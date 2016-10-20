@@ -1,0 +1,22 @@
+Checkpoint 1: Basic instructions
+By checkpoint 1, you should have a basic pipeline that can handle ADD, AND, NOT, LDR, STR, and BR instructions.
+You do not need to handle any control hazards or data hazards. The test code will contain NOPs to allow the processor to work without hazard detection. For this checkpoint you can use a “magic” memory that always sets mem_resp high immediately so that you don’t have to handle cache misses or memory stalls.
+Also, you should provide your mentor TA with an overview of your cache hierarchy (showing how your L1 caches, arbiter, and L2 cache interface with each other) as well as detailed designs for your arbiter and L2 cache.
+
+code:
+datapath:
+IF
+ID
+EX
+MEM
+WB
+(Some signal passing through the pipline need to add to EX and ID stage )
+
+
+control
+
+paper design:
+showing how your L1 caches, arbiter, and L2 cache interface with each other
+arbiter
+L2 cache
+
