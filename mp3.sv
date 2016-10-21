@@ -45,6 +45,29 @@ lc3b_word I_pmem_address;
 /* L2 Cache In/Out */
 
 
+/* Reset Control */
+enum int unsigned {
+	 s_reset,
+    s_run
+} state, next_state;
+always_comb
+begin
+	case (state)
+		s_reset : begin
+				reset = 1;
+				next_state <= s_run;
+		end
+		s_run : begin
+				reset = 0;
+				next_state <= s_run;
+		end
+	endcase
+end
+always_ff @(posedge clk)
+begin
+	state <= next_state;
+end
+
 
 cache D_CACHE (
 	/* clk, reset */
