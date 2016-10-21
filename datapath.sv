@@ -45,15 +45,27 @@ always_ff @(posedge clk or posedge reset)
 begin
 	if(reset)
 	begin
-		pc_mem <= 0;
 		opcode_mem <= 0;
 	end
 	else begin
-		pc_mem <= pc_ex;   // ?????????????twice
 		opcode_mem <= opcode_ex;
 	end	
 end
 
+
+
+
+
+/* MEM Control Signals */
+/* MEM Input Signals */
+logic [15:0] alu_out_mem;
+logic [15:0] sr2_mem;
+
+/* MEM Output Signals */
+
+
+
+/************* EX State *************/
 /* EX Control Signals */
 logic [1:0] alumux1_sel;
 logic [1:0] alumux2_sel;
@@ -71,19 +83,6 @@ logic [15:0] adj6_out_ex;
 //logic [15:0] pc_ex;
 logic [15:0] immmux_out_ex; 
 
-
-
-
-/* MEM Control Signals */
-/* MEM Input Signals */
-logic [15:0] alu_out_mem;
-logic [15:0] sr2_mem;
-
-/* MEM Output Signals */
-
-
-
-/************* EX State *************/
 /* EX Internal Signals */
 logic [15:0] alumux1_out;
 logic [15:0] alumux2_out;
@@ -139,6 +138,7 @@ end
 /* IF Control Signals */
 logic load_pc;
 logic[1:0] pcmux_sel;
+logic stall_I;
 
 /* IF Output Signals */
 logic [15:0] ir_id;
@@ -163,22 +163,31 @@ mux4 pcmux
 register pc
 (
 	.clk,
-	.load(pc_load),
+	.load(load_pc),
 	.in(pcmux_out),
 	.out(pc_out)
 );
 
-plus2 (.width(16))pcplus2
+plus2 (.width(16)) pcplus2
 (
 	.in(pc_out),
-	.out(pc_plus2_out)
-)
-
-i_cache_iterface i_cache_iterface
-(
-// pc_out
-// i_cache_out
+	.out(pc_plus2_out) 
 );
+
+
+/* I-Cache Interface */
+	/* Stall Register update untill completed memory read from I-Cache */
+stall STALLI
+(
+	.read(I_mem_read),
+	.write(0),
+	.resp(I_mem_resp),
+	.stall(stall_I)
+);
+
+	 /* I_Cache signals */
+assign I_mem_address = pc_out;
+
 
 /* Update Registers */
 always_ff @(posedge clk or posedge reset)
@@ -188,10 +197,10 @@ begin
 		pc_id <= 0;
 		ir_id <= 0;
 	end
-	else begin
-		pc_id <= pc_plus2_out;
-		ir_id <= i_cache_out;
-	end	
+	else if (!stall_I) begin
+		ir_id <= I_mem_rdata;
+		pc_id <= pc_plus2_out; 
+	end
 end
 
 /**************************************/
@@ -200,19 +209,26 @@ end
 
 /* MEM control Signals */
 //logic indirect
+logic stall_D;
 
 /* MEM Output Signals */
 logic [15:0] mem_wb;
+lc3b_mem_wmask wmask_wb;
 
 /* Modules */
 
-d_cache_interface
+/* D-Cache Interface */
+/* Stall Register update untill completed memory read from D-Cache */
+stall STALLD
 (
-// alu_out_mem
-// sr2_mem
-// indirect
-// d_cache_out
+	.read(D_mem_read),
+	.write(D_mem_write),
+	.resp(D_mem_resp),
+	.stall(stall_D)
 );
+assign D_mem_address = alu_out_mem;
+assign D_mem_wdata = sr2_mem;
+
 
 /* Update Registers */
 always_ff @(posedge clk or posedge reset)
@@ -224,11 +240,12 @@ begin
 		mem_wb <= 0;
 		dest_wb <= 0;
 	end
-	else begin
+	else if(!stall_D) begin
 		alu_out_wb <= alu_out_mem;
 		pc_wb <= pc_mem;
-		mem_wb <= d_cache_out;
 		dest_wb <= dest_mem;
+		mem_wb <= D_mem_rdata;
+		wmask_wb <= mem_byte_enable;
 	end	
 end
 
@@ -281,6 +298,7 @@ register cc
 	.in(gencc_out),
 	.out(cc_out)
 );
+
 cccomp cc
 (
 	.nzp(dest_wb),
@@ -288,7 +306,7 @@ cccomp cc
 	.branch_enable // ?????????????????????
 );
 
-mux2 (.width(3))destmux
+mux2 /*(.width(3))*/ destmux
 (
 	.sel(destmux_sel),
 	.a(dest_wb),
