@@ -164,7 +164,6 @@ mux2 #(.width(16)) IMMMUX
 decode INST_DECODER
 (
     .instruction(ir_id),
-    .load_pc(), // ??? seems like this shouldn't be an output of the decoder
     .sr1_sel(sr1_sel_id),
     .sr2_sel(sr2_sel_id),
     .sh6_sel(sh6_sel_id),
@@ -188,15 +187,15 @@ always_ff @(posedge clk or posedge reset)
 begin
 	if(reset)
 	begin
-		sr1_ex <= 0;
-        adj9_out_ex <= 0;
-        adj11_out_ex <= 0;
-		trapvect_ex <= 0;
-        sr2_ex <= 0;
-        adj6_out_ex <= 0;
-        pc_ex <= 0;
-        immmux_out_ex <= 0;
-        // which ones should get zerod out here? Do we have a convention?
+        alumux1_sel <= 0;
+        alumux2_sel <= 0;
+        aluop <= 0;
+        indirect <= 0;
+        regfilemux_sel_ex <= 0;
+        load_cc_ex <= 0;
+        branch_enable_ex <= 0;
+        destmux_sel_ex <= 0;
+        pcmux_sel_ex <= 0;
 	end
 	else begin
         /* data signal assignments */
@@ -307,6 +306,7 @@ logic [15:0] pc_out;
 logic [15:0] pc_plus2_out;
 logic [15:0] i_cache_out;
 
+assign load_pc = ~stall_I;
 
 /* Modules */
 mux4 pcmux

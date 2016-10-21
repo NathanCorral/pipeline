@@ -3,8 +3,6 @@ import lc3b_types::*;
 module decode
 (
 	input [15:0] instruction,
-	/* IF Control */
-	output logic load_pc,
 	/* ID Control */
 	output logic sr1_sel,
 	output logic sr2_sel,
