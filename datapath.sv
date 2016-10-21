@@ -63,7 +63,165 @@ logic [15:0] sr2_mem;
 
 /* MEM Output Signals */
 
+/**********ID stage***************/
 
+/* ID Control Signals */
+logic sr1_sel_id;
+logic sr2_sel_id;
+logic sh6_sel_id;
+logic imm_sel_id;
+
+/* ID Output Signals */
+logic load_regfile_id;
+logic [1:0] alumux1_sel_id;
+logic [1:0] alumux2_sel_id;
+lc3b_aluop aluop_id;
+logic indirect_id;
+logic mem_read_id;
+logic mem_write_id;
+logic mem_byte_enable_id;
+logic regfilemux_sel_id;
+logic load_cc_id;
+logic branch_enable_id;
+logic destmux_sel_id;
+logic pcmux_sel_id;
+
+/* ID Internal Signals */
+logic [15:0] adj6_out_id;
+logic [15:0] adj9_out_id;
+logic [15:0] adj11_out_id;
+logic [15:0] trapvect_id;
+logic [15:0] sr1_out_id;
+logic [15:0] sr2_out_id;
+logic [15:0] immmux_out_id;
+logic [3:0] opcode_id;
+logic [2:0] dest_id;
+logic [2:0] sr1mux_out;
+logic [2:0] sr2mux_out;
+
+/* Modules */
+assign trapvect_id = {7'b0, ir_id[7:0], 1'b0};
+assign dest_id = ir_id[11:9];
+assign opcode_id = ir_id[15:12];
+
+adj #(.width(9)) ADJ9
+(
+    .in(ir_id[8:0]),
+    .out(adj9_out_id)
+);
+
+adj #(.width(11)) ADJ11
+(
+    .in(ir_id[10:0]),
+    .out(adj11_out_id)
+);
+
+mux2 #(.width(3)) SR1MUX
+(
+    .sel(sr1_sel_id),
+    .a(ir_id[8:6]),
+    .b(dest_id),
+    .f(sr1mux_out)
+);
+
+mux2 #(.width(3)) SR2MUX
+(
+    .sel(sr2_sel_id),
+    .a(ir_id[2:0]),
+    .b(dest_id),
+    .f(sr2mux_out)
+);
+
+regfile rf
+(
+    .clk(clk),
+    .reset(reset),
+    .load(load_regfile_wb),
+    .in(regfilemux_out), // rename later?
+    .src_a(sr1mux_out),
+    .src_b(sr2mux_out),
+    .dest(destmux_out),
+    .reg_a(sr1_out_id),
+    .reg_b(sr2_out_id)
+);
+
+mux2 #(.width(16)) ADJ6MUX
+(
+    .sel(sh6_sel_id),
+    .a({{9{ir_id[5]}}, ir_id[5:0], 1'b0}),
+    .b({{10{ir_id[5]}}, ir_id[5:0]}),
+    .f(adj6_out_id)
+);
+
+mux2 #(.width(16)) IMMMUX
+(
+    .sel(imm_sel_id),
+    .a({{11{ir_id[4]}}, ir_id[4:0]}),
+    .b({12'b0, ir_id[3:0]}),
+    .f(immmux_out_id)
+);
+
+decode INST_DECODER
+(
+    .instruction(ir_id),
+    .load_pc(), // ??? seems like this shouldn't be an output of the decoder
+    .sr1_sel(sr1_sel_id),
+    .sr2_sel(sr2_sel_id),
+    .sh6_sel(sh6_sel_id),
+    .imm_sel(imm_sel_id),
+    .alumux1_sel(alumux1_sel_id),
+    .alumux2_sel(alumux2_sel_id),
+    .alu_ctrl(aluop_id),
+    .indirect(indirect_id),
+    .read(mem_read_id),
+    .write(mem_write_id),
+    .mem_byte_sig(mem_byte_enable_id),
+    .load_regfile(load_regfile_id),
+    .regfilemux_sel(regfilemux_sel_id),
+    .load_cc(load_cc_id),
+    .destmux_sel(destmux_sel_id),
+    .pcmux_sel(pcmux_sel_id)
+);
+
+/* Update Registers */
+always_ff @(posedge clk or posedge reset)
+begin
+	if(reset)
+	begin
+		sr1_ex <= 0;
+        adj9_out_ex <= 0;
+        adj11_out_ex <= 0;
+		trapvect_ex <= 0;
+        sr2_ex <= 0;
+        adj6_out_ex <= 0;
+        pc_ex <= 0;
+        immmux_out_ex <= 0;
+        // which ones should get zerod out here? Do we have a convention?
+	end
+	else begin
+        /* data signal assignments */
+        sr1_ex <= sr1_out_id;
+        adj9_out_ex <= adj9_out_id;
+        adj11_out_ex <= adj11_out_id;
+        trapvect_ex <= trapvect_id;
+        sr2_ex <= sr2_out_id;
+        adj6_out_ex <= adj6_out_id;
+        pc_ex <= pc_id;
+        immmux_out_ex <= immmux_out_id;
+        opcode_ex <= opcode_id;
+        /* control signal assignments */
+        alumux1_sel <= alumux1_sel_id;
+        alumux2_sel <= alumux2_sel_id;
+        aluop <= aluop_id;
+        indirect <= indirect_id;
+        regfilemux_sel_ex <= regfilemux_sel_id;
+        load_cc_ex <= load_cc_id;
+        branch_enable_ex <= branch_enable_id;
+        destmux_sel_ex <= destmux_sel_id;
+        pcmux_sel_ex <= pcmux_sel_id;
+	end	
+end
+/**************************************/
 
 /************* EX State *************/
 /* EX Control Signals */

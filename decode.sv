@@ -6,8 +6,6 @@ module decode
 	/* IF Control */
 	output logic load_pc,
 	/* ID Control */
-	output logic adj9_sel,
-	output logic adj11_sel,
 	output logic sr1_sel,
 	output logic sr2_sel,
 	output logic sh6_sel,
