@@ -63,6 +63,79 @@ logic [15:0] sr2_mem;
 
 /* MEM Output Signals */
 
+/**********IF stage***************/
+
+/* IF Control Signals */
+logic load_pc;
+logic[1:0] pcmux_sel;
+logic stall_I;
+
+/* IF Output Signals */
+logic [15:0] ir_id;
+
+/* IF Internal Signals */
+logic [15:0] pcmux_out;
+logic [15:0] pc_out;
+logic [15:0] pc_plus2_out;
+logic [15:0] i_cache_out;
+
+assign load_pc = ~stall_I;
+
+/* Modules */
+mux4 pcmux
+(
+	.sel(pcmux_sel),
+	.a(pc_plus2_out),
+	.b(alu_out_wb),
+	.c(sr1_out), // careful to rename after EX stage is finished
+	.d(byte_sel_out)
+);
+
+register pc
+(
+	.clk,
+	.load(load_pc),
+	.in(pcmux_out),
+	.out(pc_out)
+);
+
+plus2 (.width(16)) pcplus2
+(
+	.in(pc_out),
+	.out(pc_plus2_out) 
+);
+
+
+/* I-Cache Interface */
+	/* Stall Register update untill completed memory read from I-Cache */
+stall STALLI
+(
+	.read(I_mem_read),
+	.write(0),
+	.resp(I_mem_resp),
+	.stall(stall_I)
+);
+
+	 /* I_Cache signals */
+assign I_mem_address = pc_out;
+
+
+/* Update Registers */
+always_ff @(posedge clk or posedge reset)
+begin
+	if(reset)
+	begin
+		pc_id <= 0;
+		ir_id <= 0;
+	end
+	else if (!stall_I) begin
+		ir_id <= I_mem_rdata;
+		pc_id <= pc_plus2_out; 
+	end
+end
+
+/**************************************/
+
 /**********ID stage***************/
 
 /* ID Control Signals */
@@ -289,79 +362,6 @@ begin
 	end	
 end
 /**************************/
-
-/**********IF stage***************/
-
-/* IF Control Signals */
-logic load_pc;
-logic[1:0] pcmux_sel;
-logic stall_I;
-
-/* IF Output Signals */
-logic [15:0] ir_id;
-
-/* IF Internal Signals */
-logic [15:0] pcmux_out;
-logic [15:0] pc_out;
-logic [15:0] pc_plus2_out;
-logic [15:0] i_cache_out;
-
-assign load_pc = ~stall_I;
-
-/* Modules */
-mux4 pcmux
-(
-	.sel(pcmux_sel),
-	.a(pc_plus2_out),
-	.b(alu_out_wb),
-	.c(sr1_out), // careful to rename after EX stage is finished
-	.d(byte_sel_out)
-);
-
-register pc
-(
-	.clk,
-	.load(load_pc),
-	.in(pcmux_out),
-	.out(pc_out)
-);
-
-plus2 (.width(16)) pcplus2
-(
-	.in(pc_out),
-	.out(pc_plus2_out) 
-);
-
-
-/* I-Cache Interface */
-	/* Stall Register update untill completed memory read from I-Cache */
-stall STALLI
-(
-	.read(I_mem_read),
-	.write(0),
-	.resp(I_mem_resp),
-	.stall(stall_I)
-);
-
-	 /* I_Cache signals */
-assign I_mem_address = pc_out;
-
-
-/* Update Registers */
-always_ff @(posedge clk or posedge reset)
-begin
-	if(reset)
-	begin
-		pc_id <= 0;
-		ir_id <= 0;
-	end
-	else if (!stall_I) begin
-		ir_id <= I_mem_rdata;
-		pc_id <= pc_plus2_out; 
-	end
-end
-
-/**************************************/
 
 /****** MEM stage ***********/
 
