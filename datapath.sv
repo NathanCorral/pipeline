@@ -435,12 +435,13 @@ byte_sel byte_sel
 (
 // alu_out_wb
 // mem_wb
+// byte_sel_out
 );
 
 mux4 regfilemux
 (
 	.sel(regfilemux_sel_wb),  // careful to rename after EX stage is finished
-	.a(byte_sel_out),
+	.a(mem_wb), //byte_sel_out
 	.b(pc_wb),
 	.c(alu_out_wb),
 	.d(),
