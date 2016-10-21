@@ -22,7 +22,8 @@ module decode
 	output logic [1:0] regfile_mux_sel,
 	output logic load_cc,
 	output logic destmux_sel,
-	output logic [1:0] pcmux_sel	 
+	output logic [1:0] pcmux_sel,
+	output logic pcmux_sel_out_sel
 );
 
 lc3b_opcode opcode;

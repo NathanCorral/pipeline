@@ -67,7 +67,7 @@ logic [15:0] sr2_mem;
 
 /* IF Control Signals */
 logic load_pc;
-logic[1:0] pcmux_sel;
+logic[1:0] pcmux_sel_out;
 logic stall_I;
 
 /* IF Output Signals */
@@ -84,7 +84,7 @@ assign load_pc = ~stall_I;
 /* Modules */
 mux4 pcmux
 (
-	.sel(pcmux_sel),
+	.sel(pcmux_sel_out),
 	.a(pc_plus2_out),
 	.b(alu_out_wb),
 	.c(sr1_out), // careful to rename after EX stage is finished
@@ -158,6 +158,7 @@ logic load_cc_id;
 logic branch_enable_id;
 logic destmux_sel_id;
 logic pcmux_sel_id;
+logic pcmux_sel_out_sel_id;
 
 /* ID Internal Signals */
 logic [15:0] adj6_out_id;
@@ -253,6 +254,7 @@ decode INST_DECODER
     .load_cc(load_cc_id),
     .destmux_sel(destmux_sel_id),
     .pcmux_sel(pcmux_sel_id)
+    .pcmux_sel_out_sel(pcmux_sel_out_sel_id)
 );
 
 /* Update Registers */
@@ -260,10 +262,11 @@ always_ff @(posedge clk or posedge reset)
 begin
 	if(reset)
 	begin
-        alumux1_sel <= 0;
-        alumux2_sel <= 0;
-        aluop <= 0;
-        indirect <= 0;
+        alumux1_sel_ex <= 0;
+        alumux2_sel_ex <= 0;
+        aluop_ex <= 0;
+        indirect_ex <= 0;
+        mem_byte_enable_ex <= 0;
         regfilemux_sel_ex <= 0;
         load_cc_ex <= 0;
         branch_enable_ex <= 0;
@@ -282,10 +285,11 @@ begin
         immmux_out_ex <= immmux_out_id;
         opcode_ex <= opcode_id;
         /* control signal assignments */
-        alumux1_sel <= alumux1_sel_id;
-        alumux2_sel <= alumux2_sel_id;
-        aluop <= aluop_id;
-        indirect <= indirect_id;
+        alumux1_sel_ex <= alumux1_sel_id;
+        alumux2_sel_ex <= alumux2_sel_id;
+        aluop_ex <= aluop_id;
+        indirect_ex <= indirect_id;
+        mem_byte_enable_ex <= mem_byte_enable_id;
         regfilemux_sel_ex <= regfilemux_sel_id;
         load_cc_ex <= load_cc_id;
         branch_enable_ex <= branch_enable_id;
@@ -297,9 +301,9 @@ end
 
 /************* EX State *************/
 /* EX Control Signals */
-logic [1:0] alumux1_sel;
-logic [1:0] alumux2_sel;
-lc3b_aluop aluop;
+logic [1:0] alumux1_sel_ex;
+logic [1:0] alumux2_sel_ex;
+lc3b_aluop aluop_ex;
 
 /* EX Input Signals */
 /* alumux1 */
@@ -321,7 +325,7 @@ logic [15:0] alu_out;
 /* Modules */
 mux4 #(.width(16)) ALUMUX1
 (
-    .sel(alumux1_sel),
+    .sel(alumux1_sel_ex),
     .a(sr1_ex),
     .b(adj9_out_ex),
 	.c(adj11_out_ex),
@@ -331,7 +335,7 @@ mux4 #(.width(16)) ALUMUX1
 
 mux4 #(.width(16)) ALUMUX2
 (
-    .sel(alumux2_sel),
+    .sel(alumux2_sel_ex),
     .a(sr2_ex),
     .b(adj6_out_ex),
 	.c(pc_ex),
@@ -341,7 +345,7 @@ mux4 #(.width(16)) ALUMUX2
 
 alu ALU
 (
-    .aluop(aluop),
+    .aluop(aluop_ex),
     .a(alumux1_out),
     .b(alumux2_out),
     .f(alu_out)
@@ -366,7 +370,7 @@ end
 /****** MEM stage ***********/
 
 /* MEM control Signals */
-//logic indirect
+logic indirect_mem
 logic stall_D;
 
 /* MEM Output Signals */
@@ -414,11 +418,11 @@ end
 
 /* MEM Control Signals */
 
-logic load_cc;
-logic [1:0] regfilemux_sel;
+logic load_cc_wb;
+logic [1:0] regfilemux_sel_wb;
 
 /* MEM Output Signals */
-logic [2:0] destmux_sel;  // careful to rename after EX stage is finished
+logic [2:0] destmux_sel_wb;  // careful to rename after EX stage is finished
 logic [15:0] regfilemux_out; // careful to rename after EX stage is finished
 
 /* IF Internal Signals */
@@ -435,7 +439,7 @@ byte_sel byte_sel
 
 mux4 regfilemux
 (
-	.sel(regfilemux_sel),  // careful to rename after EX stage is finished
+	.sel(regfilemux_sel_wb),  // careful to rename after EX stage is finished
 	.a(byte_sel_out),
 	.b(pc_wb),
 	.c(alu_out_wb),
@@ -452,7 +456,7 @@ gencc gencc
 register cc
 (
 	.clk,
-	.load(load_cc),
+	.load(load_cc_wb),
 	.in(gencc_out),
 	.out(cc_out)
 );
@@ -461,14 +465,22 @@ cccomp cc
 (
 	.nzp(dest_wb),
 	.cc(cc_out),
-	.branch_enable // ?????????????????????
+	.branch_enable(branch_enable_wb)
 );
 
-mux2 /*(.width(3))*/ destmux
+mux2 #(.width(2)) pcmux_sel_mux
 (
-	.sel(destmux_sel),
+    .sel(pcmux_sel_out_sel_wb),
+    .a(pcmux_sel_wb),
+    .b({1'b0, branch_enable_wb}),
+    .f(pcmux_sel_out)
+);
+
+mux2 #(.width(3)) destmux
+(
+	.sel(destmux_sel_wb),
 	.a(dest_wb),
 	.b(3'b111),
-	.f(destmux_sel)  // careful to rename after EX stage is finished
+	.f(destmux_out)
 );
 endmodule : datapath
