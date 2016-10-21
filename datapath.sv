@@ -38,31 +38,6 @@ logic [2:0] dest_wb;
 
 logic [15:0] alu_out_wb;
 
-
-/* 
-/***** Pass Siganls Through *****/
-always_ff @(posedge clk or posedge reset)
-begin
-	if(reset)
-	begin
-		opcode_mem <= 0;
-	end
-	else begin
-		opcode_mem <= opcode_ex;
-	end	
-end
-
-
-
-
-
-/* MEM Control Signals */
-/* MEM Input Signals */
-logic [15:0] alu_out_mem;
-logic [15:0] sr2_mem;
-
-/* MEM Output Signals */
-
 /**********IF stage***************/
 
 /* IF Control Signals */
@@ -369,6 +344,10 @@ end
 
 /****** MEM stage ***********/
 
+/* MEM Input Signals */
+logic [15:0] alu_out_mem;
+logic [15:0] sr2_mem;
+
 /* MEM control Signals */
 logic indirect_mem
 logic stall_D;
@@ -401,6 +380,7 @@ begin
 		pc_wb <= 0;
 		mem_wb <= 0;
 		dest_wb <= 0;
+		opcode_mem <= 0;
 	end
 	else if(!stall_D) begin
 		alu_out_wb <= alu_out_mem;
@@ -408,6 +388,7 @@ begin
 		dest_wb <= dest_mem;
 		mem_wb <= D_mem_rdata;
 		wmask_wb <= mem_byte_enable;
+		opcode_mem <= opcode_ex;
 	end	
 end
 
