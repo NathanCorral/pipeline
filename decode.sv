@@ -29,7 +29,7 @@ module decode
 lc3b_opcode opcode;
 logic ir5;
 
-assign opcode = instruction[15:12]; /* NEED CAST! */
+assign opcode = lc3b_opcode'(instruction[15:12]);
 assign ir5 = instruction[5];
 
 always_comb

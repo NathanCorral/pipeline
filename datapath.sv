@@ -25,9 +25,9 @@ module datapath
 );
 /* Pass Through Signals */
 //logic [3:0] opcode_id;
-logic [3:0] opcode_ex;
-logic [3:0] opcode_mem;
-logic [3:0] opcode_wb;
+lc3b_opcode opcode_ex;
+lc3b_opcode opcode_mem;
+lc3b_opcode opcode_wb;
 
 logic [15:0] pc_id;
 logic [15:0] pc_ex;
@@ -96,7 +96,7 @@ stall STALLI
 
 	 /* I_Cache signals */
 assign I_mem_address = pc_out;
-assign I_mem_read = // LOGIC NEEDED
+assign I_mem_read = ~I_mem_resp & ~stall_D;
 
 
 /* Update Registers */
@@ -147,7 +147,7 @@ logic [15:0] trapvect_id;
 logic [15:0] sr1_out_id;
 logic [15:0] sr2_out_id;
 logic [15:0] immmux_out_id;
-logic [3:0] opcode_id;
+lc3b_opcode opcode_id;
 logic [2:0] dest_id;
 logic [2:0] sr1mux_out;
 logic [2:0] sr2mux_out;
@@ -155,7 +155,7 @@ logic [2:0] sr2mux_out;
 /* Modules */
 assign trapvect_id = {7'b0, ir_id[7:0], 1'b0};
 assign dest_id = ir_id[11:9];
-assign opcode_id = ir_id[15:12];
+assign opcode_id = lc3b_opcode'(ir_id[15:12]);
 
 adj #(.width(9)) ADJ9
 (
