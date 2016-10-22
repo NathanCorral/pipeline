@@ -54,7 +54,7 @@ logic [15:0] pc_out;
 logic [15:0] pc_plus2_out;
 logic [15:0] i_cache_out;
 
-assign load_pc = ~stall_I;
+assign load_pc = ~stall_I & ~stall_D;
 
 /* Modules */
 mux4 pcmux
@@ -74,7 +74,7 @@ register pc
 	.out(pc_out)
 );
 
-plus2 (.width(16)) pcplus2
+plus2 #(.width(16)) pcplus2
 (
 	.in(pc_out),
 	.out(pc_plus2_out) 
@@ -103,7 +103,7 @@ begin
 		pc_id <= 0;
 		ir_id <= 0;
 	end
-	else if (!stall_I) begin
+	else if (!stall_I & !stall_D) begin
 		ir_id <= I_mem_rdata;
 		pc_id <= pc_plus2_out; 
 	end
@@ -228,7 +228,7 @@ decode INST_DECODER
     .regfilemux_sel(regfilemux_sel_id),
     .load_cc(load_cc_id),
     .destmux_sel(destmux_sel_id),
-    .pcmux_sel(pcmux_sel_id)
+    .pcmux_sel(pcmux_sel_id),
     .pcmux_sel_out_sel(pcmux_sel_out_sel_id)
 );
 
@@ -248,7 +248,7 @@ begin
         destmux_sel_ex <= 0;
         pcmux_sel_ex <= 0;
 	end
-	else begin
+	else if (!stall_D) begin
         /* data signal assignments */
         sr1_ex <= sr1_out_id;
         adj9_out_ex <= adj9_out_id;
@@ -279,6 +279,8 @@ end
 logic [1:0] alumux1_sel_ex;
 logic [1:0] alumux2_sel_ex;
 lc3b_aluop aluop_ex;
+
+
 
 /* EX Input Signals */
 /* alumux1 */
@@ -334,7 +336,7 @@ begin
 		alu_out_mem <= 0;
 		sr2_mem <= 0;
 	end
-	else begin
+	else if (!stall_D) begin
 		pc_mem <= pc_ex;
 		alu_out_mem <= alu_out;
 		sr2_mem <= sr2_ex;
@@ -349,7 +351,7 @@ logic [15:0] alu_out_mem;
 logic [15:0] sr2_mem;
 
 /* MEM control Signals */
-logic indirect_mem
+logic indirect_mem;
 logic stall_D;
 
 /* MEM Output Signals */
@@ -435,7 +437,7 @@ gencc gencc
 	.out(gencc_out)
 );
 
-register cc
+register #(.width(3)) cc	// Added CC width 
 (
 	.clk,
 	.load(load_cc_wb),
@@ -443,7 +445,7 @@ register cc
 	.out(cc_out)
 );
 
-cccomp cc
+cccomp CCCOMP
 (
 	.nzp(dest_wb),
 	.cc(cc_out),
