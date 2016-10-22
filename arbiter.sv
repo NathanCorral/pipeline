@@ -24,6 +24,17 @@ always_ff @(posedge clk)
 begin
     dcache_mem_rdata <= pmem_rdata;
     icache_mem_rdata <= pmem_rdata;
+    dcache_mem_resp <= (dcache_pmem_read | dcache_pmem_write) & pmem_resp;
+    icache_mem_resp <= (~dcache_pmem_read | ~dcache_pmem_write) & pmem_resp;
+    pmem_read <= dcache_pmem_read | (icache_pmem_read & ~dcache_pmem_write);
+    pmem_write <= dcache_pmem_write;
+    pmem_wdata <= dcache_pmem_wdata;
+    if(dcache_pmem_read || dcache_pmem_write) begin
+        pmem_address <= dcache_pmem_address;
+    end
+    else begin
+        pmem_address <= icache_pmem_address;
+    end
 end
 
 endmodule : arbiter
