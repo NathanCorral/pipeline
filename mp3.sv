@@ -68,6 +68,17 @@ begin
 	state <= next_state;
 end
 
+arbiter MEM_ARBITER
+(
+    .icache_pmem_read(I_pmem_read),
+    .icache_pmem_address(I_pmem_address),
+    .dcache_pmem_read(D_pmem_read),
+    .dcache_pmem_write(D_pmem_write),
+    .dcache_pmem_address(D_pmem_address),
+    .dcache_pmem_wdata(D_pmem_wdata),
+    .pmem_resp(pmem_resp),
+    .pmem_rdata(pmem_rdata)
+);
 
 cache D_CACHE (
 	/* clk, reset */
@@ -98,7 +109,7 @@ cache I_CACHE (
 	.clk(clk),
 	.reset(reset),
 
-	/* D_Cache to/from Datapath */
+	/* I_Cache to/from Datapath */
 	.mem_resp(I_mem_resp),
 	.mem_rdata(I_mem_rdata),
 	.mem_read(I_mem_read),
@@ -107,7 +118,7 @@ cache I_CACHE (
 	.mem_address(I_mem_address),
 	.mem_wdata(0),
 
-	/* D_Cache to/from Arbitor */
+	/* I_Cache to/from Arbitor */
 	.pmem_resp(I_pmem_resp),
 	.pmem_rdata(I_pmem_rdata),
 	.pmem_read(I_pmem_read),
