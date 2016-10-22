@@ -311,6 +311,7 @@ logic [15:0] sr2_ex;
 logic [15:0] adj6_out_ex;
 //logic [15:0] pc_ex;
 logic [15:0] immmux_out_ex; 
+logic indirect_ex;
 
 /* EX Internal Signals */
 logic [15:0] alumux1_out;
@@ -353,24 +354,24 @@ begin
 	begin
 		alu_out_mem <= 0;
 		sr2_mem <= 0;
+        indirect_mem <= 0;
 	end
 	else if (!stall_D) begin
 		pc_mem <= pc_ex;
 		alu_out_mem <= alu_out;
 		sr2_mem <= sr2_ex;
 		/* control signal assignments */
-		  indirect_mem <= indirect_ex;
-		  mem_read_mem <= mem_read_ex;
-		  mem_write_mem <= mem_write_ex;
-		  mem_byte_enable_mem <= mem_byte_enable_ex;
-		  regfilemux_sel_mem <= regfilemux_sel_ex;
-		  load_cc_mem <= load_cc_ex;
-		  //branch_enable_mem <= branch_enable_ex;
-		  destmux_sel_mem <= destmux_sel_ex;
-		  pcmux_sel_mem <= pcmux_sel_ex;
-		  pcmux_sel_out_sel_mem <= pcmux_sel_out_sel_ex;
-		  
-		  opcode_mem <= opcode_ex;
+		indirect_mem <= indirect_ex;
+		mem_read_mem <= mem_read_ex;
+		mem_write_mem <= mem_write_ex;
+		mem_byte_enable_mem <= mem_byte_enable_ex;
+		regfilemux_sel_mem <= regfilemux_sel_ex;
+		load_cc_mem <= load_cc_ex;
+		//branch_enable_mem <= branch_enable_ex;
+		destmux_sel_mem <= destmux_sel_ex;
+		pcmux_sel_mem <= pcmux_sel_ex;
+		pcmux_sel_out_sel_mem <= pcmux_sel_out_sel_ex;
+		opcode_mem <= opcode_ex;
 	end	
 end
 /**************************/
@@ -459,8 +460,6 @@ logic pcmux_sel_out_sel_wb;
 
 /* WB Output Signals */
 /* WB Outputs to IF stage which is buffered by PC register*/
-
-
 /* WB Internal Signals */
 logic [15:0] byte_sel_out;
 logic [2:0] gencc_out;
