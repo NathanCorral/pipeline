@@ -466,12 +466,12 @@ logic [2:0] gencc_out;
 logic [2:0] cc_out;
 
 /* Modules */
-byte_sel byte_sel
-(
+//byte_sel byte_sel
+//(
 // alu_out_wb
 // mem_wb
 // byte_sel_out
-);
+//);
 
 mux4 regfilemux
 (
