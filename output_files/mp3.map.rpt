@@ -1,5 +1,5 @@
 Analysis & Synthesis report for mp3
-Fri Oct 21 19:34:16 2016
+Sat Oct 22 15:45:23 2016
 Quartus II 32-bit Version 13.1.4 Build 182 03/12/2014 SJ Full Version
 
 
@@ -36,7 +36,7 @@ applicable agreement for further details.
 +-----------------------------------------------------------------------------+
 ; Analysis & Synthesis Summary                                                ;
 +-------------------------------+---------------------------------------------+
-; Analysis & Synthesis Status   ; Failed - Fri Oct 21 19:34:16 2016           ;
+; Analysis & Synthesis Status   ; Failed - Sat Oct 22 15:45:23 2016           ;
 ; Quartus II 32-bit Version     ; 13.1.4 Build 182 03/12/2014 SJ Full Version ;
 ; Revision Name                 ; mp3                                         ;
 ; Top-level Entity Name         ; mp3                                         ;
@@ -165,13 +165,14 @@ applicable agreement for further details.
 Info: *******************************************************************
 Info: Running Quartus II 32-bit Analysis & Synthesis
     Info: Version 13.1.4 Build 182 03/12/2014 SJ Full Version
-    Info: Processing started: Fri Oct 21 19:34:15 2016
+    Info: Processing started: Sat Oct 22 15:45:22 2016
 Info: Command: quartus_map --read_settings_files=on --write_settings_files=off mp3 -c mp3
 Info (11104): Parallel Compilation has detected 8 hyper-threaded processors. However, the extra hyper-threaded processors will not be used by default. Parallel Compilation will use 4 of the 4 physical processors detected instead.
 Info (12021): Found 1 design units, including 1 entities, in source file stall.sv
     Info (12023): Found entity 1: stall
-Info (12021): Found 1 design units, including 1 entities, in source file decode.sv
-    Info (12023): Found entity 1: decode
+Error (10170): Verilog HDL syntax error at decode.sv(32) near text "instruction";  expecting ";" File: /home/nbcorra2/ece411/tulkas/decode.sv Line: 32
+Error (10112): Ignored design unit "decode" at decode.sv(3) due to previous errors File: /home/nbcorra2/ece411/tulkas/decode.sv Line: 3
+Info (12021): Found 0 design units, including 0 entities, in source file decode.sv
 Info (12021): Found 1 design units, including 1 entities, in source file register.sv
     Info (12023): Found entity 1: register
 Info (12021): Found 1 design units, including 1 entities, in source file cache/compare.sv
@@ -208,32 +209,10 @@ Info (12021): Found 1 design units, including 1 entities, in source file mp3.sv
     Info (12023): Found entity 1: mp3
 Info (12021): Found 1 design units, including 1 entities, in source file datapath.sv
     Info (12023): Found entity 1: datapath
-Warning (10236): Verilog HDL Implicit Net warning at cache_datapath.sv(101): created implicit net for "cache_in_mux_sel"
-Warning (10236): Verilog HDL Implicit Net warning at mp3.sv(75): created implicit net for "reset"
-Warning (10236): Verilog HDL Implicit Net warning at datapath.sv(65): created implicit net for "sr1_out"
-Warning (10236): Verilog HDL Implicit Net warning at datapath.sv(188): created implicit net for "load_regfile_wb"
-Warning (10236): Verilog HDL Implicit Net warning at datapath.sv(192): created implicit net for "destmux_out"
-Warning (10236): Verilog HDL Implicit Net warning at datapath.sv(452): created implicit net for "branch_enable_wb"
-Warning (10236): Verilog HDL Implicit Net warning at datapath.sv(457): created implicit net for "pcmux_sel_out_sel_wb"
-Warning (10236): Verilog HDL Implicit Net warning at datapath.sv(458): created implicit net for "pcmux_sel_wb"
-Error (10161): Verilog HDL error at datapath.sv(243): object "indirect_ex" is not declared File: /home/nbcorra2/ece411/tulkas/datapath.sv Line: 243
-Error (10161): Verilog HDL error at datapath.sv(244): object "mem_byte_enable_ex" is not declared File: /home/nbcorra2/ece411/tulkas/datapath.sv Line: 244
-Error (10161): Verilog HDL error at datapath.sv(245): object "regfilemux_sel_ex" is not declared File: /home/nbcorra2/ece411/tulkas/datapath.sv Line: 245
-Error (10161): Verilog HDL error at datapath.sv(246): object "load_cc_ex" is not declared File: /home/nbcorra2/ece411/tulkas/datapath.sv Line: 246
-Error (10161): Verilog HDL error at datapath.sv(247): object "branch_enable_ex" is not declared File: /home/nbcorra2/ece411/tulkas/datapath.sv Line: 247
-Error (10161): Verilog HDL error at datapath.sv(248): object "destmux_sel_ex" is not declared File: /home/nbcorra2/ece411/tulkas/datapath.sv Line: 248
-Error (10161): Verilog HDL error at datapath.sv(249): object "pcmux_sel_ex" is not declared File: /home/nbcorra2/ece411/tulkas/datapath.sv Line: 249
-Error (10161): Verilog HDL error at datapath.sv(266): object "indirect_ex" is not declared File: /home/nbcorra2/ece411/tulkas/datapath.sv Line: 266
-Error (10161): Verilog HDL error at datapath.sv(267): object "mem_byte_enable_ex" is not declared File: /home/nbcorra2/ece411/tulkas/datapath.sv Line: 267
-Error (10161): Verilog HDL error at datapath.sv(268): object "regfilemux_sel_ex" is not declared File: /home/nbcorra2/ece411/tulkas/datapath.sv Line: 268
-Error (10161): Verilog HDL error at datapath.sv(269): object "load_cc_ex" is not declared File: /home/nbcorra2/ece411/tulkas/datapath.sv Line: 269
-Error (10161): Verilog HDL error at datapath.sv(270): object "branch_enable_ex" is not declared File: /home/nbcorra2/ece411/tulkas/datapath.sv Line: 270
-Error (10161): Verilog HDL error at datapath.sv(271): object "destmux_sel_ex" is not declared File: /home/nbcorra2/ece411/tulkas/datapath.sv Line: 271
-Error (10161): Verilog HDL error at datapath.sv(272): object "pcmux_sel_ex" is not declared File: /home/nbcorra2/ece411/tulkas/datapath.sv Line: 272
-Error: Quartus II 32-bit Analysis & Synthesis was unsuccessful. 14 errors, 8 warnings
+Error: Quartus II 32-bit Analysis & Synthesis was unsuccessful. 2 errors, 0 warnings
     Error: Peak virtual memory: 383 megabytes
-    Error: Processing ended: Fri Oct 21 19:34:17 2016
-    Error: Elapsed time: 00:00:02
+    Error: Processing ended: Sat Oct 22 15:45:23 2016
+    Error: Elapsed time: 00:00:01
     Error: Total CPU time (on all processors): 00:00:00
 
 

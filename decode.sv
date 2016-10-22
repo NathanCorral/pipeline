@@ -19,7 +19,7 @@ module decode
 	output logic mem_byte_sig,
 	/* WB Control */
 	output logic load_regfile,
-	output logic [1:0] regfile_mux_sel,
+	output logic [1:0] regfilemux_sel,
 	output logic load_cc,
 	output logic destmux_sel,
 	output logic [1:0] pcmux_sel,
@@ -29,7 +29,7 @@ module decode
 lc3b_opcode opcode;
 logic ir5;
 
-assign opcode = instruction[15:12];
+assign opcode = instruction[15:12]; /* NEED CAST! */
 assign ir5 = instruction[5];
 
 always_comb
@@ -59,7 +59,7 @@ begin
 			
 			/* WB */
 			load_regfile = 1;  //missing????
- 			regfile_mux_sel = 2'b10;
+ 			regfilemux_sel = 2'b10;
 			load_cc = 1;
 			destmux_sel = 0;
 			pcmux_sel = 2'b00;
@@ -89,7 +89,7 @@ begin
 			
 			/* WB */
 			load_regfile = 1; 
-			regfile_mux_sel = 2'b10;
+			regfilemux_sel = 2'b10;
 			load_cc = 1;
 			destmux_sel = 0;
 			pcmux_sel = 2'b00;
@@ -116,7 +116,7 @@ begin
 			
 			/* WB */
 			load_regfile = 1; 
-			regfile_mux_sel = 2'b10;
+			regfilemux_sel = 2'b10;
 			load_cc = 1;
 			destmux_sel = 0;
 			pcmux_sel = 2'b00;
@@ -143,7 +143,7 @@ begin
 			
 			/* WB */
 			load_regfile = 1; 
-			regfile_mux_sel = 2'b00;
+			regfilemux_sel = 2'b00;
 			load_cc = 1;
 			destmux_sel = 0;
 			pcmux_sel = 2'b00;
@@ -170,7 +170,7 @@ begin
 			
 			/* WB */
 			load_regfile = 0; 
-			regfile_mux_sel = 2'bzz;
+			regfilemux_sel = 2'bzz;
 			load_cc = 0;
 			destmux_sel = 1'bz;
 			pcmux_sel = 2'b00;
@@ -197,7 +197,7 @@ begin
 			
 			/* WB */
 			load_regfile = 0;
- 			regfile_mux_sel = 2'bzz;
+ 			regfilemux_sel = 2'bzz;
 			load_cc = 0;
 			destmux_sel = 1'bz;
 			pcmux_sel = 2'bzz;
@@ -224,7 +224,7 @@ begin
 			mem_byte_sig = 0;
 			
 			/* WB */
-			regfile_mux_sel = 0;
+			regfilemux_sel = 0;
 			load_cc = 0;
 			destmux_sel = 0;
 			pcmux_sel = 0;

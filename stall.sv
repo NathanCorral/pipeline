@@ -8,13 +8,14 @@ module stall
 
 always_ff @(posedge read or posedge write or posedge resp)
 begin
-	if(read | write & !resp)
+	
+	if(resp) begin
+		stall <= 0;
+	end	
+	else if((read | write))
 	begin
 		stall <= 1;
 	end
-	else if(resp) begin
-		stall <= 0;
-	end	
 	else begin
 		stall <= stall;
 	end
