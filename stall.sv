@@ -6,6 +6,11 @@ module stall
 	output logic stall	 
 );
 
+initial
+begin
+    stall <= 1'b0;
+end
+
 always_ff @(posedge read or posedge write or posedge resp)
 begin
 	

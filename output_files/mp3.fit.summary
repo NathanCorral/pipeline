@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 Fitter Status : Successful - Sat Oct 22 21:26:21 2016
+=======
+Fitter Status : Successful - Sat Oct 22 21:17:41 2016
+>>>>>>> 74db24c7186deb23301dceb44cd64cd26b40bfc0
 Quartus II 32-bit Version : 13.1.4 Build 182 03/12/2014 SJ Full Version
 Revision Name : mp3
 Top-level Entity Name : mp3
@@ -6,7 +10,11 @@ Family : Stratix III
 Device : EP3SL50F780C2
 Timing Models : Final
 Logic utilization : < 1 %
+<<<<<<< HEAD
     Combinational ALUTs : 139 / 38,000 ( < 1 % )
+=======
+    Combinational ALUTs : 146 / 38,000 ( < 1 % )
+>>>>>>> 74db24c7186deb23301dceb44cd64cd26b40bfc0
     Memory ALUTs : 0 / 19,000 ( 0 % )
     Dedicated logic registers : 203 / 38,000 ( < 1 % )
 Total registers : 203

@@ -1,10 +1,18 @@
+<<<<<<< HEAD
 Analysis & Synthesis Status : Successful - Sat Oct 22 21:25:56 2016
+=======
+Analysis & Synthesis Status : Successful - Sat Oct 22 21:17:11 2016
+>>>>>>> 74db24c7186deb23301dceb44cd64cd26b40bfc0
 Quartus II 32-bit Version : 13.1.4 Build 182 03/12/2014 SJ Full Version
 Revision Name : mp3
 Top-level Entity Name : mp3
 Family : Stratix III
 Logic utilization : N/A
+<<<<<<< HEAD
     Combinational ALUTs : 137
+=======
+    Combinational ALUTs : 144
+>>>>>>> 74db24c7186deb23301dceb44cd64cd26b40bfc0
     Memory ALUTs : 0
     Dedicated logic registers : 203
 Total registers : 203

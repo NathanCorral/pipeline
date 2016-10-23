@@ -1,6 +1,10 @@
 <sld_project_info>
   <project>
+<<<<<<< HEAD
     <hash md5_digest_80b="f220144b408bc5082b01"/>
+=======
+    <hash md5_digest_80b="5f1880775ebb7e23de02"/>
+>>>>>>> 74db24c7186deb23301dceb44cd64cd26b40bfc0
   </project>
   <file_info>
     <file device="EP3SL50F780C2" path="mp3.sof" usercode="0xFFFFFFFF"/>

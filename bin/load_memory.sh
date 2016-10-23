@@ -1,8 +1,13 @@
 #!/bin/bash
 
 # Settings
+<<<<<<< HEAD
 DEFAULT_TARGET=$HOME/tulkas/simulation/modelsim/memory.lst
 ASSEMBLER=$HOME/tulkas/bin/LC3bAssembler
+=======
+DEFAULT_TARGET=$HOME/Documents/ece411/tulkas/simulation/modelsim/memory.lst
+ASSEMBLER=$HOME/Documents/ece411/tulkas/bin/LC3bAssembler
+>>>>>>> 74db24c7186deb23301dceb44cd64cd26b40bfc0
 ADDRESSABILITY=16
 
 # Command line parameters

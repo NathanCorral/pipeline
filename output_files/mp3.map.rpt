@@ -1,5 +1,9 @@
 Analysis & Synthesis report for mp3
+<<<<<<< HEAD
 Sat Oct 22 21:25:56 2016
+=======
+Sat Oct 22 21:17:12 2016
+>>>>>>> 74db24c7186deb23301dceb44cd64cd26b40bfc0
 Quartus II 32-bit Version 13.1.4 Build 182 03/12/2014 SJ Full Version
 
 
@@ -94,13 +98,21 @@ applicable agreement for further details.
 +-----------------------------------------------------------------------------+
 ; Analysis & Synthesis Summary                                                ;
 +-------------------------------+---------------------------------------------+
+<<<<<<< HEAD
 ; Analysis & Synthesis Status   ; Successful - Sat Oct 22 21:25:56 2016       ;
+=======
+; Analysis & Synthesis Status   ; Successful - Sat Oct 22 21:17:11 2016       ;
+>>>>>>> 74db24c7186deb23301dceb44cd64cd26b40bfc0
 ; Quartus II 32-bit Version     ; 13.1.4 Build 182 03/12/2014 SJ Full Version ;
 ; Revision Name                 ; mp3                                         ;
 ; Top-level Entity Name         ; mp3                                         ;
 ; Family                        ; Stratix III                                 ;
 ; Logic utilization             ; N/A                                         ;
+<<<<<<< HEAD
 ;     Combinational ALUTs       ; 137                                         ;
+=======
+;     Combinational ALUTs       ; 144                                         ;
+>>>>>>> 74db24c7186deb23301dceb44cd64cd26b40bfc0
 ;     Memory ALUTs              ; 0                                           ;
 ;     Dedicated logic registers ; 203                                         ;
 ; Total registers               ; 203                                         ;
@@ -218,6 +230,7 @@ applicable agreement for further details.
 +----------------------------+-------------+
 
 
+<<<<<<< HEAD
 +---------------------------------------------------------------------------------------------------------------------------------------------+
 ; Analysis & Synthesis Source Files Read                                                                                                      ;
 +----------------------------------+-----------------+------------------------------+-----------------------------------------------+---------+
@@ -244,6 +257,34 @@ applicable agreement for further details.
 ; mp3.sv                           ; yes             ; User SystemVerilog HDL File  ; /home/scheng41/tulkas/mp3.sv                  ;         ;
 ; datapath.sv                      ; yes             ; User SystemVerilog HDL File  ; /home/scheng41/tulkas/datapath.sv             ;         ;
 +----------------------------------+-----------------+------------------------------+-----------------------------------------------+---------+
+=======
++-------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Analysis & Synthesis Source Files Read                                                                                                                            ;
++----------------------------------+-----------------+------------------------------------+---------------------------------------------------------------+---------+
+; File Name with User-Entered Path ; Used in Netlist ; File Type                          ; File Name with Absolute Path                                  ; Library ;
++----------------------------------+-----------------+------------------------------------+---------------------------------------------------------------+---------+
+; stall.sv                         ; yes             ; User SystemVerilog HDL File        ; /home/cdlord2/Documents/ece411/tulkas/stall.sv                ;         ;
+; decode.sv                        ; yes             ; User SystemVerilog HDL File        ; /home/cdlord2/Documents/ece411/tulkas/decode.sv               ;         ;
+; register.sv                      ; yes             ; User SystemVerilog HDL File        ; /home/cdlord2/Documents/ece411/tulkas/register.sv             ;         ;
+; cache/compare.sv                 ; yes             ; User SystemVerilog HDL File        ; /home/cdlord2/Documents/ece411/tulkas/cache/compare.sv        ;         ;
+; cache/swap_word.sv               ; yes             ; User SystemVerilog HDL File        ; /home/cdlord2/Documents/ece411/tulkas/cache/swap_word.sv      ;         ;
+; cache/cache_datapath.sv          ; yes             ; User SystemVerilog HDL File        ; /home/cdlord2/Documents/ece411/tulkas/cache/cache_datapath.sv ;         ;
+; cache/cache_control.sv           ; yes             ; User SystemVerilog HDL File        ; /home/cdlord2/Documents/ece411/tulkas/cache/cache_control.sv  ;         ;
+; cache/cache.sv                   ; yes             ; User SystemVerilog HDL File        ; /home/cdlord2/Documents/ece411/tulkas/cache/cache.sv          ;         ;
+; regfile.sv                       ; yes             ; User SystemVerilog HDL File        ; /home/cdlord2/Documents/ece411/tulkas/regfile.sv              ;         ;
+; plus2.sv                         ; yes             ; User SystemVerilog HDL File        ; /home/cdlord2/Documents/ece411/tulkas/plus2.sv                ;         ;
+; mux4.sv                          ; yes             ; User SystemVerilog HDL File        ; /home/cdlord2/Documents/ece411/tulkas/mux4.sv                 ;         ;
+; mux2.sv                          ; yes             ; User SystemVerilog HDL File        ; /home/cdlord2/Documents/ece411/tulkas/mux2.sv                 ;         ;
+; lc3b_types.sv                    ; yes             ; User SystemVerilog HDL File        ; /home/cdlord2/Documents/ece411/tulkas/lc3b_types.sv           ;         ;
+; gencc.sv                         ; yes             ; User SystemVerilog HDL File        ; /home/cdlord2/Documents/ece411/tulkas/gencc.sv                ;         ;
+; cccomp.sv                        ; yes             ; User SystemVerilog HDL File        ; /home/cdlord2/Documents/ece411/tulkas/cccomp.sv               ;         ;
+; alu.sv                           ; yes             ; User SystemVerilog HDL File        ; /home/cdlord2/Documents/ece411/tulkas/alu.sv                  ;         ;
+; adj.sv                           ; yes             ; User SystemVerilog HDL File        ; /home/cdlord2/Documents/ece411/tulkas/adj.sv                  ;         ;
+; mp3.sv                           ; yes             ; User SystemVerilog HDL File        ; /home/cdlord2/Documents/ece411/tulkas/mp3.sv                  ;         ;
+; datapath.sv                      ; yes             ; User SystemVerilog HDL File        ; /home/cdlord2/Documents/ece411/tulkas/datapath.sv             ;         ;
+; arbiter.sv                       ; yes             ; Auto-Found SystemVerilog HDL File  ; /home/cdlord2/Documents/ece411/tulkas/arbiter.sv              ;         ;
++----------------------------------+-----------------+------------------------------------+---------------------------------------------------------------+---------+
+>>>>>>> 74db24c7186deb23301dceb44cd64cd26b40bfc0
 
 
 +-----------------------------------------------------------+
@@ -251,8 +292,13 @@ applicable agreement for further details.
 +-----------------------------------------------+-----------+
 ; Resource                                      ; Usage     ;
 +-----------------------------------------------+-----------+
+<<<<<<< HEAD
 ; Estimated ALUTs Used                          ; 137       ;
 ;     -- Combinational ALUTs                    ; 137       ;
+=======
+; Estimated ALUTs Used                          ; 144       ;
+;     -- Combinational ALUTs                    ; 144       ;
+>>>>>>> 74db24c7186deb23301dceb44cd64cd26b40bfc0
 ;     -- Memory ALUTs                           ; 0         ;
 ;     -- LUT_REGs                               ; 0         ;
 ; Dedicated logic registers                     ; 203       ;
@@ -261,6 +307,7 @@ applicable agreement for further details.
 ;     -- Due to unpartnered combinational logic ; 1         ;
 ;     -- Due to Memory ALUTs                    ; 0         ;
 ;                                               ;           ;
+<<<<<<< HEAD
 ; Total combinational functions                 ; 137       ;
 ; Combinational ALUT usage by number of inputs  ;           ;
 ;     -- 7 input functions                      ; 1         ;
@@ -271,11 +318,27 @@ applicable agreement for further details.
 ;                                               ;           ;
 ; Combinational ALUTs by mode                   ;           ;
 ;     -- normal mode                            ; 121       ;
+=======
+; Total combinational functions                 ; 144       ;
+; Combinational ALUT usage by number of inputs  ;           ;
+;     -- 7 input functions                      ; 1         ;
+;     -- 6 input functions                      ; 79        ;
+;     -- 5 input functions                      ; 3         ;
+;     -- 4 input functions                      ; 33        ;
+;     -- <=3 input functions                    ; 28        ;
+;                                               ;           ;
+; Combinational ALUTs by mode                   ;           ;
+;     -- normal mode                            ; 128       ;
+>>>>>>> 74db24c7186deb23301dceb44cd64cd26b40bfc0
 ;     -- extended LUT mode                      ; 1         ;
 ;     -- arithmetic mode                        ; 15        ;
 ;     -- shared arithmetic mode                 ; 0         ;
 ;                                               ;           ;
+<<<<<<< HEAD
 ; Estimated ALUT/register pairs used            ; 274       ;
+=======
+; Estimated ALUT/register pairs used            ; 283       ;
+>>>>>>> 74db24c7186deb23301dceb44cd64cd26b40bfc0
 ;                                               ;           ;
 ; Total registers                               ; 203       ;
 ;     -- Dedicated logic registers              ; 203       ;
@@ -287,8 +350,13 @@ applicable agreement for further details.
 ; DSP block 18-bit elements                     ; 0         ;
 ; Maximum fan-out node                          ; clk~input ;
 ; Maximum fan-out                               ; 203       ;
+<<<<<<< HEAD
 ; Total fan-out                                 ; 1514      ;
 ; Average fan-out                               ; 1.70      ;
+=======
+; Total fan-out                                 ; 1567      ;
+; Average fan-out                               ; 1.74      ;
+>>>>>>> 74db24c7186deb23301dceb44cd64cd26b40bfc0
 +-----------------------------------------------+-----------+
 
 
@@ -297,6 +365,7 @@ applicable agreement for further details.
 +----------------------------------------+-------------------+--------------+-------------------+--------------+---------+-----------+-----------+-----------+------+--------------+------------------------------------------------------------------------------+--------------+
 ; Compilation Hierarchy Node             ; LC Combinationals ; LC Registers ; Block Memory Bits ; DSP Elements ; DSP 9x9 ; DSP 12x12 ; DSP 18x18 ; DSP 36x36 ; Pins ; Virtual Pins ; Full Hierarchy Name                                                          ; Library Name ;
 +----------------------------------------+-------------------+--------------+-------------------+--------------+---------+-----------+-----------+-----------+------+--------------+------------------------------------------------------------------------------+--------------+
+<<<<<<< HEAD
 ; |mp3                                   ; 137 (0)           ; 203 (1)      ; 0                 ; 0            ; 0       ; 0         ; 0         ; 0         ; 276  ; 0            ; |mp3                                                                         ; work         ;
 ;    |arbiter:MEM_ARBITER|               ; 0 (0)             ; 17 (17)      ; 0                 ; 0            ; 0       ; 0         ; 0         ; 0         ; 0    ; 0            ; |mp3|arbiter:MEM_ARBITER                                                     ; work         ;
 ;    |cache:I_CACHE|                     ; 122 (0)           ; 170 (0)      ; 0                 ; 0            ; 0       ; 0         ; 0         ; 0         ; 0    ; 0            ; |mp3|cache:I_CACHE                                                           ; work         ;
@@ -308,6 +377,20 @@ applicable agreement for further details.
 ;    |datapath:DATAPATH|                 ; 15 (0)            ; 15 (0)       ; 0                 ; 0            ; 0       ; 0         ; 0         ; 0         ; 0    ; 0            ; |mp3|datapath:DATAPATH                                                       ; work         ;
 ;       |plus2:pcplus2|                  ; 15 (15)           ; 0 (0)        ; 0                 ; 0            ; 0       ; 0         ; 0         ; 0         ; 0    ; 0            ; |mp3|datapath:DATAPATH|plus2:pcplus2                                         ; work         ;
 ;       |register:pc|                    ; 0 (0)             ; 15 (15)      ; 0                 ; 0            ; 0       ; 0         ; 0         ; 0         ; 0    ; 0            ; |mp3|datapath:DATAPATH|register:pc                                           ; work         ;
+=======
+; |mp3                                   ; 144 (0)           ; 203 (1)      ; 0                 ; 0            ; 0       ; 0         ; 0         ; 0         ; 276  ; 0            ; |mp3                                                                         ; work         ;
+;    |arbiter:MEM_ARBITER|               ; 0 (0)             ; 17 (17)      ; 0                 ; 0            ; 0       ; 0         ; 0         ; 0         ; 0    ; 0            ; |mp3|arbiter:MEM_ARBITER                                                     ; work         ;
+;    |cache:I_CACHE|                     ; 126 (0)           ; 170 (0)      ; 0                 ; 0            ; 0       ; 0         ; 0         ; 0         ; 0    ; 0            ; |mp3|cache:I_CACHE                                                           ; work         ;
+;       |cache_control:CACHE_CONTROL|    ; 3 (3)             ; 2 (2)        ; 0                 ; 0            ; 0       ; 0         ; 0         ; 0         ; 0    ; 0            ; |mp3|cache:I_CACHE|cache_control:CACHE_CONTROL                               ; work         ;
+;       |cache_datapath:CACHE_DATAPATH|  ; 123 (107)         ; 168 (168)    ; 0                 ; 0            ; 0       ; 0         ; 0         ; 0         ; 0    ; 0            ; |mp3|cache:I_CACHE|cache_datapath:CACHE_DATAPATH                             ; work         ;
+;          |compare:COMPARE[0].COMPAREi| ; 7 (7)             ; 0 (0)        ; 0                 ; 0            ; 0       ; 0         ; 0         ; 0         ; 0    ; 0            ; |mp3|cache:I_CACHE|cache_datapath:CACHE_DATAPATH|compare:COMPARE[0].COMPAREi ; work         ;
+;          |compare:COMPARE[1].COMPAREi| ; 7 (7)             ; 0 (0)        ; 0                 ; 0            ; 0       ; 0         ; 0         ; 0         ; 0    ; 0            ; |mp3|cache:I_CACHE|cache_datapath:CACHE_DATAPATH|compare:COMPARE[1].COMPAREi ; work         ;
+;          |mux2:SEL_WAY_MUX|            ; 2 (2)             ; 0 (0)        ; 0                 ; 0            ; 0       ; 0         ; 0         ; 0         ; 0    ; 0            ; |mp3|cache:I_CACHE|cache_datapath:CACHE_DATAPATH|mux2:SEL_WAY_MUX            ; work         ;
+;    |datapath:DATAPATH|                 ; 18 (0)            ; 15 (0)       ; 0                 ; 0            ; 0       ; 0         ; 0         ; 0         ; 0    ; 0            ; |mp3|datapath:DATAPATH                                                       ; work         ;
+;       |plus2:pcplus2|                  ; 15 (15)           ; 0 (0)        ; 0                 ; 0            ; 0       ; 0         ; 0         ; 0         ; 0    ; 0            ; |mp3|datapath:DATAPATH|plus2:pcplus2                                         ; work         ;
+;       |register:pc|                    ; 0 (0)             ; 15 (15)      ; 0                 ; 0            ; 0       ; 0         ; 0         ; 0         ; 0    ; 0            ; |mp3|datapath:DATAPATH|register:pc                                           ; work         ;
+;       |stall:STALLI|                   ; 3 (3)             ; 0 (0)        ; 0                 ; 0            ; 0       ; 0         ; 0         ; 0         ; 0    ; 0            ; |mp3|datapath:DATAPATH|stall:STALLI                                          ; work         ;
+>>>>>>> 74db24c7186deb23301dceb44cd64cd26b40bfc0
 +----------------------------------------+-------------------+--------------+-------------------+--------------+---------+-----------+-----------+-----------+------+--------------+------------------------------------------------------------------------------+--------------+
 Note: For table entries with two numbers listed, the numbers in parentheses indicate the number of resources of the given type used by the specific entity alone. The numbers listed outside of parentheses indicate the total resources of the given type used by the specific entity and all of its sub-entities in the hierarchy.
 
@@ -6273,6 +6356,11 @@ Note: All cells listed above may not be present at the end of synthesis due to v
 ;                                                                ; due to stuck port data_in      ;                                                                                       ;
 ; datapath:DATAPATH|pcmux_sel_ex[0]                              ; Stuck at GND                   ; datapath:DATAPATH|pcmux_sel_mem[0], datapath:DATAPATH|pcmux_sel_wb[0]                 ;
 ;                                                                ; due to stuck port data_in      ;                                                                                       ;
+<<<<<<< HEAD
+=======
+; datapath:DATAPATH|mem_write_ex                                 ; Stuck at GND                   ; datapath:DATAPATH|mem_write_mem                                                       ;
+;                                                                ; due to stuck port data_in      ;                                                                                       ;
+>>>>>>> 74db24c7186deb23301dceb44cd64cd26b40bfc0
 ; datapath:DATAPATH|mem_read_mem                                 ; Stuck at GND                   ; cache:D_CACHE|cache_datapath:CACHE_DATAPATH|dirty_data[0][1]                          ;
 ;                                                                ; due to stuck port data_in      ;                                                                                       ;
 ; datapath:DATAPATH|pc_wb[11]                                    ; Lost Fanouts                   ; datapath:DATAPATH|pc_mem[11]                                                          ;
@@ -6306,7 +6394,11 @@ Note: All cells listed above may not be present at the end of synthesis due to v
 +--------------------+-----------+---------------+----------------------+------------------------+------------+---------------------------------------------------------+
 ; 4:1                ; 3 bits    ; 6 ALUTs       ; 6 ALUTs              ; 0 ALUTs                ; Yes        ; |mp3|arbiter:MEM_ARBITER|pmem_address[1]                ;
 ; 12:1               ; 12 bits   ; 96 ALUTs      ; 96 ALUTs             ; 0 ALUTs                ; Yes        ; |mp3|arbiter:MEM_ARBITER|pmem_address[8]                ;
+<<<<<<< HEAD
 ; 16:1               ; 128 bits  ; 1280 ALUTs    ; 1280 ALUTs           ; 0 ALUTs                ; Yes        ; |mp3|arbiter:MEM_ARBITER|pmem_wdata[78]                 ;
+=======
+; 16:1               ; 128 bits  ; 1280 ALUTs    ; 1280 ALUTs           ; 0 ALUTs                ; Yes        ; |mp3|arbiter:MEM_ARBITER|pmem_wdata[79]                 ;
+>>>>>>> 74db24c7186deb23301dceb44cd64cd26b40bfc0
 ; 8:1                ; 27 bits   ; 135 ALUTs     ; 135 ALUTs            ; 0 ALUTs                ; No         ; |mp3|cache:I_CACHE|cache_datapath:CACHE_DATAPATH|Mux139 ;
 ; 8:1                ; 13 bits   ; 65 ALUTs      ; 65 ALUTs             ; 0 ALUTs                ; No         ; |mp3|cache:D_CACHE|cache_datapath:CACHE_DATAPATH|Mux152 ;
 +--------------------+-----------+---------------+----------------------+------------------------+------------+---------------------------------------------------------+
@@ -6770,7 +6862,11 @@ Note: In order to hide this table in the UI and the text report file, please set
 Info: *******************************************************************
 Info: Running Quartus II 32-bit Analysis & Synthesis
     Info: Version 13.1.4 Build 182 03/12/2014 SJ Full Version
+<<<<<<< HEAD
     Info: Processing started: Sat Oct 22 21:25:47 2016
+=======
+    Info: Processing started: Sat Oct 22 21:17:03 2016
+>>>>>>> 74db24c7186deb23301dceb44cd64cd26b40bfc0
 Info: Command: quartus_map --read_settings_files=on --write_settings_files=off mp3 -c mp3
 Info (11104): Parallel Compilation has detected 8 hyper-threaded processors. However, the extra hyper-threaded processors will not be used by default. Parallel Compilation will use 4 of the 4 physical processors detected instead.
 Info (12021): Found 1 design units, including 1 entities, in source file arbiter.sv
@@ -6815,7 +6911,14 @@ Info (12021): Found 1 design units, including 1 entities, in source file mp3.sv
     Info (12023): Found entity 1: mp3
 Info (12021): Found 1 design units, including 1 entities, in source file datapath.sv
     Info (12023): Found entity 1: datapath
+<<<<<<< HEAD
 Info (12127): Elaborating entity "mp3" for the top level hierarchy
+=======
+Warning (10236): Verilog HDL Implicit Net warning at cache_datapath.sv(101): created implicit net for "cache_in_mux_sel"
+Info (12127): Elaborating entity "mp3" for the top level hierarchy
+Warning (12125): Using design file arbiter.sv, which is not specified as a design file for the current project, but contains definitions for 1 design units and 1 entities in project
+    Info (12023): Found entity 1: arbiter
+>>>>>>> 74db24c7186deb23301dceb44cd64cd26b40bfc0
 Info (12128): Elaborating entity "arbiter" for hierarchy "arbiter:MEM_ARBITER"
 Info (12128): Elaborating entity "cache" for hierarchy "cache:D_CACHE"
 Info (12128): Elaborating entity "cache_control" for hierarchy "cache:D_CACHE|cache_control:CACHE_CONTROL"
@@ -6837,9 +6940,15 @@ Info (12128): Elaborating entity "mux4" for hierarchy "datapath:DATAPATH|mux4:pc
 Info (12128): Elaborating entity "register" for hierarchy "datapath:DATAPATH|register:pc"
 Info (12128): Elaborating entity "plus2" for hierarchy "datapath:DATAPATH|plus2:pcplus2"
 Info (12128): Elaborating entity "stall" for hierarchy "datapath:DATAPATH|stall:STALLI"
+<<<<<<< HEAD
 Critical Warning (10237): Verilog HDL warning at stall.sv(20): can't infer register for assignment in edge-triggered always construct because the clock isn't obvious. Generated combinational logic instead
 Warning (10240): Verilog HDL Always Construct warning at stall.sv(9): inferring latch(es) for variable "stall", which holds its previous value in one or more paths through the always construct
 Info (10041): Inferred latch for "stall" at stall.sv(9)
+=======
+Critical Warning (10237): Verilog HDL warning at stall.sv(25): can't infer register for assignment in edge-triggered always construct because the clock isn't obvious. Generated combinational logic instead
+Warning (10240): Verilog HDL Always Construct warning at stall.sv(10): inferring latch(es) for variable "stall", which holds its previous value in one or more paths through the always construct
+Info (10041): Inferred latch for "stall" at stall.sv(10)
+>>>>>>> 74db24c7186deb23301dceb44cd64cd26b40bfc0
 Info (12128): Elaborating entity "adj" for hierarchy "datapath:DATAPATH|adj:ADJ9"
 Info (12128): Elaborating entity "adj" for hierarchy "datapath:DATAPATH|adj:ADJ11"
 Info (12128): Elaborating entity "mux2" for hierarchy "datapath:DATAPATH|mux2:SR1MUX"
@@ -7011,7 +7120,11 @@ Warning (13024): Output pins are stuck at VCC or GND
     Warning (13410): Pin "pmem_wdata[127]" is stuck at GND
 Info (286030): Timing-Driven Synthesis is running
 Info (17049): 2482 registers lost all their fanouts during netlist optimizations.
+<<<<<<< HEAD
 Info (144001): Generated suppressed messages file /home/scheng41/tulkas/output_files/mp3.map.smsg
+=======
+Info (144001): Generated suppressed messages file /home/cdlord2/Documents/ece411/tulkas/output_files/mp3.map.smsg
+>>>>>>> 74db24c7186deb23301dceb44cd64cd26b40bfc0
 Info (16010): Generating hard_block partition "hard_block:auto_generated_inst"
     Info (16011): Adding 0 node(s), including 0 DDIO, 0 PLL, 0 transceiver and 0 LCELL
 Warning (21074): Design contains 128 input pin(s) that do not drive logic
@@ -7143,6 +7256,7 @@ Warning (21074): Design contains 128 input pin(s) that do not drive logic
     Warning (15610): No output dependent on input pin "pmem_rdata[125]"
     Warning (15610): No output dependent on input pin "pmem_rdata[126]"
     Warning (15610): No output dependent on input pin "pmem_rdata[127]"
+<<<<<<< HEAD
 Info (21057): Implemented 575 device resources after synthesis - the final resource count might be different
     Info (21058): Implemented 130 input pins
     Info (21059): Implemented 146 output pins
@@ -7150,6 +7264,15 @@ Info (21057): Implemented 575 device resources after synthesis - the final resou
 Info: Quartus II 32-bit Analysis & Synthesis was successful. 0 errors, 294 warnings
     Info: Peak virtual memory: 452 megabytes
     Info: Processing ended: Sat Oct 22 21:25:56 2016
+=======
+Info (21057): Implemented 582 device resources after synthesis - the final resource count might be different
+    Info (21058): Implemented 130 input pins
+    Info (21059): Implemented 146 output pins
+    Info (21061): Implemented 306 logic cells
+Info: Quartus II 32-bit Analysis & Synthesis was successful. 0 errors, 296 warnings
+    Info: Peak virtual memory: 456 megabytes
+    Info: Processing ended: Sat Oct 22 21:17:12 2016
+>>>>>>> 74db24c7186deb23301dceb44cd64cd26b40bfc0
     Info: Elapsed time: 00:00:09
     Info: Total CPU time (on all processors): 00:00:04
 
@@ -7157,6 +7280,10 @@ Info: Quartus II 32-bit Analysis & Synthesis was successful. 0 errors, 294 warni
 +------------------------------------------+
 ; Analysis & Synthesis Suppressed Messages ;
 +------------------------------------------+
+<<<<<<< HEAD
 The suppressed messages can be found in /home/scheng41/tulkas/output_files/mp3.map.smsg.
+=======
+The suppressed messages can be found in /home/cdlord2/Documents/ece411/tulkas/output_files/mp3.map.smsg.
+>>>>>>> 74db24c7186deb23301dceb44cd64cd26b40bfc0
 
 
