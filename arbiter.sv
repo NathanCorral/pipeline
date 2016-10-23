@@ -2,6 +2,7 @@ import lc3b_types::*;
 
 module arbiter
 (
+    input clk,
     input icache_pmem_read,
     input lc3b_word icache_pmem_address,
     input dcache_pmem_read,
