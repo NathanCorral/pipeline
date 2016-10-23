@@ -1,20 +1,20 @@
 module stall
 (
-    input reset,
 	input read,
 	input write,
 	input resp,
 	output logic stall	 
 );
 
-always_ff @(posedge read or posedge write or posedge resp or posedge reset)
+initial
+begin
+    stall <= 1'b0;
+end
+
+always_ff @(posedge read or posedge write or posedge resp)
 begin
 	
-    if(reset) begin
-        stall <= 1'b0;
-    end
-	else if(resp)
-    begin
+	if(resp) begin
 		stall <= 1'b0;
 	end	
 	else if((read | write))
