@@ -208,6 +208,7 @@ plus2 #(.width(16)) pcplus2
 	/* Stall Register update untill completed memory read from I-Cache */
 stall STALLI
 (
+    .reset(reset),
 	.read(I_mem_read),
 	.write(1'b0),
 	.resp(I_mem_resp),
@@ -442,6 +443,7 @@ end
 /* Stall Register update untill completed memory read from D-Cache */
 stall STALLD
 (
+    .reset(reset),
 	.read(D_mem_read),
 	.write(D_mem_write),
 	.resp(D_mem_resp),

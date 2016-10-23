@@ -1,16 +1,16 @@
-Analysis & Synthesis Status : Failed - Sat Oct 22 15:45:23 2016
+Analysis & Synthesis Status : Successful - Sat Oct 22 21:17:11 2016
 Quartus II 32-bit Version : 13.1.4 Build 182 03/12/2014 SJ Full Version
 Revision Name : mp3
 Top-level Entity Name : mp3
 Family : Stratix III
-Logic utilization : N/A until Partition Merge
-    Combinational ALUTs : N/A until Partition Merge
-    Memory ALUTs : N/A until Partition Merge
-    Dedicated logic registers : N/A until Partition Merge
-Total registers : N/A until Partition Merge
-Total pins : N/A until Partition Merge
-Total virtual pins : N/A until Partition Merge
-Total block memory bits : N/A until Partition Merge
-DSP block 18-bit elements : N/A until Partition Merge
-Total PLLs : N/A until Partition Merge
-Total DLLs : N/A until Partition Merge
+Logic utilization : N/A
+    Combinational ALUTs : 144
+    Memory ALUTs : 0
+    Dedicated logic registers : 203
+Total registers : 203
+Total pins : 276
+Total virtual pins : 0
+Total block memory bits : 0
+DSP block 18-bit elements : 0
+Total PLLs : 0
+Total DLLs : 0
