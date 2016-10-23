@@ -285,8 +285,8 @@ regfile rf
 mux2 #(.width(16)) ADJ6MUX
 (
     .sel(sh6_sel_id),
-    .a({{9{ir_id[5]}}, ir_id[5:0], 1'b0}),
-    .b({{10{ir_id[5]}}, ir_id[5:0]}),
+    .a({{10{ir_id[5]}}, ir_id[5:0]}),
+    .b({{9{ir_id[5]}}, ir_id[5:0], 1'b0}),
     .f(adj6_out_id)
 );
 

@@ -197,7 +197,7 @@ begin
 			
 			/* WB */
 			load_regfile = 0;
- 			regfilemux_sel = 2'bzz;
+ 			regfilemux_sel = 2'b10;
 			load_cc = 0;
 			destmux_sel = 1'bz;
 			pcmux_sel = 2'bzz;
