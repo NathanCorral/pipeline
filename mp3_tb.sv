@@ -15,7 +15,7 @@ logic [127:0] pmem_wdata;
 initial clk = 0;
 always #5 clk = ~clk;
 
-mp2 dut
+mp3 dut
 (
     .clk,
     .pmem_resp,
