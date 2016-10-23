@@ -15,6 +15,12 @@ typedef logic  [2:0] lc3b_reg;
 typedef logic  [2:0] lc3b_nzp;
 typedef logic  [1:0] lc3b_mem_wmask;
 
+typedef logic  [8:0] lc3b_tag;
+typedef logic  [2:0] lc3b_index;
+typedef logic  [2:0] lc3b_offset;
+
+
+
 typedef enum bit [3:0] {
     op_add  = 4'b0001,
     op_and  = 4'b0101,

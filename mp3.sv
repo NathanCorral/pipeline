@@ -100,7 +100,7 @@ arbiter MEM_ARBITER
 cache D_CACHE (
 	/* clk, reset */
 	.clk(clk),
-	.reset(reset),
+	//.reset(reset),
 
 	/* D_Cache to/from Datapath */
 	.mem_resp(D_mem_resp),
@@ -124,7 +124,7 @@ cache D_CACHE (
 cache I_CACHE (
 		/* clk, reset */
 	.clk(clk),
-	.reset(reset),
+	//.reset(reset),
 
 	/* I_Cache to/from Datapath */
 	.mem_resp(I_mem_resp),
