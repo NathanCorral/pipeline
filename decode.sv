@@ -139,7 +139,7 @@ begin
 			indirect = 1'b0;
 			read = 1;
 			write = 0;
-			mem_byte_sig = 0;
+			mem_byte_sig = 2'b11;
 			
 			/* WB */
 			load_regfile = 1; 
@@ -166,7 +166,7 @@ begin
 			indirect = 1'b0;
 			read = 0;
 			write = 1;
-			mem_byte_sig = 0;
+			mem_byte_sig = 2'b11;
 			
 			/* WB */
 			load_regfile = 0; 

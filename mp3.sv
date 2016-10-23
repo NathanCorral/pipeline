@@ -131,7 +131,7 @@ cache I_CACHE (
 	.mem_rdata(I_mem_rdata),
 	.mem_read(I_mem_read),
 	.mem_write(1'b0),
-	.mem_byte_enable(2'b0),
+	.mem_byte_enable(2'b11),
 	.mem_address(I_mem_address),
 	.mem_wdata(16'b0),
 
