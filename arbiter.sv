@@ -10,7 +10,7 @@ module arbiter
     input lc3b_word dcache_pmem_address,
     input lc3b_block dcache_pmem_wdata,
     input pmem_resp,
-    input lc3b_word pmem_rdata,
+    input lc3b_block pmem_rdata,
     output lc3b_block dcache_mem_rdata,
     output lc3b_block icache_mem_rdata,
     output logic dcache_mem_resp,
