@@ -24,27 +24,7 @@ module datapath
 	 
 );
 
-
-assign mem_byte_enable = mem_byte_enable_mem;  //   change in Dcache Interfacae
-
-/* Pass Through Signals */
-//logic [3:0] opcode_id;
-lc3b_opcode opcode_ex;
-lc3b_opcode opcode_mem;
-lc3b_opcode opcode_wb;
-
-logic [15:0] pc_id;
-logic [15:0] pc_ex;
-logic [15:0] pc_mem;
-logic [15:0] pc_wb;
-
-logic [2:0] dest_ex;
-logic [2:0] dest_mem;
-logic [2:0] dest_wb;
-
-logic [15:0] alu_out_wb;
-
-/**********IF stage***************/
+/* Signal declarations */
 
 /* IF Control Signals */
 logic load_pc;
@@ -60,68 +40,7 @@ logic [15:0] pc_out;
 logic [15:0] pc_plus2_out;
 logic [15:0] i_cache_out;
 
-assign load_pc = ~stall_I & ~stall_D;
-
-
-
-/* Modules */
-mux4 pcmux
-(
-	.sel(pcmux_sel_out),
-	.a(pc_plus2_out),
-	.b(alu_out_wb),
-	.c(sr1_out_id), 
-	.d(byte_sel_out),
-	.f(pcmux_out)
-);
-
-register pc
-(
-	.clk,
-	.load(load_pc),
-	.in(pcmux_out),
-	.out(pc_out)
-);
-
-plus2 #(.width(16)) pcplus2
-(
-	.in(pc_out),
-	.out(pc_plus2_out) 
-);
-
-
-/* I-Cache Interface */
-	/* Stall Register update untill completed memory read from I-Cache */
-stall STALLI
-(
-	.read(I_mem_read),
-	.write(0),
-	.resp(I_mem_resp),
-	.stall(stall_I)
-);
-
-	 /* I_Cache signals */
-assign I_mem_address = pc_out;
-assign I_mem_read = ~I_mem_resp & ~stall_D;
-
-
-/* Update Registers */
-always_ff @(posedge clk or posedge reset)
-begin
-	if(reset)
-	begin
-		pc_id <= 0;
-		ir_id <= 0;
-	end
-	else if (!stall_I & !stall_D) begin
-		ir_id <= I_mem_rdata;
-		pc_id <= pc_plus2_out; 
-	end
-end
-
-/**************************************/
-
-/**********ID stage***************/
+logic stall_D;
 
 /* ID Control Signals */
 logic sr1_sel_id;
@@ -158,6 +77,165 @@ logic [2:0] dest_id;
 logic [2:0] sr1mux_out;
 logic [2:0] sr2mux_out;
 
+/* EX Control Signals */
+logic [1:0] alumux1_sel_ex;
+logic [1:0] alumux2_sel_ex;
+lc3b_aluop aluop_ex;
+/* Future stages */
+logic load_regfile_ex;
+logic indirect_ex;
+logic mem_read_ex;
+logic mem_write_ex;
+logic [1:0] mem_byte_enable_ex;
+logic [1:0] regfilemux_sel_ex;
+logic load_cc_ex;
+//logic branch_enable_ex;
+logic destmux_sel_ex;
+logic [1:0] pcmux_sel_ex;
+logic pcmux_sel_out_sel_ex;
+
+
+
+
+/* EX Input Signals */
+/* alumux1 */
+logic [15:0] sr1_ex;
+logic [15:0] adj9_out_ex;
+logic [15:0] adj11_out_ex;
+logic [15:0] trapvect_ex; 
+/* alumux2 */
+logic [15:0] sr2_ex;
+logic [15:0] adj6_out_ex;
+//logic [15:0] pc_ex;
+logic [15:0] immmux_out_ex; 
+
+/* EX Internal Signals */
+logic [15:0] alumux1_out;
+logic [15:0] alumux2_out;
+logic [15:0] alu_out;
+
+/* MEM Input Signals */
+logic [15:0] alu_out_mem;
+logic [15:0] sr2_mem;
+
+/* MEM control Signals */
+logic indirect_mem;
+logic mem_read_mem;
+logic mem_write_mem;
+logic [1:0] mem_byte_enable_mem;
+/* Future stages */
+logic [1:0] regfilemux_sel_mem;
+logic load_cc_mem;
+//logic branch_enable_ex;
+logic destmux_sel_mem;
+logic [1:0] pcmux_sel_mem;
+logic pcmux_sel_out_sel_mem;
+
+/* MEM Output Signals */
+logic [15:0] mem_wb;
+logic load_regfile_mem;
+lc3b_mem_wmask mem_byte_enable_wb;
+
+/* WB Control Signals */
+
+logic load_cc_wb;
+logic [1:0] regfilemux_sel_wb;
+logic [1:0] pcmux_sel_wb;
+logic destmux_sel_wb;  // careful to rename after EX stage is finished
+logic [15:0] regfilemux_out; // careful to rename after EX stage is finished
+logic pcmux_sel_out_sel_wb;
+logic load_regfile_wb;
+
+/* WB Output Signals */
+logic [2:0] destmux_out;
+/* WB Outputs to IF stage which is buffered by PC register*/
+/* WB Internal Signals */
+logic [15:0] byte_sel_out;
+logic [2:0] gencc_out;
+logic [2:0] cc_out;
+logic branch_enable_wb;
+
+/* Pass Through Signals */
+//logic [3:0] opcode_id;
+lc3b_opcode opcode_ex;
+lc3b_opcode opcode_mem;
+lc3b_opcode opcode_wb;
+
+logic [15:0] pc_id;
+logic [15:0] pc_ex;
+logic [15:0] pc_mem;
+logic [15:0] pc_wb;
+
+logic [2:0] dest_ex;
+logic [2:0] dest_mem;
+logic [2:0] dest_wb;
+
+logic [15:0] alu_out_wb;
+
+/**********IF stage***************/
+
+assign load_pc = ~stall_I & ~stall_D;
+
+
+
+/* Modules */
+mux4 pcmux
+(
+    .sel(pcmux_sel_out),
+    .a(pc_plus2_out),
+    .b(alu_out_wb),
+    .c(sr1_out_id), 
+	.d(byte_sel_out),
+	.f(pcmux_out)
+);
+
+register pc
+(
+	.clk,
+	.load(load_pc),
+	.in(pcmux_out),
+	.out(pc_out)
+);
+
+plus2 #(.width(16)) pcplus2
+(
+	.in(pc_out),
+	.out(pc_plus2_out) 
+);
+
+
+/* I-Cache Interface */
+	/* Stall Register update untill completed memory read from I-Cache */
+stall STALLI
+(
+	.read(I_mem_read),
+	.write(1'b0),
+	.resp(I_mem_resp),
+	.stall(stall_I)
+);
+
+	 /* I_Cache signals */
+assign I_mem_address = pc_out;
+assign I_mem_read = ~I_mem_resp & ~stall_D;
+
+
+/* Update Registers */
+always_ff @(posedge clk or posedge reset)
+begin
+	if(reset)
+	begin
+		pc_id <= 0;
+		ir_id <= 0;
+	end
+	else if (!stall_I & !stall_D) begin
+		ir_id <= I_mem_rdata;
+		pc_id <= pc_plus2_out; 
+	end
+end
+
+/**************************************/
+
+/**********ID stage***************/
 /* Modules */
 assign trapvect_id = {7'b0, ir_id[7:0], 1'b0};
 assign dest_id = ir_id[11:9];
@@ -295,43 +373,6 @@ end
 /**************************************/
 
 /************* EX State *************/
-/* EX Control Signals */
-logic [1:0] alumux1_sel_ex;
-logic [1:0] alumux2_sel_ex;
-lc3b_aluop aluop_ex;
-/* Future stages */
-logic load_regfile_ex;
-logic indirect_ex;
-logic mem_read_ex;
-logic mem_write_ex;
-logic [1:0] mem_byte_enable_ex;
-logic [1:0] regfilemux_sel_ex;
-logic load_cc_ex;
-//logic branch_enable_ex;
-logic destmux_sel_ex;
-logic [1:0] pcmux_sel_ex;
-logic pcmux_sel_out_sel_ex;
-
-
-
-
-/* EX Input Signals */
-/* alumux1 */
-logic [15:0] sr1_ex;
-logic [15:0] adj9_out_ex;
-logic [15:0] adj11_out_ex;
-logic [15:0] trapvect_ex; 
-/* alumux2 */
-logic [15:0] sr2_ex;
-logic [15:0] adj6_out_ex;
-//logic [15:0] pc_ex;
-logic [15:0] immmux_out_ex; 
-
-/* EX Internal Signals */
-logic [15:0] alumux1_out;
-logic [15:0] alumux2_out;
-logic [15:0] alu_out;
-
 /* Modules */
 mux4 #(.width(16)) ALUMUX1
 (
@@ -395,30 +436,6 @@ end
 /**************************/
 
 /****** MEM stage ***********/
-
-/* MEM Input Signals */
-logic [15:0] alu_out_mem;
-logic [15:0] sr2_mem;
-
-/* MEM control Signals */
-logic indirect_mem;
-logic mem_read_mem;
-logic mem_write_mem;
-logic [1:0] mem_byte_enable_mem;
-logic stall_D;
-/* Future stages */
-logic [1:0] regfilemux_sel_mem;
-logic load_cc_mem;
-//logic branch_enable_ex;
-logic destmux_sel_mem;
-logic [1:0] pcmux_sel_mem;
-logic pcmux_sel_out_sel_mem;
-
-/* MEM Output Signals */
-logic [15:0] mem_wb;
-logic load_regfile_mem;
-lc3b_mem_wmask mem_byte_enable_wb;
-
 /* Modules */
 
 /* D-Cache Interface */
@@ -434,6 +451,7 @@ assign D_mem_address = alu_out_mem;
 assign D_mem_wdata = sr2_mem;
 assign D_mem_read = mem_read_mem;
 assign D_mem_write = mem_write_mem;
+assign mem_byte_enable = mem_byte_enable_mem;  // change when Dcache Interfacae implemented
 
 /* Update Registers */
 always_ff @(posedge clk or posedge reset)
@@ -468,25 +486,6 @@ end
 
 
 /******** WB stage ********/
-
-/* WB Control Signals */
-
-logic load_cc_wb;
-logic [1:0] regfilemux_sel_wb;
-logic [1:0] pcmux_sel_wb;
-logic destmux_sel_wb;  // careful to rename after EX stage is finished
-logic [15:0] regfilemux_out; // careful to rename after EX stage is finished
-logic pcmux_sel_out_sel_wb;
-logic load_regfile_wb;
-
-/* WB Output Signals */
-logic [2:0] destmux_out;
-/* WB Outputs to IF stage which is buffered by PC register*/
-/* WB Internal Signals */
-logic [15:0] byte_sel_out;
-logic [2:0] gencc_out;
-logic [2:0] cc_out;
-logic branch_enable_wb;
 /* Modules */
 //byte_sel byte_sel
 //(

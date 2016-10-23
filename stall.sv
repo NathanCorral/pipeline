@@ -10,11 +10,11 @@ always_ff @(posedge read or posedge write or posedge resp)
 begin
 	
 	if(resp) begin
-		stall <= 0;
+		stall <= 1'b0;
 	end	
 	else if((read | write))
 	begin
-		stall <= 1;
+		stall <= 1'b1;
 	end
 	else begin
 		stall <= stall;

@@ -130,18 +130,18 @@ cache I_CACHE (
 	.mem_resp(I_mem_resp),
 	.mem_rdata(I_mem_rdata),
 	.mem_read(I_mem_read),
-	.mem_write(0),
-	.mem_byte_enable(0),
+	.mem_write(1'b0),
+	.mem_byte_enable(2'b0),
 	.mem_address(I_mem_address),
-	.mem_wdata(0),
+	.mem_wdata(16'b0),
 
 	/* I_Cache to/from Arbitor */
 	.pmem_resp(I_pmem_resp),
 	.pmem_rdata(I_pmem_rdata),
 	.pmem_read(I_pmem_read),
-	.pmem_write(0),
+    .pmem_write(),
 	.pmem_address(I_pmem_address),
-	.pmem_wdata(0)
+    .pmem_wdata()
 );
 
 datapath DATAPATH (
