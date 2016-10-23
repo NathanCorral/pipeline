@@ -20,3 +20,13 @@ showing how your L1 caches, arbiter, and L2 cache interface with each other
 arbiter
 L2 cache
 
+----------------------
+Current Progress as of 10/23/16
+----------------------
+
+Short summary of who did what:
+
+everyone: we worked as a group in the process of designing and drawing the diagram for this MP
+Nathan: set up project files, implemented the MP hierarchy with the caches, memory, datapath, etc. Wrote up the control signals for the pipeline registers. Implemented early version of the ex stage.
+Sheng: implemented early version of mem, wb, and if stages. Implemented our current decoder. Helped with the multitude of compilation issues (mostly missing and/or unassigned signals).
+Colin: implemented id stage. Helped get the project compiling and helped fill out many of the datapath and control signals. Wrote the arbiter. Final debugging and polishing of the MP.
