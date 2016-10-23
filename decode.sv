@@ -34,13 +34,13 @@ assign ir5 = instruction[5];
 
 always_comb
 begin	
-	
+			
     case (opcode)
 		op_add : begin
 			/* ID */
 			sr1_sel = 1'b0;
 			sr2_sel = 1'b0;
-			sh6_sel = 1'bz; // it might be wrong???
+			sh6_sel = 1'bz; 
 			imm_sel = 1'b0;
 			
 			/* EX */
@@ -58,7 +58,7 @@ begin
 			mem_byte_sig = 0;
 			
 			/* WB */
-			load_regfile = 1;  //missing????
+			load_regfile = 1; 
  			regfilemux_sel = 2'b10;
 			load_cc = 1;
 			destmux_sel = 0;
@@ -224,6 +224,7 @@ begin
 			mem_byte_sig = 0;
 			
 			/* WB */
+			load_regfile = 0;
 			regfilemux_sel = 0;
 			load_cc = 0;
 			destmux_sel = 0;
