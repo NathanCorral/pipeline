@@ -23,6 +23,10 @@ module datapath
 	 input lc3b_word I_mem_rdata
 	 
 );
+
+
+assign mem_byte_enable = mem_byte_enable_mem;  //   change in Dcache Interfacae
+
 /* Pass Through Signals */
 //logic [3:0] opcode_id;
 lc3b_opcode opcode_ex;
@@ -58,13 +62,15 @@ logic [15:0] i_cache_out;
 
 assign load_pc = ~stall_I & ~stall_D;
 
+
+
 /* Modules */
 mux4 pcmux
 (
 	.sel(pcmux_sel_out),
 	.a(pc_plus2_out),
 	.b(alu_out_wb),
-	.c(sr1_out), // careful to rename after EX stage is finished
+	.c(sr1_out_id), 
 	.d(byte_sel_out),
 	.f(pcmux_out)
 );
@@ -251,6 +257,10 @@ begin
         //branch_enable_ex <= 0;
         destmux_sel_ex <= 0;
         pcmux_sel_ex <= 0;
+		  dest_ex <= 0;
+		  mem_read_ex <= 0;
+		  mem_write_ex <= 0;
+		  load_regfile_ex <= 0;
 	end
 	else if (!stall_D) begin
         /* data signal assignments */
@@ -275,6 +285,11 @@ begin
         destmux_sel_ex <= destmux_sel_id;
         pcmux_sel_ex <= pcmux_sel_id;
 		  pcmux_sel_out_sel_ex <= pcmux_sel_out_sel_id;
+		  dest_ex <= dest_id;
+		  mem_read_ex <= mem_read_id;
+		  mem_write_ex <= mem_write_id;
+		  dest_ex <= dest_id;
+		  load_regfile_ex <= load_regfile_id;
 	end	
 end
 /**************************************/
@@ -311,7 +326,6 @@ logic [15:0] sr2_ex;
 logic [15:0] adj6_out_ex;
 //logic [15:0] pc_ex;
 logic [15:0] immmux_out_ex; 
-logic indirect_ex;
 
 /* EX Internal Signals */
 logic [15:0] alumux1_out;
@@ -354,7 +368,9 @@ begin
 	begin
 		alu_out_mem <= 0;
 		sr2_mem <= 0;
-        indirect_mem <= 0;
+       indirect_mem <= 0;
+		 dest_mem <= 0;
+		 load_regfile_mem <= 0;
 	end
 	else if (!stall_D) begin
 		pc_mem <= pc_ex;
@@ -372,6 +388,8 @@ begin
 		pcmux_sel_mem <= pcmux_sel_ex;
 		pcmux_sel_out_sel_mem <= pcmux_sel_out_sel_ex;
 		opcode_mem <= opcode_ex;
+		dest_mem <= dest_ex;
+		load_regfile_mem <= load_regfile_ex;
 	end	
 end
 /**************************/
@@ -398,7 +416,8 @@ logic pcmux_sel_out_sel_mem;
 
 /* MEM Output Signals */
 logic [15:0] mem_wb;
-lc3b_mem_wmask wmask_wb;
+logic load_regfile_mem;
+lc3b_mem_wmask mem_byte_enable_wb;
 
 /* Modules */
 
@@ -425,14 +444,14 @@ begin
 		pc_wb <= 0;
 		mem_wb <= 0;
 		dest_wb <= 0;
-		opcode_mem <= 0;
+		opcode_wb <= op_br;
 	end
 	else if(!stall_D) begin
 		alu_out_wb <= alu_out_mem;
 		pc_wb <= pc_mem;
 		dest_wb <= dest_mem;
 		mem_wb <= D_mem_rdata;
-		wmask_wb <= mem_byte_enable;
+		mem_byte_enable_wb <= mem_byte_enable_mem;
 		opcode_wb <= opcode_mem;
 		
 		regfilemux_sel_wb <= regfilemux_sel_mem;
@@ -441,6 +460,7 @@ begin
 	  destmux_sel_wb <= destmux_sel_mem;
 	  pcmux_sel_wb <= pcmux_sel_mem;
 	  pcmux_sel_out_sel_wb <= pcmux_sel_out_sel_mem;
+	  load_regfile_wb <= load_regfile_mem;
 	end	
 end
 
@@ -457,14 +477,16 @@ logic [1:0] pcmux_sel_wb;
 logic destmux_sel_wb;  // careful to rename after EX stage is finished
 logic [15:0] regfilemux_out; // careful to rename after EX stage is finished
 logic pcmux_sel_out_sel_wb;
+logic load_regfile_wb;
 
 /* WB Output Signals */
+logic [2:0] destmux_out;
 /* WB Outputs to IF stage which is buffered by PC register*/
 /* WB Internal Signals */
 logic [15:0] byte_sel_out;
 logic [2:0] gencc_out;
 logic [2:0] cc_out;
-
+logic branch_enable_wb;
 /* Modules */
 //byte_sel byte_sel
 //(
