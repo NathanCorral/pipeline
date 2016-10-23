@@ -16,7 +16,7 @@ module decode
 	output logic indirect,
 	output logic read,
 	output logic write,
-	output logic mem_byte_sig,
+	output logic [1:0] mem_byte_sig,
 	/* WB Control */
 	output logic load_regfile,
 	output logic [1:0] regfilemux_sel,
