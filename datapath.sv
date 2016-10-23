@@ -192,6 +192,7 @@ mux4 pcmux
 register pc
 (
 	.clk,
+	.reset,
 	.load(load_pc),
 	.in(pcmux_out),
 	.out(pc_out)
@@ -214,10 +215,10 @@ stall STALLI
 	.stall(stall_I)
 );
 
+
 	 /* I_Cache signals */
 assign I_mem_address = pc_out;
 assign I_mem_read = ~I_mem_resp & ~stall_D;
-
 
 /* Update Registers */
 always_ff @(posedge clk or posedge reset)
@@ -231,6 +232,9 @@ begin
 		ir_id <= I_mem_rdata;
 		pc_id <= pc_plus2_out; 
 	end
+
+	
+	
 end
 
 /**************************************/
@@ -513,6 +517,7 @@ gencc gencc
 register #(.width(3)) cc	// Added CC width 
 (
 	.clk,
+	.reset,
 	.load(load_cc_wb),
 	.in(gencc_out),
 	.out(cc_out)
