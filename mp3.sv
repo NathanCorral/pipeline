@@ -42,6 +42,8 @@ logic [127:0] I_pmem_rdata;
 logic I_pmem_read;
 lc3b_word I_pmem_address;
 
+logic reset;
+
 /* L2 Cache In/Out */
 
 
@@ -68,8 +70,15 @@ begin
 	state <= next_state;
 end
 
+/* 
+ * This arbiter scheme assumes that we won't be writing data
+ * into any instruction memory (this is not the same as assuming
+ * the i-cache will not be writing data, this is assuming that
+ * the d-cache will not invalidate any data in the i-cache)
+ */
 arbiter MEM_ARBITER
 (
+	 .clk(clk),
     .icache_pmem_read(I_pmem_read),
     .icache_pmem_address(I_pmem_address),
     .dcache_pmem_read(D_pmem_read),
@@ -77,7 +86,15 @@ arbiter MEM_ARBITER
     .dcache_pmem_address(D_pmem_address),
     .dcache_pmem_wdata(D_pmem_wdata),
     .pmem_resp(pmem_resp),
-    .pmem_rdata(pmem_rdata)
+    .pmem_rdata(pmem_rdata),
+	 .dcache_mem_rdata(D_pmem_rdata),
+    .icache_mem_rdata(I_pmem_rdata),
+    .dcache_mem_resp(D_pmem_resp),
+    .icache_mem_resp(I_pmem_resp),
+    .pmem_read(pmem_read),
+    .pmem_write(pmem_write),
+    .pmem_address(pmem_address),
+    .pmem_wdata(pmem_wdata)
 );
 
 cache D_CACHE (
