@@ -1,16 +1,18 @@
-Fitter Status : Successful - Fri Oct 14 21:43:39 2016
-Quartus Prime Version : 16.0.0 Build 211 04/27/2016 SJ Lite Edition
+Fitter Status : Successful - Sat Oct 22 21:26:21 2016
+Quartus II 32-bit Version : 13.1.4 Build 182 03/12/2014 SJ Full Version
 Revision Name : mp3
 Top-level Entity Name : mp3
-Family : Cyclone IV E
-Device : EP4CE15F23C6
+Family : Stratix III
+Device : EP3SL50F780C2
 Timing Models : Final
-Total logic elements : 0 / 15,408 ( 0 % )
-    Total combinational functions : 0 / 15,408 ( 0 % )
-    Dedicated logic registers : 0 / 15,408 ( 0 % )
-Total registers : 0
-Total pins : 276 / 344 ( 80 % )
+Logic utilization : < 1 %
+    Combinational ALUTs : 139 / 38,000 ( < 1 % )
+    Memory ALUTs : 0 / 19,000 ( 0 % )
+    Dedicated logic registers : 203 / 38,000 ( < 1 % )
+Total registers : 203
+Total pins : 276 / 488 ( 57 % )
 Total virtual pins : 0
-Total memory bits : 0 / 516,096 ( 0 % )
-Embedded Multiplier 9-bit elements : 0 / 112 ( 0 % )
+Total block memory bits : 0 / 1,880,064 ( 0 % )
+DSP block 18-bit elements : 0 / 216 ( 0 % )
 Total PLLs : 0 / 4 ( 0 % )
+Total DLLs : 0 / 4 ( 0 % )

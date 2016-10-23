@@ -1,0 +1,796 @@
+m255
+K3
+13
+cModel Technology
+Z0 d/home/scheng41/tulkas/simulation/modelsim
+vadj
+Z1 DXx6 sv_std 3 std 0 22 F[19LRNL:5;XmIFh[XOPn1
+Z2 DXx4 work 10 lc3b_types 0 22 Z4LZYN7I9G>UjIC^U5l<h0
+DXx4 work 11 adj_sv_unit 0 22 Zz1f1?G_3Q<LzB8ELCN<B0
+VE;zLPZ?c`8[LaP1M[Ui<V1
+r1
+31
+IE?DeziCSMm19LdOg08T;50
+S1
+Z3 d/home/scheng41/tulkas/simulation/modelsim
+Z4 w1476563723
+Z5 8/home/scheng41/tulkas/adj.sv
+Z6 F/home/scheng41/tulkas/adj.sv
+L0 6
+Z7 OV;L;10.1d;51
+Z8 !s108 1477189630.149308
+Z9 !s107 /home/scheng41/tulkas/adj.sv|
+Z10 !s90 -reportprogress|300|-sv|-work|work|+incdir+/home/scheng41/tulkas|/home/scheng41/tulkas/adj.sv|
+Z11 o-sv -work work -O0
+Z12 !s92 -sv -work work +incdir+/home/scheng41/tulkas -O0
+!s85 0
+!i10b 1
+!s100 k]d=bo;1jdz>MAe0lzEi20
+!s105 adj_sv_unit
+!s101 -O0
+Xadj_sv_unit
+R1
+R2
+VZz1f1?G_3Q<LzB8ELCN<B0
+r1
+31
+IZz1f1?G_3Q<LzB8ELCN<B0
+S1
+R3
+R4
+R5
+R6
+L0 1
+R7
+R8
+R9
+R10
+R11
+R12
+!s85 0
+!i10b 1
+!s100 2jaO3zcK1?hTZjo43KG7A3
+!i103 1
+!s101 -O0
+valu
+R1
+R2
+DXx4 work 11 alu_sv_unit 0 22 UC46M:>Hn;Q9AEofh?91:3
+V=ZN?TEUMd1Ge?6dcD7B5a3
+r1
+31
+IW4OgWeXm_45:AG[i^I4XP1
+S1
+R3
+R4
+Z13 8/home/scheng41/tulkas/alu.sv
+Z14 F/home/scheng41/tulkas/alu.sv
+L0 3
+R7
+Z15 !s108 1477189629.937211
+Z16 !s107 /home/scheng41/tulkas/alu.sv|
+Z17 !s90 -reportprogress|300|-sv|-work|work|+incdir+/home/scheng41/tulkas|/home/scheng41/tulkas/alu.sv|
+R11
+R12
+!s85 0
+!i10b 1
+!s100 inb6e^743ALaZDQJdJn=f3
+!s105 alu_sv_unit
+!s101 -O0
+Xalu_sv_unit
+R1
+R2
+VUC46M:>Hn;Q9AEofh?91:3
+r1
+31
+IUC46M:>Hn;Q9AEofh?91:3
+S1
+R3
+R4
+R13
+R14
+L0 1
+R7
+R15
+R16
+R17
+R11
+R12
+!s85 0
+!i10b 1
+!s100 8Hc[I]ilOdmeHK3ddDZY42
+!i103 1
+!s101 -O0
+varbiter
+R1
+R2
+DXx4 work 15 arbiter_sv_unit 0 22 @E0LCYzZ[3oaaCHdaEfNH0
+VXGP9a8JdZko<6@]VI3K[i0
+r1
+31
+I^BRQTg9V;hML1VLj3R0TM3
+S1
+R3
+Z18 w1477187346
+Z19 8/home/scheng41/tulkas/arbiter.sv
+Z20 F/home/scheng41/tulkas/arbiter.sv
+L0 3
+R7
+Z21 !s108 1477189628.547438
+Z22 !s107 /home/scheng41/tulkas/arbiter.sv|
+Z23 !s90 -reportprogress|300|-sv|-work|work|+incdir+/home/scheng41/tulkas|/home/scheng41/tulkas/arbiter.sv|
+R11
+R12
+!s85 0
+!i10b 1
+!s100 ?Uk?a7@?mI2TCd25?;HBj2
+!s105 arbiter_sv_unit
+!s101 -O0
+Xarbiter_sv_unit
+R1
+R2
+V@E0LCYzZ[3oaaCHdaEfNH0
+r1
+31
+I@E0LCYzZ[3oaaCHdaEfNH0
+S1
+R3
+R18
+R19
+R20
+L0 1
+R7
+R21
+R22
+R23
+R11
+R12
+!s85 0
+!i10b 1
+!s100 CL`Rz[=]1<L_nkS7`A<gg3
+!i103 1
+!s101 -O0
+vcache
+R1
+R2
+DXx4 work 13 cache_sv_unit 0 22 zZo;RcNniigU=TDYd?C3S3
+VDHo1zcP8]Gj=W;a7OY];[3
+r1
+31
+IVD5O3Ikeeh8azY33RZGQ51
+S1
+R3
+R4
+Z24 8/home/scheng41/tulkas/cache/cache.sv
+Z25 F/home/scheng41/tulkas/cache/cache.sv
+L0 3
+R7
+Z26 !s108 1477189630.604102
+Z27 !s107 /home/scheng41/tulkas/cache/cache.sv|
+Z28 !s90 -reportprogress|300|-sv|-work|work|+incdir+/home/scheng41/tulkas/cache|/home/scheng41/tulkas/cache/cache.sv|
+R11
+Z29 !s92 -sv -work work +incdir+/home/scheng41/tulkas/cache -O0
+!s85 0
+!i10b 1
+!s100 9UHFTYnaGhL>>=nfcioEG2
+!s105 cache_sv_unit
+!s101 -O0
+vcache_control
+R1
+Iz<H`2EWOQ8Eg;n0`QaoLV2
+V_U<bZh6<<F^^9a2V5>:J>3
+S1
+R3
+R4
+8/home/scheng41/tulkas/cache/cache_control.sv
+F/home/scheng41/tulkas/cache/cache_control.sv
+L0 1
+R7
+r1
+31
+R11
+R29
+!i10b 1
+!s100 H:e=eNgfMBGCVg4`m=X@e3
+!s105 cache_control_sv_unit
+!s85 0
+!s108 1477189627.670666
+!s107 /home/scheng41/tulkas/cache/cache_control.sv|
+!s90 -reportprogress|300|-sv|-work|work|+incdir+/home/scheng41/tulkas/cache|/home/scheng41/tulkas/cache/cache_control.sv|
+!s101 -O0
+vcache_datapath
+R1
+R2
+DXx4 work 22 cache_datapath_sv_unit 0 22 a6QjVHcR5jDW3lkgflm0N0
+VQd_YQm=43hTeDiPPHGWSA3
+r1
+31
+IoOIhcKIf`<I9_89i`=beQ1
+S1
+R3
+Z30 w1477181169
+Z31 8/home/scheng41/tulkas/cache/cache_datapath.sv
+Z32 F/home/scheng41/tulkas/cache/cache_datapath.sv
+L0 3
+R7
+Z33 !s108 1477189629.091995
+Z34 !s107 /home/scheng41/tulkas/cache/cache_datapath.sv|
+Z35 !s90 -reportprogress|300|-sv|-work|work|+incdir+/home/scheng41/tulkas/cache|/home/scheng41/tulkas/cache/cache_datapath.sv|
+R11
+R29
+!s85 0
+!i10b 1
+!s100 C<mn:S0bmiCIVP;fUBS^]2
+!s105 cache_datapath_sv_unit
+!s101 -O0
+Xcache_datapath_sv_unit
+R1
+R2
+Va6QjVHcR5jDW3lkgflm0N0
+r1
+31
+Ia6QjVHcR5jDW3lkgflm0N0
+S1
+R3
+R30
+R31
+R32
+L0 1
+R7
+R33
+R34
+R35
+R11
+R29
+!s85 0
+!i10b 1
+!s100 m@7i7ozodB3VnUL:AfLNX1
+!i103 1
+!s101 -O0
+Xcache_sv_unit
+R1
+R2
+VzZo;RcNniigU=TDYd?C3S3
+r1
+31
+IzZo;RcNniigU=TDYd?C3S3
+S1
+R3
+R4
+R24
+R25
+L0 1
+R7
+R26
+R27
+R28
+R11
+R29
+!s85 0
+!i10b 1
+!s100 nR1@<E8I<AM<JbPR8>7[Z0
+!i103 1
+!s101 -O0
+vcccomp
+R1
+R2
+DXx4 work 14 cccomp_sv_unit 0 22 ?YYXfEj6[FGFcR4TTchl<0
+V7]OGbnYI7`bTYSa8mIfm41
+r1
+31
+IF]TgSLg18FEB<mZ7zal]n2
+S1
+R3
+R4
+Z36 8/home/scheng41/tulkas/cccomp.sv
+Z37 F/home/scheng41/tulkas/cccomp.sv
+L0 4
+R7
+Z38 !s108 1477189629.715302
+Z39 !s107 /home/scheng41/tulkas/cccomp.sv|
+Z40 !s90 -reportprogress|300|-sv|-work|work|+incdir+/home/scheng41/tulkas|/home/scheng41/tulkas/cccomp.sv|
+R11
+R12
+!s85 0
+!i10b 1
+!s100 S`b0blVIHZ_4oVXCDKQOo1
+!s105 cccomp_sv_unit
+!s101 -O0
+Xcccomp_sv_unit
+R1
+R2
+V?YYXfEj6[FGFcR4TTchl<0
+r1
+31
+I?YYXfEj6[FGFcR4TTchl<0
+S1
+R3
+R4
+R36
+R37
+L0 1
+R7
+R38
+R39
+R40
+R11
+R12
+!s85 0
+!i10b 1
+!s100 6XNO8;c<F4^f2maZZ;N;E0
+!i103 1
+!s101 -O0
+vcompare
+R1
+I3g=Egb@h@4N5PORic?^0e1
+V7W^2eYNX8SB^e8Ni=3RPW3
+S1
+R3
+R4
+8/home/scheng41/tulkas/cache/compare.sv
+F/home/scheng41/tulkas/cache/compare.sv
+L0 1
+R7
+r1
+31
+R11
+R29
+!i10b 1
+!s100 9F<n`2zUeESd7SY5Z]D5I3
+!s105 compare_sv_unit
+!s85 0
+!s108 1477189626.742484
+!s107 /home/scheng41/tulkas/cache/compare.sv|
+!s90 -reportprogress|300|-sv|-work|work|+incdir+/home/scheng41/tulkas/cache|/home/scheng41/tulkas/cache/compare.sv|
+!s101 -O0
+vdatapath
+R1
+R2
+DXx4 work 16 datapath_sv_unit 0 22 MXe>9`HW2]<ocS6DZ@8O@0
+Vb?F1Q36cA8k3?C3Kn<;VN2
+r1
+31
+IaQc6CV_S@`R2>5Ja_U97M3
+S1
+R3
+Z41 w1477189545
+Z42 8/home/scheng41/tulkas/datapath.sv
+Z43 F/home/scheng41/tulkas/datapath.sv
+L0 3
+R7
+Z44 !s108 1477189630.358262
+Z45 !s107 /home/scheng41/tulkas/datapath.sv|
+Z46 !s90 -reportprogress|300|-sv|-work|work|+incdir+/home/scheng41/tulkas|/home/scheng41/tulkas/datapath.sv|
+R11
+R12
+!s85 0
+!i10b 1
+!s100 W:HZUd9;@mbJBb0>O<Ok@1
+!s105 datapath_sv_unit
+!s101 -O0
+Xdatapath_sv_unit
+R1
+R2
+VMXe>9`HW2]<ocS6DZ@8O@0
+r1
+31
+IMXe>9`HW2]<ocS6DZ@8O@0
+S1
+R3
+R41
+R42
+R43
+L0 1
+R7
+R44
+R45
+R46
+R11
+R12
+!s85 0
+!i10b 1
+!s100 [?ELgHM?^3S65mo6XnSo=3
+!i103 1
+!s101 -O0
+vdecode
+R1
+R2
+DXx4 work 14 decode_sv_unit 0 22 L;JUNK^>k9[CK8^CFAfT90
+VJP;z1:GB;1UWhRzdG?TTb0
+r1
+31
+IM1eB`VhU;hUNDgmU_RcdV0
+S1
+R3
+Z47 w1477187347
+Z48 8/home/scheng41/tulkas/decode.sv
+Z49 F/home/scheng41/tulkas/decode.sv
+L0 3
+R7
+Z50 !s108 1477189628.791068
+Z51 !s107 /home/scheng41/tulkas/decode.sv|
+Z52 !s90 -reportprogress|300|-sv|-work|work|+incdir+/home/scheng41/tulkas|/home/scheng41/tulkas/decode.sv|
+R11
+R12
+!s85 0
+!i10b 1
+!s100 KVO10O6ejf77mzS^SblKz0
+!s105 decode_sv_unit
+!s101 -O0
+Xdecode_sv_unit
+R1
+R2
+VL;JUNK^>k9[CK8^CFAfT90
+r1
+31
+IL;JUNK^>k9[CK8^CFAfT90
+S1
+R3
+R47
+R48
+R49
+L0 1
+R7
+R50
+R51
+R52
+R11
+R12
+!s85 0
+!i10b 1
+!s100 ;eBJa?YV?acPzzfQC3bQF2
+!i103 1
+!s101 -O0
+vgencc
+R1
+R2
+DXx4 work 13 gencc_sv_unit 0 22 lGKe_^=HY7`[b=oABfT2a3
+VWC`9gVLYW_h075<FQmcHc2
+r1
+31
+INiC[R?QAXcmKOS@2K=IjA2
+S1
+R3
+Z53 w1476563725
+Z54 8/home/scheng41/tulkas/gencc.sv
+Z55 F/home/scheng41/tulkas/gencc.sv
+L0 3
+R7
+Z56 !s108 1477189629.539006
+Z57 !s107 /home/scheng41/tulkas/gencc.sv|
+Z58 !s90 -reportprogress|300|-sv|-work|work|+incdir+/home/scheng41/tulkas|/home/scheng41/tulkas/gencc.sv|
+R11
+R12
+!s85 0
+!i10b 1
+!s100 J]Ug_P^6mAWz];1U2gBPC1
+!s105 gencc_sv_unit
+!s101 -O0
+Xgencc_sv_unit
+R1
+R2
+VlGKe_^=HY7`[b=oABfT2a3
+r1
+31
+IlGKe_^=HY7`[b=oABfT2a3
+S1
+R3
+R53
+R54
+R55
+L0 1
+R7
+R56
+R57
+R58
+R11
+R12
+!s85 0
+!i10b 1
+!s100 gR:diz0eOABS<i9B97zca2
+!i103 1
+!s101 -O0
+Xlc3b_types
+R1
+IZ4LZYN7I9G>UjIC^U5l<h0
+VZ4LZYN7I9G>UjIC^U5l<h0
+S1
+R3
+w1477077354
+8/home/scheng41/tulkas/lc3b_types.sv
+F/home/scheng41/tulkas/lc3b_types.sv
+L0 1
+R7
+r1
+31
+R11
+R12
+!i10b 1
+!s100 Zd@2MWz1WGA2ECQa?]]?42
+!s85 0
+!s108 1477189628.367869
+!s107 /home/scheng41/tulkas/lc3b_types.sv|
+!s90 -reportprogress|300|-sv|-work|work|+incdir+/home/scheng41/tulkas|/home/scheng41/tulkas/lc3b_types.sv|
+!s101 -O0
+vmp3
+R1
+R2
+DXx4 work 11 mp3_sv_unit 0 22 5H9Z0KE;ClchzSoSddYSV2
+V=T76C9NLdVcj6d@;_no@_2
+r1
+31
+IzPHNeHRZcP5M]XgWd24N53
+S1
+R3
+R47
+Z59 8/home/scheng41/tulkas/mp3.sv
+Z60 F/home/scheng41/tulkas/mp3.sv
+L0 3
+R7
+Z61 !s108 1477189630.805061
+Z62 !s107 /home/scheng41/tulkas/mp3.sv|
+Z63 !s90 -reportprogress|300|-sv|-work|work|+incdir+/home/scheng41/tulkas|/home/scheng41/tulkas/mp3.sv|
+R11
+R12
+!s85 0
+!i10b 1
+!s100 <1J;B8:T0NMmb<b?kH4eD0
+!s105 mp3_sv_unit
+!s101 -O0
+Xmp3_sv_unit
+R1
+R2
+V5H9Z0KE;ClchzSoSddYSV2
+r1
+31
+I5H9Z0KE;ClchzSoSddYSV2
+S1
+R3
+R47
+R59
+R60
+L0 1
+R7
+R61
+R62
+R63
+R11
+R12
+!s85 0
+!i10b 1
+!s100 8ndT8]d?:U2Oa><Ej2JA=0
+!i103 1
+!s101 -O0
+vmp3_tb
+R1
+!i10b 1
+!s100 7k^;@n95VYmZA_o@BcmDT3
+I>U2TT1Cn6ga=3gB>U^>LU2
+VGRaNXc@:Z3jVCaTT0F9jW2
+!s105 mp3_tb_sv_unit
+S1
+R3
+R47
+8/home/scheng41/tulkas/mp3_tb.sv
+F/home/scheng41/tulkas/mp3_tb.sv
+L0 1
+R7
+r1
+!s85 0
+31
+!s108 1477189631.201840
+!s107 /home/scheng41/tulkas/mp3_tb.sv|
+!s90 -reportprogress|300|-sv|-work|work|+incdir+/home/scheng41/tulkas|/home/scheng41/tulkas/mp3_tb.sv|
+!s101 -O0
+R11
+R12
+vmux2
+R1
+IN2Z_aoCmzm=CkbHaH<FSI0
+V8m]l]_QnJ>bC;o8UdVIPk2
+S1
+R3
+R53
+8/home/scheng41/tulkas/mux2.sv
+F/home/scheng41/tulkas/mux2.sv
+L0 1
+R7
+r1
+31
+R11
+R12
+!i10b 1
+!s100 Y=8CF<7hJRW7M0Nc`>f0b0
+!s105 mux2_sv_unit
+!s85 0
+!s108 1477189628.228374
+!s107 /home/scheng41/tulkas/mux2.sv|
+!s90 -reportprogress|300|-sv|-work|work|+incdir+/home/scheng41/tulkas|/home/scheng41/tulkas/mux2.sv|
+!s101 -O0
+vmux4
+R1
+INISZEU1XB5hIIYjaI_i402
+VYCkK`QGYSnR6BP^DhRdne0
+S1
+R3
+R53
+8/home/scheng41/tulkas/mux4.sv
+F/home/scheng41/tulkas/mux4.sv
+L0 1
+R7
+r1
+31
+R11
+R12
+!i10b 1
+!s100 c<`ObLl9K>D_7JPz0?jC[3
+!s105 mux4_sv_unit
+!s85 0
+!s108 1477189628.071987
+!s107 /home/scheng41/tulkas/mux4.sv|
+!s90 -reportprogress|300|-sv|-work|work|+incdir+/home/scheng41/tulkas|/home/scheng41/tulkas/mux4.sv|
+!s101 -O0
+vphysical_memory
+R1
+I6A<QLQbF0_P@ZhLm2ABQ10
+VbAHNzMUF]n2gJaIiKj0nn2
+S1
+R3
+w1477174594
+8/home/scheng41/tulkas/physical_memory.sv
+F/home/scheng41/tulkas/physical_memory.sv
+L0 1
+R7
+r1
+31
+R11
+R12
+!i10b 1
+!s100 K@8lB>IiPDR0C0l6On7251
+!s105 physical_memory_sv_unit
+!s85 0
+!s108 1477189631.052553
+!s107 /home/scheng41/tulkas/physical_memory.sv|
+!s90 -reportprogress|300|-sv|-work|work|+incdir+/home/scheng41/tulkas|/home/scheng41/tulkas/physical_memory.sv|
+!s101 -O0
+vplus2
+R1
+I@0>6:XhKPA]aUCU@^FBzU1
+V8Yjd6>kf[QVaNB:l@BLiW1
+S1
+R3
+Z64 w1476563726
+8/home/scheng41/tulkas/plus2.sv
+F/home/scheng41/tulkas/plus2.sv
+L0 1
+R7
+r1
+31
+R11
+R12
+!i10b 1
+!s100 7he[N3Q5Z=_>>Z5^z_zU^0
+!s105 plus2_sv_unit
+!s85 0
+!s108 1477189627.871298
+!s107 /home/scheng41/tulkas/plus2.sv|
+!s90 -reportprogress|300|-sv|-work|work|+incdir+/home/scheng41/tulkas|/home/scheng41/tulkas/plus2.sv|
+!s101 -O0
+vregfile
+R1
+R2
+DXx4 work 15 regfile_sv_unit 0 22 O97b53Gnl9`92XD^73W2G2
+VI5Qi<J7d>m:48JkPAAQAV2
+r1
+31
+I@g<aheAd>5Ka3o:>f:M8O2
+S1
+R3
+R64
+Z65 8/home/scheng41/tulkas/regfile.sv
+Z66 F/home/scheng41/tulkas/regfile.sv
+L0 3
+R7
+Z67 !s108 1477189629.362253
+Z68 !s107 /home/scheng41/tulkas/regfile.sv|
+Z69 !s90 -reportprogress|300|-sv|-work|work|+incdir+/home/scheng41/tulkas|/home/scheng41/tulkas/regfile.sv|
+R11
+R12
+!s85 0
+!i10b 1
+!s100 mci0L;BbhJZAczTM[4geJ3
+!s105 regfile_sv_unit
+!s101 -O0
+Xregfile_sv_unit
+R1
+R2
+VO97b53Gnl9`92XD^73W2G2
+r1
+31
+IO97b53Gnl9`92XD^73W2G2
+S1
+R3
+R64
+R65
+R66
+L0 1
+R7
+R67
+R68
+R69
+R11
+R12
+!s85 0
+!i10b 1
+!s100 <6_1]]6YV1Y=8iT<`b`iX2
+!i103 1
+!s101 -O0
+vregister
+R1
+IQeEnR]lJhjlZ:`77oDKf01
+VVWH2GIcWRQ29K?3;26c491
+S1
+R3
+w1476567421
+8/home/scheng41/tulkas/register.sv
+F/home/scheng41/tulkas/register.sv
+L0 1
+R7
+r1
+31
+R11
+R12
+!i10b 1
+!s100 IA@76[OIH>G]CXP1hSm602
+!s105 register_sv_unit
+!s85 0
+!s108 1477189626.607485
+!s107 /home/scheng41/tulkas/register.sv|
+!s90 -reportprogress|300|-sv|-work|work|+incdir+/home/scheng41/tulkas|/home/scheng41/tulkas/register.sv|
+!s101 -O0
+vstall
+R1
+Ie2WQMQU]RSibhCb[k3=g;1
+V@8N_o3jhgZcKOdh<VRYTi0
+S1
+R3
+R47
+8/home/scheng41/tulkas/stall.sv
+F/home/scheng41/tulkas/stall.sv
+L0 1
+R7
+r1
+31
+R11
+R12
+!i10b 1
+!s100 1leETe7:zKWk@NP0e@[]T2
+!s105 stall_sv_unit
+!s85 0
+!s108 1477189626.500357
+!s107 /home/scheng41/tulkas/stall.sv|
+!s90 -reportprogress|300|-sv|-work|work|+incdir+/home/scheng41/tulkas|/home/scheng41/tulkas/stall.sv|
+!s101 -O0
+vswap_word
+R1
+IU;8=2c5HkUdbd7fm3C2QA2
+Va6]nZUTge59Mf9>3XL^[K0
+S1
+R3
+R4
+8/home/scheng41/tulkas/cache/swap_word.sv
+F/home/scheng41/tulkas/cache/swap_word.sv
+L0 1
+R7
+r1
+31
+R11
+R29
+!i10b 1
+!s100 kAhKRQdLH[lmPO^>SR:@V2
+!s105 swap_word_sv_unit
+!s85 0
+!s108 1477189627.330665
+!s107 /home/scheng41/tulkas/cache/swap_word.sv|
+!s90 -reportprogress|300|-sv|-work|work|+incdir+/home/scheng41/tulkas/cache|/home/scheng41/tulkas/cache/swap_word.sv|
+!s101 -O0

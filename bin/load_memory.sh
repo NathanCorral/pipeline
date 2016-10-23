@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # Settings
-DEFAULT_TARGET=$HOME/ece411/mp0/simulation/modelsim/memory.lst
-ASSEMBLER=$HOME/ece411/bin/LC3bAssembler
-ADDRESSABILITY=1
+DEFAULT_TARGET=$HOME/tulkas/simulation/modelsim/memory.lst
+ASSEMBLER=$HOME/tulkas/bin/LC3bAssembler
+ADDRESSABILITY=16
 
 # Command line parameters
 ASM_FILE=$1

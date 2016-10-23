@@ -27,7 +27,7 @@ module cache_datapath #(parameter way = 2, data_words = 8, lines = 8)
 
 
 
-
+logic cache_in_mux_sel;
 
 // Address Division
 logic [11:0] tag;   

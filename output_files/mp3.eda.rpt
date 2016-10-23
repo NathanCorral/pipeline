@@ -1,6 +1,6 @@
 EDA Netlist Writer report for mp3
-Fri Oct 14 21:43:47 2016
-Quartus Prime Version 16.0.0 Build 211 04/27/2016 SJ Lite Edition
+Sat Oct 22 21:26:52 2016
+Quartus II 32-bit Version 13.1.4 Build 182 03/12/2014 SJ Full Version
 
 
 ---------------------
@@ -17,30 +17,29 @@ Quartus Prime Version 16.0.0 Build 211 04/27/2016 SJ Lite Edition
 ----------------
 ; Legal Notice ;
 ----------------
-Copyright (C) 1991-2016 Altera Corporation. All rights reserved.
+Copyright (C) 1991-2014 Altera Corporation
 Your use of Altera Corporation's design tools, logic functions 
 and other software and tools, and its AMPP partner logic 
 functions, and any output files from any of the foregoing 
 (including device programming or simulation files), and any 
 associated documentation or information are expressly subject 
 to the terms and conditions of the Altera Program License 
-Subscription Agreement, the Altera Quartus Prime License Agreement,
-the Altera MegaCore Function License Agreement, or other 
-applicable license agreement, including, without limitation, 
-that your use is for the sole purpose of programming logic 
-devices manufactured by Altera and sold by Altera or its 
-authorized distributors.  Please refer to the applicable 
-agreement for further details.
+Subscription Agreement, Altera MegaCore Function License 
+Agreement, or other applicable license agreement, including, 
+without limitation, that your use is for the sole purpose of 
+programming logic devices manufactured by Altera and sold by 
+Altera or its authorized distributors.  Please refer to the 
+applicable agreement for further details.
 
 
 
 +-------------------------------------------------------------------+
 ; EDA Netlist Writer Summary                                        ;
 +---------------------------+---------------------------------------+
-; EDA Netlist Writer Status ; Successful - Fri Oct 14 21:43:47 2016 ;
+; EDA Netlist Writer Status ; Successful - Sat Oct 22 21:26:52 2016 ;
 ; Revision Name             ; mp3                                   ;
 ; Top-level Entity Name     ; mp3                                   ;
-; Family                    ; Cyclone IV E                          ;
+; Family                    ; Stratix III                           ;
 ; Simulation Files Creation ; Successful                            ;
 +---------------------------+---------------------------------------+
 
@@ -51,7 +50,7 @@ agreement for further details.
 ; Option                                                                                            ; Setting                         ;
 +---------------------------------------------------------------------------------------------------+---------------------------------+
 ; Tool Name                                                                                         ; ModelSim-Altera (SystemVerilog) ;
-; Generate functional simulation netlist                                                            ; Off                             ;
+; Generate netlist for functional simulation only                                                   ; Off                             ;
 ; Time scale                                                                                        ; 1 ps                            ;
 ; Truncate long hierarchy paths                                                                     ; Off                             ;
 ; Map illegal HDL characters                                                                        ; Off                             ;
@@ -72,14 +71,14 @@ agreement for further details.
 +------------------------------------------------------------------------+
 ; Generated Files                                                        ;
 +------------------------------------------------------------------------+
-; /home/nate/ece411/mp3/simulation/modelsim/mp3_6_1200mv_85c_slow.svo    ;
-; /home/nate/ece411/mp3/simulation/modelsim/mp3_6_1200mv_0c_slow.svo     ;
-; /home/nate/ece411/mp3/simulation/modelsim/mp3_min_1200mv_0c_fast.svo   ;
-; /home/nate/ece411/mp3/simulation/modelsim/mp3.svo                      ;
-; /home/nate/ece411/mp3/simulation/modelsim/mp3_6_1200mv_85c_v_slow.sdo  ;
-; /home/nate/ece411/mp3/simulation/modelsim/mp3_6_1200mv_0c_v_slow.sdo   ;
-; /home/nate/ece411/mp3/simulation/modelsim/mp3_min_1200mv_0c_v_fast.sdo ;
-; /home/nate/ece411/mp3/simulation/modelsim/mp3_v.sdo                    ;
+; /home/scheng41/tulkas/simulation/modelsim/mp3_2_1100mv_85c_slow.svo    ;
+; /home/scheng41/tulkas/simulation/modelsim/mp3_2_1100mv_0c_slow.svo     ;
+; /home/scheng41/tulkas/simulation/modelsim/mp3_min_1100mv_0c_fast.svo   ;
+; /home/scheng41/tulkas/simulation/modelsim/mp3.svo                      ;
+; /home/scheng41/tulkas/simulation/modelsim/mp3_2_1100mv_85c_v_slow.sdo  ;
+; /home/scheng41/tulkas/simulation/modelsim/mp3_2_1100mv_0c_v_slow.sdo   ;
+; /home/scheng41/tulkas/simulation/modelsim/mp3_min_1100mv_0c_v_fast.sdo ;
+; /home/scheng41/tulkas/simulation/modelsim/mp3_v.sdo                    ;
 +------------------------------------------------------------------------+
 
 
@@ -87,22 +86,22 @@ agreement for further details.
 ; EDA Netlist Writer Messages ;
 +-----------------------------+
 Info: *******************************************************************
-Info: Running Quartus Prime EDA Netlist Writer
-    Info: Version 16.0.0 Build 211 04/27/2016 SJ Lite Edition
-    Info: Processing started: Fri Oct 14 21:43:46 2016
+Info: Running Quartus II 32-bit EDA Netlist Writer
+    Info: Version 13.1.4 Build 182 03/12/2014 SJ Full Version
+    Info: Processing started: Sat Oct 22 21:26:44 2016
 Info: Command: quartus_eda --read_settings_files=off --write_settings_files=off mp3 -c mp3
-Info (204019): Generated file mp3_6_1200mv_85c_slow.svo in folder "/home/nate/ece411/mp3/simulation/modelsim/" for EDA simulation tool
-Info (204019): Generated file mp3_6_1200mv_0c_slow.svo in folder "/home/nate/ece411/mp3/simulation/modelsim/" for EDA simulation tool
-Info (204019): Generated file mp3_min_1200mv_0c_fast.svo in folder "/home/nate/ece411/mp3/simulation/modelsim/" for EDA simulation tool
-Info (204019): Generated file mp3.svo in folder "/home/nate/ece411/mp3/simulation/modelsim/" for EDA simulation tool
-Info (204019): Generated file mp3_6_1200mv_85c_v_slow.sdo in folder "/home/nate/ece411/mp3/simulation/modelsim/" for EDA simulation tool
-Info (204019): Generated file mp3_6_1200mv_0c_v_slow.sdo in folder "/home/nate/ece411/mp3/simulation/modelsim/" for EDA simulation tool
-Info (204019): Generated file mp3_min_1200mv_0c_v_fast.sdo in folder "/home/nate/ece411/mp3/simulation/modelsim/" for EDA simulation tool
-Info (204019): Generated file mp3_v.sdo in folder "/home/nate/ece411/mp3/simulation/modelsim/" for EDA simulation tool
-Info: Quartus Prime EDA Netlist Writer was successful. 0 errors, 0 warnings
-    Info: Peak virtual memory: 1317 megabytes
-    Info: Processing ended: Fri Oct 14 21:43:47 2016
-    Info: Elapsed time: 00:00:01
-    Info: Total CPU time (on all processors): 00:00:01
+Info (204019): Generated file mp3_2_1100mv_85c_slow.svo in folder "/home/scheng41/tulkas/simulation/modelsim/" for EDA simulation tool
+Info (204019): Generated file mp3_2_1100mv_0c_slow.svo in folder "/home/scheng41/tulkas/simulation/modelsim/" for EDA simulation tool
+Info (204019): Generated file mp3_min_1100mv_0c_fast.svo in folder "/home/scheng41/tulkas/simulation/modelsim/" for EDA simulation tool
+Info (204019): Generated file mp3.svo in folder "/home/scheng41/tulkas/simulation/modelsim/" for EDA simulation tool
+Info (204019): Generated file mp3_2_1100mv_85c_v_slow.sdo in folder "/home/scheng41/tulkas/simulation/modelsim/" for EDA simulation tool
+Info (204019): Generated file mp3_2_1100mv_0c_v_slow.sdo in folder "/home/scheng41/tulkas/simulation/modelsim/" for EDA simulation tool
+Info (204019): Generated file mp3_min_1100mv_0c_v_fast.sdo in folder "/home/scheng41/tulkas/simulation/modelsim/" for EDA simulation tool
+Info (204019): Generated file mp3_v.sdo in folder "/home/scheng41/tulkas/simulation/modelsim/" for EDA simulation tool
+Info: Quartus II 32-bit EDA Netlist Writer was successful. 0 errors, 0 warnings
+    Info: Peak virtual memory: 388 megabytes
+    Info: Processing ended: Sat Oct 22 21:26:53 2016
+    Info: Elapsed time: 00:00:09
+    Info: Total CPU time (on all processors): 00:00:02
 
 
