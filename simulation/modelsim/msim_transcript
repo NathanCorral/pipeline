@@ -209,12 +209,8 @@
 # .main_pane.objects.interior.cs.body.tree
 # run 200 ns
 add list  \
-sim:/mp3_tb/dut/DATAPATH/pc/out
-add list  \
-sim:/mp3_tb/dut/DATAPATH/ir_id
-rsetart -f; run 5000ns
-# invalid command name "rsetart"
-restart -f; run 5000ns
+sim:/mp3_tb/dut/DATAPATH/rf/data
+restart -f; run 20000ns
 # Loading sv_std.std
 # Loading work.mp3_tb
 # Loading work.lc3b_types

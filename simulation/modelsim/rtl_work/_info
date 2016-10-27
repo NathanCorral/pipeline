@@ -18,7 +18,7 @@ Z5 8/home/nbcorra2/ece411/tulkas/adj.sv
 Z6 F/home/nbcorra2/ece411/tulkas/adj.sv
 L0 6
 Z7 OV;L;10.1d;51
-Z8 !s108 1477259586.856709
+Z8 !s108 1477260185.746967
 Z9 !s107 /home/nbcorra2/ece411/tulkas/adj.sv|
 Z10 !s90 -reportprogress|300|-sv|-work|work|+incdir+/home/nbcorra2/ece411/tulkas|/home/nbcorra2/ece411/tulkas/adj.sv|
 Z11 o-sv -work work -O0
@@ -67,7 +67,7 @@ Z13 8/home/nbcorra2/ece411/tulkas/alu.sv
 Z14 F/home/nbcorra2/ece411/tulkas/alu.sv
 L0 3
 R7
-Z15 !s108 1477259586.722111
+Z15 !s108 1477260185.487473
 Z16 !s107 /home/nbcorra2/ece411/tulkas/alu.sv|
 Z17 !s90 -reportprogress|300|-sv|-work|work|+incdir+/home/nbcorra2/ece411/tulkas|/home/nbcorra2/ece411/tulkas/alu.sv|
 R11
@@ -116,7 +116,7 @@ Z18 8/home/nbcorra2/ece411/tulkas/arbiter.sv
 Z19 F/home/nbcorra2/ece411/tulkas/arbiter.sv
 L0 3
 R7
-Z20 !s108 1477259585.671310
+Z20 !s108 1477260184.105690
 Z21 !s107 /home/nbcorra2/ece411/tulkas/arbiter.sv|
 Z22 !s90 -reportprogress|300|-sv|-work|work|+incdir+/home/nbcorra2/ece411/tulkas|/home/nbcorra2/ece411/tulkas/arbiter.sv|
 R11
@@ -165,7 +165,7 @@ Z24 8/home/nbcorra2/ece411/tulkas/cache/cache.sv
 Z25 F/home/nbcorra2/ece411/tulkas/cache/cache.sv
 L0 3
 R7
-Z26 !s108 1477259587.187668
+Z26 !s108 1477260186.243123
 Z27 !s107 /home/nbcorra2/ece411/tulkas/cache/cache.sv|
 Z28 !s90 -reportprogress|300|-sv|-work|work|+incdir+/home/nbcorra2/ece411/tulkas/cache|/home/nbcorra2/ece411/tulkas/cache/cache.sv|
 R11
@@ -194,7 +194,7 @@ R29
 !s100 _oZ]m_2bb;NQdcO]kihfm0
 !s105 cache_control_sv_unit
 !s85 0
-!s108 1477259585.170124
+!s108 1477260183.425813
 !s107 /home/nbcorra2/ece411/tulkas/cache/cache_control.sv|
 !s90 -reportprogress|300|-sv|-work|work|+incdir+/home/nbcorra2/ece411/tulkas/cache|/home/nbcorra2/ece411/tulkas/cache/cache_control.sv|
 !s101 -O0
@@ -213,7 +213,7 @@ Z30 8/home/nbcorra2/ece411/tulkas/cache/cache_datapath.sv
 Z31 F/home/nbcorra2/ece411/tulkas/cache/cache_datapath.sv
 L0 3
 R7
-Z32 !s108 1477259585.990098
+Z32 !s108 1477260184.438253
 Z33 !s107 /home/nbcorra2/ece411/tulkas/cache/cache_datapath.sv|
 Z34 !s90 -reportprogress|300|-sv|-work|work|+incdir+/home/nbcorra2/ece411/tulkas/cache|/home/nbcorra2/ece411/tulkas/cache/cache_datapath.sv|
 R11
@@ -286,7 +286,7 @@ Z35 8/home/nbcorra2/ece411/tulkas/cccomp.sv
 Z36 F/home/nbcorra2/ece411/tulkas/cccomp.sv
 L0 4
 R7
-Z37 !s108 1477259586.590405
+Z37 !s108 1477260185.239680
 Z38 !s107 /home/nbcorra2/ece411/tulkas/cccomp.sv|
 Z39 !s90 -reportprogress|300|-sv|-work|work|+incdir+/home/nbcorra2/ece411/tulkas|/home/nbcorra2/ece411/tulkas/cccomp.sv|
 R11
@@ -339,7 +339,7 @@ R29
 !s100 JS`I71dZi12T`C6ZlOAJM3
 !s105 compare_sv_unit
 !s85 0
-!s108 1477259584.877913
+!s108 1477260183.120328
 !s107 /home/nbcorra2/ece411/tulkas/cache/compare.sv|
 !s90 -reportprogress|300|-sv|-work|work|+incdir+/home/nbcorra2/ece411/tulkas/cache|/home/nbcorra2/ece411/tulkas/cache/compare.sv|
 !s101 -O0
@@ -350,22 +350,22 @@ DXx4 work 16 datapath_sv_unit 0 22 `R;7:@]oD^25Ne7dEh8_W3
 Vb?F1Q36cA8k3?C3Kn<;VN2
 r1
 31
-IHjRfzJa1ODI_1z0gYH7;F1
+ISQOa=<]1Ec9Jn?DSOlhdT0
 S1
 R3
-Z40 w1477259576
+Z40 w1477259667
 Z41 8/home/nbcorra2/ece411/tulkas/datapath.sv
 Z42 F/home/nbcorra2/ece411/tulkas/datapath.sv
 L0 3
 R7
-Z43 !s108 1477259587.026722
+Z43 !s108 1477260185.966069
 Z44 !s107 /home/nbcorra2/ece411/tulkas/datapath.sv|
 Z45 !s90 -reportprogress|300|-sv|-work|work|+incdir+/home/nbcorra2/ece411/tulkas|/home/nbcorra2/ece411/tulkas/datapath.sv|
 R11
 R12
 !s85 0
 !i10b 1
-!s100 :Cj<Q<IQ1c`IizKj_gPNV1
+!s100 9b7oHH;VeYN7HTZ>=`FZM3
 !s105 datapath_sv_unit
 !s101 -O0
 Xdatapath_sv_unit
@@ -407,7 +407,7 @@ Z47 8/home/nbcorra2/ece411/tulkas/decode.sv
 Z48 F/home/nbcorra2/ece411/tulkas/decode.sv
 L0 3
 R7
-Z49 !s108 1477259585.841763
+Z49 !s108 1477260184.281843
 Z50 !s107 /home/nbcorra2/ece411/tulkas/decode.sv|
 Z51 !s90 -reportprogress|300|-sv|-work|work|+incdir+/home/nbcorra2/ece411/tulkas|/home/nbcorra2/ece411/tulkas/decode.sv|
 R11
@@ -456,7 +456,7 @@ Z52 8/home/nbcorra2/ece411/tulkas/gencc.sv
 Z53 F/home/nbcorra2/ece411/tulkas/gencc.sv
 L0 3
 R7
-Z54 !s108 1477259586.401086
+Z54 !s108 1477260185.003514
 Z55 !s107 /home/nbcorra2/ece411/tulkas/gencc.sv|
 Z56 !s90 -reportprogress|300|-sv|-work|work|+incdir+/home/nbcorra2/ece411/tulkas|/home/nbcorra2/ece411/tulkas/gencc.sv|
 R11
@@ -508,7 +508,7 @@ R12
 !i10b 1
 !s100 9H:4=abA[Ngj@Jkg9fl1b3
 !s85 0
-!s108 1477259585.592389
+!s108 1477260183.942944
 !s107 /home/nbcorra2/ece411/tulkas/lc3b_types.sv|
 !s90 -reportprogress|300|-sv|-work|work|+incdir+/home/nbcorra2/ece411/tulkas|/home/nbcorra2/ece411/tulkas/lc3b_types.sv|
 !s101 -O0
@@ -527,7 +527,7 @@ Z58 8/home/nbcorra2/ece411/tulkas/mp3.sv
 Z59 F/home/nbcorra2/ece411/tulkas/mp3.sv
 L0 3
 R7
-Z60 !s108 1477259587.331288
+Z60 !s108 1477260186.501627
 Z61 !s107 /home/nbcorra2/ece411/tulkas/mp3.sv|
 Z62 !s90 -reportprogress|300|-sv|-work|work|+incdir+/home/nbcorra2/ece411/tulkas|/home/nbcorra2/ece411/tulkas/mp3.sv|
 R11
@@ -578,7 +578,7 @@ R7
 r1
 !s85 0
 31
-!s108 1477259587.556288
+!s108 1477260187.034441
 !s107 /home/nbcorra2/ece411/tulkas/mp3_tb.sv|
 !s90 -reportprogress|300|-sv|-work|work|+incdir+/home/nbcorra2/ece411/tulkas|/home/nbcorra2/ece411/tulkas/mp3_tb.sv|
 !s101 -O0
@@ -603,7 +603,7 @@ R12
 !s100 Qza69:]2;7AC[_BCf<MRU0
 !s105 mux2_sv_unit
 !s85 0
-!s108 1477259585.483093
+!s108 1477260183.825249
 !s107 /home/nbcorra2/ece411/tulkas/mux2.sv|
 !s90 -reportprogress|300|-sv|-work|work|+incdir+/home/nbcorra2/ece411/tulkas|/home/nbcorra2/ece411/tulkas/mux2.sv|
 !s101 -O0
@@ -626,7 +626,7 @@ R12
 !s100 BYBS5MBO<o`KWSZN^HbF?3
 !s105 mux4_sv_unit
 !s85 0
-!s108 1477259585.389332
+!s108 1477260183.730636
 !s107 /home/nbcorra2/ece411/tulkas/mux4.sv|
 !s90 -reportprogress|300|-sv|-work|work|+incdir+/home/nbcorra2/ece411/tulkas|/home/nbcorra2/ece411/tulkas/mux4.sv|
 !s101 -O0
@@ -649,7 +649,7 @@ R12
 !s100 KlT@GbfHo^A^_h20Z`hAM1
 !s105 physical_memory_sv_unit
 !s85 0
-!s108 1477259587.456877
+!s108 1477260186.894698
 !s107 /home/nbcorra2/ece411/tulkas/physical_memory.sv|
 !s90 -reportprogress|300|-sv|-work|work|+incdir+/home/nbcorra2/ece411/tulkas|/home/nbcorra2/ece411/tulkas/physical_memory.sv|
 !s101 -O0
@@ -672,7 +672,7 @@ R12
 !s100 >=dzV1icXG@1IbG2kV4A]3
 !s105 plus2_sv_unit
 !s85 0
-!s108 1477259585.309809
+!s108 1477260183.590160
 !s107 /home/nbcorra2/ece411/tulkas/plus2.sv|
 !s90 -reportprogress|300|-sv|-work|work|+incdir+/home/nbcorra2/ece411/tulkas|/home/nbcorra2/ece411/tulkas/plus2.sv|
 !s101 -O0
@@ -691,7 +691,7 @@ Z65 8/home/nbcorra2/ece411/tulkas/regfile.sv
 Z66 F/home/nbcorra2/ece411/tulkas/regfile.sv
 L0 3
 R7
-Z67 !s108 1477259586.175085
+Z67 !s108 1477260184.864017
 Z68 !s107 /home/nbcorra2/ece411/tulkas/regfile.sv|
 Z69 !s90 -reportprogress|300|-sv|-work|work|+incdir+/home/nbcorra2/ece411/tulkas|/home/nbcorra2/ece411/tulkas/regfile.sv|
 R11
@@ -744,7 +744,7 @@ R12
 !s100 Z4eI3:>P^FN^JjZngN5D]1
 !s105 register_sv_unit
 !s85 0
-!s108 1477259584.624834
+!s108 1477260183.015935
 !s107 /home/nbcorra2/ece411/tulkas/register.sv|
 !s90 -reportprogress|300|-sv|-work|work|+incdir+/home/nbcorra2/ece411/tulkas|/home/nbcorra2/ece411/tulkas/register.sv|
 !s101 -O0
@@ -767,7 +767,7 @@ R12
 !s100 T=[oo@O6KVHbc621`]`G_3
 !s105 stall_sv_unit
 !s85 0
-!s108 1477259584.430608
+!s108 1477260182.799193
 !s107 /home/nbcorra2/ece411/tulkas/stall.sv|
 !s90 -reportprogress|300|-sv|-work|work|+incdir+/home/nbcorra2/ece411/tulkas|/home/nbcorra2/ece411/tulkas/stall.sv|
 !s101 -O0
@@ -790,7 +790,7 @@ R29
 !s100 JkA9aFjnPMHOl1]]MjT;E0
 !s105 swap_word_sv_unit
 !s85 0
-!s108 1477259585.062841
+!s108 1477260183.217908
 !s107 /home/nbcorra2/ece411/tulkas/cache/swap_word.sv|
 !s90 -reportprogress|300|-sv|-work|work|+incdir+/home/nbcorra2/ece411/tulkas/cache|/home/nbcorra2/ece411/tulkas/cache/swap_word.sv|
 !s101 -O0
