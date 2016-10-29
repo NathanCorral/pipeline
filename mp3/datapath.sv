@@ -58,7 +58,8 @@ logic indirect_id;
 logic mem_read_id;
 logic mem_write_id;
 logic [1:0] mem_byte_enable_id;
-logic [1:0] regfilemux_sel_id;
+logic regfilemux_sel_id;
+logic memread_sel_id;
 logic load_cc_id;
 // logic branch_enable_id;		// Not used?
 logic destmux_sel_id;
@@ -79,6 +80,8 @@ logic [2:0] sr1mux_out;
 logic [2:0] sr2mux_out;
 
 /* EX Control Signals */
+logic [1:0] fwd1_sel;
+logic [1:0] fwd2_sel;
 logic [1:0] alumux1_sel_ex;
 logic [1:0] alumux2_sel_ex;
 lc3b_aluop aluop_ex;
@@ -88,10 +91,12 @@ logic indirect_ex;
 logic mem_read_ex;
 logic mem_write_ex;
 logic [1:0] mem_byte_enable_ex;
-logic [1:0] regfilemux_sel_ex;
+logic regfilemux_sel_ex;
+logic memread_sel_ex;
 logic load_cc_ex;
 //logic branch_enable_ex;
 logic destmux_sel_ex;
+logic [2:0] destmux_out_ex;
 logic [1:0] pcmux_sel_ex;
 logic pcmux_sel_out_sel_ex;
 
@@ -100,6 +105,8 @@ logic pcmux_sel_out_sel_ex;
 
 /* EX Input Signals */
 /* alumux1 */
+logic [2:0] sr1id_ex;
+logic [2:0] sr2id_ex;
 logic [15:0] sr1_ex;
 logic [15:0] adj9_out_ex;
 logic [15:0] adj11_out_ex;
@@ -114,6 +121,8 @@ logic [15:0] immmux_out_ex;
 logic [15:0] alumux1_out;
 logic [15:0] alumux2_out;
 logic [15:0] alu_out;
+logic [15:0] fwdmux1_out;
+logic [15:0] fwdmux2_out;
 
 /* MEM Input Signals */
 logic [15:0] alu_out_mem;
@@ -125,30 +134,31 @@ logic mem_read_mem;
 logic mem_write_mem;
 logic [1:0] mem_byte_enable_mem;
 /* Future stages */
-logic [1:0] regfilemux_sel_mem;
+logic regfilemux_sel_mem;
+logic memread_sel_mem;
 logic load_cc_mem;
 //logic branch_enable_ex;
-logic destmux_sel_mem;
+logic [2:0] destmux_out_mem;
 logic [1:0] pcmux_sel_mem;
 logic pcmux_sel_out_sel_mem;
 
 /* MEM Output Signals */
 logic [15:0] mem_wb;
 logic load_regfile_mem;
+logic [15:0] regfilemux_out_mem;
 lc3b_mem_wmask mem_byte_enable_wb;
 
 /* WB Control Signals */
 
 logic load_cc_wb;
-logic [1:0] regfilemux_sel_wb;
+logic memread_sel_wb;
 logic [1:0] pcmux_sel_wb;
-logic destmux_sel_wb;  // careful to rename after EX stage is finished
-logic [15:0] regfilemux_out; // careful to rename after EX stage is finished
+logic [2:0] destmux_out_wb;
+logic [15:0] regfilemux_out_wb;
+logic [15:0] memreadmux_out_wb;
 logic pcmux_sel_out_sel_wb;
 logic load_regfile_wb;
 
-/* WB Output Signals */
-logic [2:0] destmux_out;
 /* WB Outputs to IF stage which is buffered by PC register*/
 /* WB Internal Signals */
 logic [15:0] byte_sel_out;
@@ -168,8 +178,6 @@ logic [15:0] pc_mem;
 logic [15:0] pc_wb;
 
 logic [2:0] dest_ex;
-logic [2:0] dest_mem;
-logic [2:0] dest_wb;
 
 logic [15:0] alu_out_wb;
 
@@ -186,7 +194,7 @@ mux4 pcmux
     .a(pc_plus2_out),
     .b(alu_out_wb),
     .c(sr1_out_id), 
-	.d(byte_sel_out),
+	.d(mem_wb),
 	.f(pcmux_out)
 );
 
@@ -279,10 +287,10 @@ regfile rf
     .clk(clk),
     .reset(reset),
     .load(load_regfile_wb),
-    .in(regfilemux_out), // rename later?
+    .in(memreadmux_out_wb),
     .src_a(sr1mux_out),
     .src_b(sr2mux_out),
-    .dest(destmux_out),
+    .dest(destmux_out_wb),
     .reg_a(sr1_out_id),
     .reg_b(sr2_out_id)
 );
@@ -319,6 +327,7 @@ decode INST_DECODER
     .mem_byte_sig(mem_byte_enable_id),
     .load_regfile(load_regfile_id),
     .regfilemux_sel(regfilemux_sel_id),
+    .memread_sel(memread_sel_id),
     .load_cc(load_cc_id),
     .destmux_sel(destmux_sel_id),
     .pcmux_sel(pcmux_sel_id),
@@ -330,12 +339,15 @@ always_ff @(posedge clk or posedge reset)
 begin
 	if(reset)
 	begin
+        sr1id_ex <= 0;
+        sr2id_ex <= 0;
         alumux1_sel_ex <= 0;
         alumux2_sel_ex <= 0;
         aluop_ex <= alu_pass;
         indirect_ex <= 0;
         mem_byte_enable_ex <= 0;
         regfilemux_sel_ex <= 0;
+        memread_sel_ex <= 0;
         load_cc_ex <= 0;
         //branch_enable_ex <= 0;
         destmux_sel_ex <= 0;
@@ -357,12 +369,15 @@ begin
         immmux_out_ex <= immmux_out_id;
         opcode_ex <= opcode_id;
         /* control signal assignments */
+        sr1id_ex <= sr1mux_out;
+        sr2id_ex <= sr2mux_out;
         alumux1_sel_ex <= alumux1_sel_id;
         alumux2_sel_ex <= alumux2_sel_id;
         aluop_ex <= aluop_id;
         indirect_ex <= indirect_id;
         mem_byte_enable_ex <= mem_byte_enable_id;
         regfilemux_sel_ex <= regfilemux_sel_id;
+        memread_sel_ex <= memread_sel_id;
         load_cc_ex <= load_cc_id;
         /* branch_enable_ex <= branch_enable_id; */ // Not needed?
         destmux_sel_ex <= destmux_sel_id;
@@ -379,10 +394,30 @@ end
 
 /************* EX State *************/
 /* Modules */
+mux4 FWDMUX1
+(
+    .sel(fwd1_sel),
+    .a(sr1_ex),
+    .b(regfilemux_out_mem),
+    .c(memreadmux_out_wb),
+    .d(),
+    .f(fwdmux1_out)
+);
+
+mux4 FWDMUX2
+(
+    .sel(fwd2_sel),
+    .a(sr2_ex),
+    .b(regfilemux_out_mem),
+    .c(memreadmux_out_wb),
+    .d(),
+    .f(fwdmux2_out)
+);
+
 mux4 #(.width(16)) ALUMUX1
 (
     .sel(alumux1_sel_ex),
-    .a(sr1_ex),
+    .a(fwdmux1_out),
     .b(adj9_out_ex),
 	.c(adj11_out_ex),
 	.d(trapvect_ex),
@@ -392,7 +427,7 @@ mux4 #(.width(16)) ALUMUX1
 mux4 #(.width(16)) ALUMUX2
 (
     .sel(alumux2_sel_ex),
-    .a(sr2_ex),
+    .a(fwdmux2_out),
     .b(adj6_out_ex),
 	.c(pc_ex),
 	.d(immmux_out_ex),
@@ -407,6 +442,25 @@ alu ALU
     .f(alu_out)
 );
 
+mux2 #(.width(3)) destmux
+(
+	.sel(destmux_sel_ex),
+	.a(dest_ex),
+	.b(3'b111),
+	.f(destmux_out_ex)
+);
+
+hazard HDETECTOR
+(
+    .sr1(sr1id_ex),
+    .sr2(sr2id_ex),
+    .destmux_out_mem(destmux_out_mem),
+    .destmux_out_wb(destmux_out_wb),
+    .regfilemux_out_mem(regfilemux_out_mem),
+    .memreadmux_out_wb(memreadmux_out_wb),
+    .mem_read_mem(mem_read_mem)
+);
+
 /* Update Registers */
 always_ff @(posedge clk or posedge reset)
 begin
@@ -415,7 +469,6 @@ begin
 		alu_out_mem <= 0;
 		sr2_mem <= 0;
        indirect_mem <= 0;
-		 dest_mem <= 0;
 		 load_regfile_mem <= 0;
 	end
 	else if (!stall_D) begin
@@ -428,13 +481,13 @@ begin
 		mem_write_mem <= mem_write_ex;
 		mem_byte_enable_mem <= mem_byte_enable_ex;
 		regfilemux_sel_mem <= regfilemux_sel_ex;
+        memread_sel_mem <= memread_sel_ex;
 		load_cc_mem <= load_cc_ex;
 		//branch_enable_mem <= branch_enable_ex;
-		destmux_sel_mem <= destmux_sel_ex;
+		destmux_out_mem <= destmux_out_ex;
 		pcmux_sel_mem <= pcmux_sel_ex;
 		pcmux_sel_out_sel_mem <= pcmux_sel_out_sel_ex;
 		opcode_mem <= opcode_ex;
-		dest_mem <= dest_ex;
 		load_regfile_mem <= load_regfile_ex;
 	end	
 end
@@ -459,6 +512,14 @@ assign P_mem_write = mem_write_mem;
 assign P_mem_byte_enable = mem_byte_enable_mem;  // change when Dcache Interfacae implemented
 assign indirect = indirect_mem & !P_mem_resp;
 
+mux2 regfilemux
+(
+    .sel(regfilemux_sel_mem),
+    .a(alu_out_mem),
+    .b(pc_mem),
+    .f(regfilemux_out_mem)
+);
+
 /* Update Registers */
 always_ff @(posedge clk or posedge reset)
 begin
@@ -467,24 +528,23 @@ begin
 		alu_out_wb <= 0;
 		pc_wb <= 0;
 		mem_wb <= 0;
-		dest_wb <= 0;
 		opcode_wb <= op_br;
 	end
 	else if(!stall_D) begin
 		alu_out_wb <= alu_out_mem;
 		pc_wb <= pc_mem;
-		dest_wb <= dest_mem;
 		mem_wb <= P_mem_rdata;
 		mem_byte_enable_wb <= mem_byte_enable_mem;
 		opcode_wb <= opcode_mem;
 		
-		regfilemux_sel_wb <= regfilemux_sel_mem;
 	  load_cc_wb <= load_cc_mem;
 	  //branch_enable_mem <= branch_enable_ex;
-	  destmux_sel_wb <= destmux_sel_mem;
+	  destmux_out_wb <= destmux_out_mem;
 	  pcmux_sel_wb <= pcmux_sel_mem;
 	  pcmux_sel_out_sel_wb <= pcmux_sel_out_sel_mem;
 	  load_regfile_wb <= load_regfile_mem;
+      regfilemux_out_wb <= regfilemux_out_mem;
+      memread_sel_wb <= memread_sel_mem;
 	end	
 end
 
@@ -493,26 +553,17 @@ end
 
 /******** WB stage ********/
 /* Modules */
-//byte_sel byte_sel
-//(
-// alu_out_wb
-// mem_wb
-// byte_sel_out
-//);
-
-mux4 regfilemux
+mux2 memreadmux
 (
-	.sel(regfilemux_sel_wb),  // careful to rename after EX stage is finished
-	.a(mem_wb), //byte_sel_out
-	.b(pc_wb),
-	.c(alu_out_wb),
-	.d(),
-	.f(regfilemux_out) // careful to rename after EX stage is finished
+    .sel(memread_sel_wb),
+    .a(regfilemux_out_wb),
+    .b(mem_wb),
+    .f(memreadmux_out_wb)
 );
 
 gencc gencc
 (
-	.in(regfilemux_out),  // careful to rename after EX stage is finished
+	.in(memreadmux_out_wb),
 	.out(gencc_out)
 );
 
@@ -527,7 +578,7 @@ register #(.width(3)) cc	// Added CC width
 
 cccomp CCCOMP
 (
-	.nzp(dest_wb),
+	.nzp(destmux_out_wb),
 	.cc(cc_out),
 	.branch_enable(branch_enable_wb)
 );
@@ -540,11 +591,4 @@ mux2 #(.width(2)) pcmux_sel_mux
     .f(pcmux_sel_out)
 );
 
-mux2 #(.width(3)) destmux
-(
-	.sel(destmux_sel_wb),
-	.a(dest_wb),
-	.b(3'b111),
-	.f(destmux_out)
-);
 endmodule : datapath
