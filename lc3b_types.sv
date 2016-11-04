@@ -21,6 +21,7 @@ typedef enum bit [3:0] {
     op_br   = 4'b0000,
     op_jmp  = 4'b1100,   /* also RET */
     op_jsr  = 4'b0100,   /* also JSRR */
+	 op_jssr = 4'b0100,
     op_ldb  = 4'b0010,
     op_ldi  = 4'b1010,
     op_ldr  = 4'b0110,
