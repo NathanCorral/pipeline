@@ -5,7 +5,7 @@ module stall
 	input resp,
 	output logic stall	 
 );
-
+/*
 initial
 begin
     stall <= 1'b0;
@@ -24,6 +24,34 @@ begin
 	else begin
 		stall <= stall;
 	end
+end
+*/
+enum int unsigned {
+	 normal,
+    stop
+} state, next_state;
+always_comb
+begin
+	case (state)
+		normal : begin
+				stall = 0;
+				if((read | write))
+					next_state <= stop;
+				else
+					next_state <= normal;
+		end
+		stop : begin
+				stall = 1;
+				if(resp)
+					next_state <= normal;
+				else
+					next_state <= stop;
+		end
+	endcase
+end
+always_ff @(posedge read or posedge write or posedge resp)
+begin
+	state <= next_state;
 end
 
 endmodule : stall

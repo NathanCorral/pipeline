@@ -44,4 +44,11 @@ typedef enum bit [3:0] {
     alu_sra
 } lc3b_aluop;
 
+typedef enum bit [1:0] {
+    none  = 2'b00,
+    ex_ex  = 2'b01,
+    mem_ex   = 2'b10,
+    not_used  = 2'b11   /* also RET */
+} lc3b_forward;
+
 endpackage : lc3b_types

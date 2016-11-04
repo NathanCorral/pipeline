@@ -11,11 +11,14 @@ logic [width-1:0] data;
 
 /* Altera device registers are 0 at power on. Specify this
  * so that Modelsim works as expected.
- */
+ */  
+ /* Replaced for reset.  I dont know why initialization doesnt work on the free Modelsim license */
+ /*
 initial
 begin
     data = 1'b0;
 end
+*/
 
 always_ff @(posedge clk)
 begin

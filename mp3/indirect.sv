@@ -14,8 +14,8 @@ module indirect
 	input logic indirect,
 	
 	input logic D_mem_resp,
-	output D_mem_read,
-	output D_mem_write,
+	output logic D_mem_read,
+	output logic D_mem_write,
 	output lc3b_word D_mem_address,
 	output lc3b_word D_mem_wdata,
 	input   lc3b_word D_mem_rdata,

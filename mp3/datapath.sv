@@ -49,6 +49,8 @@ logic sr2_sel_id;
 logic sh6_sel_id;
 logic imm_sel_id;
 
+logic stall_load;
+
 /* ID Output Signals */
 logic load_regfile_id;
 logic [1:0] alumux1_sel_id;
@@ -65,6 +67,8 @@ logic load_cc_id;
 logic destmux_sel_id;
 logic [1:0] pcmux_sel_id;
 logic pcmux_sel_out_sel_id;
+logic [1:0] fwd1_sel_id;
+logic [1:0] fwd2_sel_id;
 
 /* ID Internal Signals */
 logic [15:0] adj6_out_id;
@@ -80,8 +84,8 @@ logic [2:0] sr1mux_out;
 logic [2:0] sr2mux_out;
 
 /* EX Control Signals */
-logic [1:0] fwd1_sel;
-logic [1:0] fwd2_sel;
+logic [1:0] fwd1_sel_ex;
+logic [1:0] fwd2_sel_ex;
 logic [1:0] alumux1_sel_ex;
 logic [1:0] alumux2_sel_ex;
 lc3b_aluop aluop_ex;
@@ -183,7 +187,7 @@ logic [15:0] alu_out_wb;
 
 /**********IF stage***************/
 
-assign load_pc = ~stall_I & ~stall_D;
+assign load_pc = ~stall_I & ~stall_D & ~stall_load;
 
 
 
@@ -237,7 +241,7 @@ begin
 		pc_id <= 0;
 		ir_id <= 0;
 	end
-	else if (!stall_I & !stall_D) begin
+	else if (!stall_I & !stall_D & !stall_load) begin
 		ir_id <= I_mem_rdata;
 		pc_id <= pc_plus2_out; 
 	end
@@ -334,6 +338,24 @@ decode INST_DECODER
     .pcmux_sel_out_sel(pcmux_sel_out_sel_id)
 );
 
+
+hazard HDETECTOR
+(
+	 .clk,
+    .sr1(sr1id_ex),
+    .sr2(sr2id_ex),
+    .destmux_out_mem(destmux_out_mem),
+    .destmux_out_wb(destmux_out_wb),
+	 .load_regfile_mem(load_regfile_mem),
+	 .load_regfile_wb(load_regfile_wb),
+    .mem_read_mem(mem_read_mem),
+	 .fwd1_sel(fwd1_sel_id),
+	 .fwd2_sel(fwd2_sel_id),
+	 .stall_load(stall_load)
+);
+
+
+
 /* Update Registers */
 always_ff @(posedge clk or posedge reset)
 begin
@@ -356,8 +378,10 @@ begin
 		  mem_read_ex <= 0;
 		  mem_write_ex <= 0;
 		  load_regfile_ex <= 0;
+		  fwd1_sel_ex <= 0;
+		  fwd2_sel_ex <= 0;
 	end
-	else if (!stall_D) begin
+	else if (!stall_D & !stall_load) begin
         /* data signal assignments */
         sr1_ex <= sr1_out_id;
         adj9_out_ex <= adj9_out_id;
@@ -388,6 +412,8 @@ begin
 		  mem_write_ex <= mem_write_id;
 		  dest_ex <= dest_id;
 		  load_regfile_ex <= load_regfile_id;
+		  fwd1_sel_ex <= fwd1_sel_id;
+		  fwd2_sel_ex <= fwd2_sel_id;
 	end	
 end
 /**************************************/
@@ -396,7 +422,7 @@ end
 /* Modules */
 mux4 FWDMUX1
 (
-    .sel(fwd1_sel),
+    .sel(fwd1_sel_ex),
     .a(sr1_ex),
     .b(regfilemux_out_mem),
     .c(memreadmux_out_wb),
@@ -406,7 +432,7 @@ mux4 FWDMUX1
 
 mux4 FWDMUX2
 (
-    .sel(fwd2_sel),
+    .sel(fwd2_sel_ex),
     .a(sr2_ex),
     .b(regfilemux_out_mem),
     .c(memreadmux_out_wb),
@@ -448,17 +474,6 @@ mux2 #(.width(3)) destmux
 	.a(dest_ex),
 	.b(3'b111),
 	.f(destmux_out_ex)
-);
-
-hazard HDETECTOR
-(
-    .sr1(sr1id_ex),
-    .sr2(sr2id_ex),
-    .destmux_out_mem(destmux_out_mem),
-    .destmux_out_wb(destmux_out_wb),
-    .regfilemux_out_mem(regfilemux_out_mem),
-    .memreadmux_out_wb(memreadmux_out_wb),
-    .mem_read_mem(mem_read_mem)
 );
 
 /* Update Registers */
@@ -567,7 +582,7 @@ gencc gencc
 	.out(gencc_out)
 );
 
-register #(.width(3)) cc	// Added CC width 
+register #(.width(3)) cc	
 (
 	.clk,
 	.reset,

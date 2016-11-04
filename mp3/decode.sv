@@ -19,7 +19,8 @@ module decode
 	output logic [1:0] mem_byte_sig,
 	/* WB Control */
 	output logic load_regfile,
-	output logic [1:0] regfilemux_sel,
+	output logic regfilemux_sel,
+	output logic memread_sel,
 	output logic load_cc,
 	output logic destmux_sel,
 	output logic [1:0] pcmux_sel,
@@ -59,7 +60,8 @@ begin
 			
 			/* WB */
 			load_regfile = 1; 
- 			regfilemux_sel = 2'b10;
+ 			regfilemux_sel = 1'b0;
+			memread_sel = 1'b0;
 			load_cc = 1;
 			destmux_sel = 0;
 			pcmux_sel = 2'b00;
@@ -89,7 +91,8 @@ begin
 			
 			/* WB */
 			load_regfile = 1; 
-			regfilemux_sel = 2'b10;
+			regfilemux_sel = 1'b0;
+			memread_sel = 1'b0;
 			load_cc = 1;
 			destmux_sel = 0;
 			pcmux_sel = 2'b00;
@@ -116,7 +119,8 @@ begin
 			
 			/* WB */
 			load_regfile = 1; 
-			regfilemux_sel = 2'b10;
+			regfilemux_sel = 1'b0;
+			memread_sel = 1'b0;
 			load_cc = 1;
 			destmux_sel = 0;
 			pcmux_sel = 2'b00;
@@ -143,7 +147,8 @@ begin
 			
 			/* WB */
 			load_regfile = 1; 
-			regfilemux_sel = 2'b00;
+			regfilemux_sel = 1'bz;
+			memread_sel = 1'b1;
 			load_cc = 1;
 			destmux_sel = 0;
 			pcmux_sel = 2'b00;
@@ -170,7 +175,8 @@ begin
 			
 			/* WB */
 			load_regfile = 0; 
-			regfilemux_sel = 2'bzz;
+			regfilemux_sel = 1'bz;
+			memread_sel = 1'bz;
 			load_cc = 0;
 			destmux_sel = 1'bz;
 			pcmux_sel = 2'b00;
@@ -197,7 +203,8 @@ begin
 			
 			/* WB */
 			load_regfile = 0;
- 			regfilemux_sel = 2'b10;
+ 			regfilemux_sel = 1'b0;
+			memread_sel = 1'b0;
 			load_cc = 0;
 			destmux_sel = 1'bz;
 			pcmux_sel = 2'bzz;
@@ -225,7 +232,8 @@ begin
 			
 			/* WB */
 			load_regfile = 0;
-			regfilemux_sel = 0;
+			regfilemux_sel = 1'b0;
+			memread_sel = 1'b0;
 			load_cc = 0;
 			destmux_sel = 0;
 			pcmux_sel = 0;
