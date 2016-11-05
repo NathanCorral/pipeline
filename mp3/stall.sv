@@ -5,7 +5,6 @@ module stall
 	input resp,
 	output logic stall	 
 );
-/*
 initial
 begin
     stall <= 1'b0;
@@ -25,7 +24,7 @@ begin
 		stall <= stall;
 	end
 end
-*/
+/*
 enum int unsigned {
 	 normal,
     stop
@@ -53,5 +52,6 @@ always_ff @(posedge read or posedge write or posedge resp)
 begin
 	state <= next_state;
 end
+*/
 
 endmodule : stall
