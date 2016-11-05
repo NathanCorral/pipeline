@@ -1,4 +1,0 @@
-Warning (10268): Verilog HDL information at cache_datapath.sv(167): always construct contains both blocking and non-blocking assignments
-Info (10281): Verilog HDL Declaration information at cache_datapath.sv(23): object "sel_way_mux" differs only in case from object "SEL_WAY_MUX" in the same scope
-Warning (10268): Verilog HDL information at cache_control.sv(59): always construct contains both blocking and non-blocking assignments
-Warning (10268): Verilog HDL information at mp3.sv(57): always construct contains both blocking and non-blocking assignments
