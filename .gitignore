@@ -69,3 +69,6 @@ $RECYCLE.BIN/
 
 # NFS
 .nfs*
+
+# load_memory.sh
+bin/load_memory.sh
