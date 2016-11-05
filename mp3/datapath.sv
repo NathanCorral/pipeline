@@ -150,7 +150,6 @@ logic pcmux_sel_out_sel_mem;
 logic [15:0] mem_wb;
 logic load_regfile_mem;
 logic [15:0] regfilemux_out_mem;
-lc3b_mem_wmask mem_byte_enable_wb;
 
 /* WB Control Signals */
 
@@ -179,7 +178,6 @@ lc3b_opcode opcode_wb;
 logic [15:0] pc_id;
 logic [15:0] pc_ex;
 logic [15:0] pc_mem;
-logic [15:0] pc_wb;
 
 logic [2:0] dest_ex;
 
@@ -341,7 +339,7 @@ decode INST_DECODER
 
 hazard HDETECTOR
 (
-	 .clk,
+	 .clk(clk),
     .sr1(sr1id_ex),
     .sr2(sr2id_ex),
     .destmux_out_mem(destmux_out_mem),
@@ -541,15 +539,12 @@ begin
 	if(reset)
 	begin
 		alu_out_wb <= 0;
-		pc_wb <= 0;
 		mem_wb <= 0;
 		opcode_wb <= op_br;
 	end
 	else if(!stall_D) begin
 		alu_out_wb <= alu_out_mem;
-		pc_wb <= pc_mem;
 		mem_wb <= P_mem_rdata;
-		mem_byte_enable_wb <= mem_byte_enable_mem;
 		opcode_wb <= opcode_mem;
 		
 	  load_cc_wb <= load_cc_mem;
@@ -582,7 +577,7 @@ gencc gencc
 	.out(gencc_out)
 );
 
-register #(.width(3)) cc	
+register #(.width(3), .reset_val(1)) cc	
 (
 	.clk,
 	.reset,

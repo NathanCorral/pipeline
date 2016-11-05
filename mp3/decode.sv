@@ -199,7 +199,7 @@ begin
 			alumux1_sel = 2'b01;
 			alumux2_sel = 2'b10;
 			alu_ctrl = alu_add;
-			destmux_sel = 1'bz;
+			destmux_sel = 1'b0;
 			
 			/* MEM */
 			indirect = 1'bz;

@@ -1,4 +1,4 @@
-module register #(parameter width = 16)
+module register #(parameter width = 16, parameter reset_val = 0)
 (
     input clk,
 	 input reset,
@@ -23,7 +23,7 @@ end
 always_ff @(posedge clk)
 begin
 	if(reset)
-		data <= 0;
+		data <= reset_val;
 		
    else if (load)
     begin
