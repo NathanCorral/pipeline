@@ -502,18 +502,19 @@ begin
 			alumux1_sel = 0;
 			alumux2_sel = 0;
 			alu_ctrl = alu_pass;
+			destmux_sel = 0;
 			
 			/* MEM */
 			indirect = 0;
 			read = 0;
 			write = 0;
 			mem_byte_sig = 0;
+			regfilemux_sel = 0;
 			
 			/* WB */
-			load_regfile = 0;
-			regfilemux_sel = 0;
+			load_regfile = 0;		
 			load_cc = 0;
-			destmux_sel = 0;
+			memread_sel = 0;
 			pcmux_sel = 0;
 			pcmux_sel_out_sel = 0;
 		end
