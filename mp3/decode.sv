@@ -348,7 +348,7 @@ begin
 			imm_sel = 1'bz;
 			
 			/* EX */
-			alumux1_sel = 2'b00;
+			alumux1_sel = 2'b01;
 			alumux2_sel = 2'b10;
 			alu_ctrl = alu_add;
 			destmux_sel = 1'b0;
