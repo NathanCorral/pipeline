@@ -46,11 +46,7 @@ begin
 		begin
 			fwd2_sel = none;
 		end
-    if(pmem_resp)
-        begin
-            stall_load = 0;
-        end
-    else if(((sr1 == destmux_out_mem) | (sr2 == destmux_out_mem)) && (mem_read_mem))
+	if(((sr1 == destmux_out_mem) | (sr2 == destmux_out_mem)) && (mem_read_mem) & pmem_resp)
         begin
             stall_load = 1;
         end
