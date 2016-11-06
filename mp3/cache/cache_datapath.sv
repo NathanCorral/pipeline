@@ -22,7 +22,7 @@ module cache_datapath #(parameter way = 2, data_words = 8, lines = 8)
 	 output logic hit,
 	 input sel_way_mux,
 	 input pmem_mux_sel,
-	 input mem_resp
+	 input real_mem_resp
 );
 
 
@@ -215,7 +215,7 @@ begin
    else if (load_cache)
     begin
 		/* Check for load LRU */
-		if(mem_resp) begin
+		if(real_mem_resp) begin
 			LRU[index] = sel_way;
 		end
 		
@@ -228,7 +228,7 @@ begin
 		
     end
     /* Load the LRU */
-	else if(mem_resp) begin
+	else if(real_mem_resp) begin
 		LRU[index] = sel_way;
 	end
 end

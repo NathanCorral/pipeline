@@ -26,6 +26,9 @@ logic sel_way_mux;
 logic pmem_mux_sel;
 logic hit;
 logic dirty;
+logic real_mem_resp;
+
+assign mem_resp = real_mem_resp;
 
 cache_control CACHE_CONTROL (
 	.*
