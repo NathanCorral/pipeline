@@ -71,8 +71,12 @@ end
 always_ff @(posedge clk)
 begin
 	state <= next_state;
-	finished_indirect <= finished_indirect_next;
 	addr <= addr_next;
+end
+
+always_ff @(negedge clk)
+begin
+	finished_indirect <= finished_indirect_next;
 end
 
 endmodule : indirect
