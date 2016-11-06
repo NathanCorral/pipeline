@@ -5,12 +5,20 @@ module stall
 	input resp,
 	output logic stall	 
 );
+/*
 initial
 begin
     stall <= 1'b0;
 end
 
-always_ff @(posedge read or posedge write or posedge resp)
+logic hack;
+
+assign hack = ~resp;
+*/
+assign stall = (read | write) & ~resp;
+
+/*
+always_ff @(posedge read or posedge write or posedge resp or posedge hack)
 begin
 	
 	if(resp) begin
@@ -24,6 +32,7 @@ begin
 		stall <= stall;
 	end
 end
+*/
 /*
 enum int unsigned {
 	 normal,
