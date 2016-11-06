@@ -2,8 +2,8 @@ import lc3b_types::*;
 
 module flush
 (
-	input pcmux_sel_out,
-	output flush_all	
+	input [1:0] pcmux_sel_out,
+	output logic flush_all	
 );
 
 
