@@ -346,6 +346,7 @@ hazard HDETECTOR
     .destmux_out_wb(destmux_out_wb),
 	 .load_regfile_mem(load_regfile_mem),
 	 .load_regfile_wb(load_regfile_wb),
+     .pmem_resp(P_mem_resp),
     .mem_read_mem(mem_read_mem),
 	 .fwd1_sel(fwd1_sel_id),
 	 .fwd2_sel(fwd2_sel_id),
@@ -379,7 +380,7 @@ begin
 		  fwd1_sel_ex <= 0;
 		  fwd2_sel_ex <= 0;
 	end
-	else if (!stall_D & !stall_load) begin
+	else if (!stall_D & !stall_I & !stall_load) begin
         /* data signal assignments */
         sr1_ex <= sr1_out_id;
         adj9_out_ex <= adj9_out_id;
@@ -483,8 +484,10 @@ begin
 		sr2_mem <= 0;
        indirect_mem <= 0;
 		 load_regfile_mem <= 0;
+         mem_read_mem <= 0;
+         mem_write_mem <= 0;
 	end
-	else if (!stall_D) begin
+	else if (!stall_D & !stall_I & !stall_load) begin
 		pc_mem <= pc_ex;
 		alu_out_mem <= alu_out;
 		sr2_mem <= sr2_ex;
@@ -542,7 +545,7 @@ begin
 		mem_wb <= 0;
 		opcode_wb <= op_br;
 	end
-	else if(!stall_D) begin
+	else if(!stall_D & !stall_I & !stall_load) begin
 		alu_out_wb <= alu_out_mem;
 		mem_wb <= P_mem_rdata;
 		opcode_wb <= opcode_mem;
