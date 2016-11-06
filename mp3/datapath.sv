@@ -186,7 +186,7 @@ logic [15:0] alu_out_wb;
 
 /**********IF stage***************/
 
-assign load_pc = ~stall_I & ~stall_D & ~stall_load;
+assign load_pc = ~stall_I & ~stall_D & ~stall_load | flush_all;
 
 
 
@@ -196,7 +196,7 @@ mux4 pcmux
     .sel(pcmux_sel_out),
     .a(pc_plus2_out),
     .b(alu_out_wb),
-    .c(sr1_out_id), 
+    .c(), 
 	.d(mem_wb),
 	.f(pcmux_out)
 );
@@ -233,14 +233,11 @@ assign I_mem_address = pc_out;
 assign I_mem_read = ~I_mem_resp & ~stall_D;
 
 /* Update Registers */
-always_ff @(posedge clk or posedge reset)
+logic zero;
+assign zero = reset | flush_all & ~stall_I;
+always_ff @(posedge clk)
 begin
-	if(reset)
-	begin
-		pc_id <= 0;
-		ir_id <= 0;
-	end
-	else if(flush_all)
+	if(zero)
 	begin
 		pc_id <= 0;
 		ir_id <= 0;
@@ -248,9 +245,7 @@ begin
 	else if (!stall_I & !stall_D & !stall_load) begin
 		ir_id <= I_mem_rdata;
 		pc_id <= pc_plus2_out; 
-	end
-
-	
+	end	
 	
 end
 
@@ -354,8 +349,8 @@ hazard HDETECTOR
 	 .load_regfile_wb(load_regfile_wb),
      .pmem_resp(P_mem_resp),
     .mem_read_mem(mem_read_mem),
-	 .fwd1_sel(fwd1_sel_id),
-	 .fwd2_sel(fwd2_sel_id),
+	 .fwd1_sel(fwd1_sel_ex),
+	 .fwd2_sel(fwd2_sel_ex),
 	 .stall_load(stall_load)
 );
 
@@ -367,9 +362,9 @@ flush FLUSH
 
 
 /* Update Registers */
-always_ff @(posedge clk or posedge reset)
+always_ff @(posedge clk)
 begin
-	if(reset)
+	if(zero)
 	begin
         sr1_ex <= 0;
 		  adj9_out_ex <= 0;
@@ -395,40 +390,10 @@ begin
 		  mem_read_ex <= 0;
 		  mem_write_ex <= 0;
 		  load_regfile_ex <= 0;
-		  fwd1_sel_ex <= 0;
-		  fwd2_sel_ex <= 0;
+		  //fwd1_sel_ex <= 0;
+		 // fwd2_sel_ex <= 0;
 		  opcode_ex <= op_br;
 		  pcmux_sel_out_sel_ex <= 0;
-	end
-	else if(flush_all) begin	
-	  sr1_ex <= 0;
-	  adj9_out_ex <= 0;
-	  adj11_out_ex <= 0;
-	  trapvect_ex <= 0;
-	  sr2_ex <= 0;
-	  adj6_out_ex <= 0;
-	  pc_ex <= 0;
-	  immmux_out_ex <= 0;	
-	  sr1id_ex <= 0;
-	  sr2id_ex <= 0;
-	  alumux1_sel_ex <= 0;
-	  alumux2_sel_ex <= 0;
-	  aluop_ex <= alu_pass;
-	  indirect_ex <= 0;
-	  mem_byte_enable_ex <= 0;
-	  regfilemux_sel_ex <= 0;
-	  memread_sel_ex <= 0;
-	  load_cc_ex <= 0;
-	  destmux_sel_ex <= 0;
-	  pcmux_sel_ex <= 0;
-	  dest_ex <= 0;
-	  mem_read_ex <= 0;
-	  mem_write_ex <= 0;
-	  load_regfile_ex <= 0;
-	  fwd1_sel_ex <= 0;
-	  fwd2_sel_ex <= 0;
-	  opcode_ex <= op_br;
-	  pcmux_sel_out_sel_ex <= 0;
 	end
 	else if (!stall_D & !stall_I & !stall_load) begin
         /* data signal assignments */
@@ -460,9 +425,13 @@ begin
 		  mem_write_ex <= mem_write_id;
 		  dest_ex <= dest_id;
 		  load_regfile_ex <= load_regfile_id;
-		  fwd1_sel_ex <= fwd1_sel_id;
-		  fwd2_sel_ex <= fwd2_sel_id;
+		 // fwd1_sel_ex <= fwd1_sel_id;
+		  //fwd2_sel_ex <= fwd2_sel_id;
 	end	
+    else if(stall_load) begin
+        sr1_ex <= fwdmux1_out;
+        sr2_ex <= fwdmux2_out;
+    end
 end
 /**************************************/
 
@@ -525,9 +494,11 @@ mux2 #(.width(3)) destmux
 );
 
 /* Update Registers */
-always_ff @(posedge clk or posedge reset)
+logic zero2;
+assign zero2 = zero | stall_load;
+always_ff @(posedge clk)
 begin
-	if(reset)
+	if(zero2)
 	begin
 		pc_mem <= 0;
 		alu_out_mem <= 0;
@@ -546,25 +517,7 @@ begin
 		opcode_mem <= op_br;
 		load_regfile_mem <= 0;
 	end
-	else if(flush_all) begin
-		pc_mem <= 0;
-		alu_out_mem <= 0;
-		sr2_mem <= 0;
-		/* control signal assignments */
-		indirect_mem <= 0;
-		mem_read_mem <= 0;
-		mem_write_mem <= 0;
-		mem_byte_enable_mem <= 0;
-		regfilemux_sel_mem <= 0;
-      memread_sel_mem <= 0;
-		load_cc_mem <= 0;
-		destmux_out_mem <= 0;
-		pcmux_sel_mem <= 0;
-		pcmux_sel_out_sel_mem <= 0;
-		opcode_mem <= op_br;
-		load_regfile_mem <= 0;
-	end
-	else if (!stall_D & !stall_I & !stall_load) begin
+	else if (!stall_D & !stall_I) begin
 		pc_mem <= pc_ex;
 		alu_out_mem <= alu_out;
 		sr2_mem <= sr2_ex;
@@ -603,7 +556,7 @@ assign P_mem_wdata = sr2_mem;
 assign P_mem_read = mem_read_mem;
 assign P_mem_write = mem_write_mem;
 assign P_mem_byte_enable = mem_byte_enable_mem;  // change when Dcache Interfacae implemented
-assign indirect = indirect_mem & !P_mem_resp;
+assign indirect = indirect_mem;
 
 mux2 regfilemux
 (
@@ -614,9 +567,9 @@ mux2 regfilemux
 );
 
 /* Update Registers */
-always_ff @(posedge clk or posedge reset)
+always_ff @(posedge clk)
 begin
-	if(reset)
+	if(zero)
 	begin
 		alu_out_wb <= 0;
 		mem_wb <= 0;
@@ -629,20 +582,7 @@ begin
      regfilemux_out_wb <= 0;
      memread_sel_wb <= 0;
 	end
-	else if(flush_all)
-	begin
-		alu_out_wb <= 0;
-		mem_wb <= 0;
-		opcode_wb <= op_br;
-	  load_cc_wb <= 0;
-	  destmux_out_wb <= 0;
-	  pcmux_sel_wb <= 0;
-	  pcmux_sel_out_sel_wb <= 0;
-	  load_regfile_wb <= 0;
-     regfilemux_out_wb <= 0;
-     memread_sel_wb <= 0;
-	end
-	else if(!stall_D & !stall_I & !stall_load) begin
+	else if(!stall_D & !stall_I) begin
 		alu_out_wb <= alu_out_mem;
 		mem_wb <= P_mem_rdata;
 		opcode_wb <= opcode_mem;
