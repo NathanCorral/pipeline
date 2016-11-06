@@ -59,7 +59,7 @@ internal_word_track = 'z;
 	case(mem_byte_enable)
 		2'b00 :	out_word = 16'b0;
 		2'b01 :	out_word = {8'b0,internal_word_track[7:0]};
-		2'b10 :	out_word = {internal_word_track[15:8],8'b0};
+		2'b10 :	out_word = {8'b0,internal_word_track[15:8]};
 		2'b11 :	out_word = internal_word_track;
 	endcase
 end
