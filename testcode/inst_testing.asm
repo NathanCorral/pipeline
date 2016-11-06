@@ -1,5 +1,6 @@
 ORIGIN 4x0000
 SEGMENT CodeSegment:
+    LEA R0, DataSegment
     ADD R1, R0, 7
     LDI R2, R0, FOURI
     AND R3, R2, R1
@@ -31,8 +32,8 @@ guavas:
     RET
     
 SEGMENT DataSegment:
-FOUR:       DATA2 4
 FOURI:      DATA2 FOUR
+FOUR:       DATA2 4
 FS:         DATA2 4xffff
 RES1:       DATA2 0
 RES2:       DATA2 0
