@@ -16,7 +16,7 @@ module decode
 	output logic indirect,
 	output logic read,
 	output logic write,
-	output logic [1:0] mem_byte_sig,
+	output logic mem_byte_sig,
    output logic regfilemux_sel,
 	/* WB Control */
 	output logic load_regfile,
@@ -149,7 +149,7 @@ begin
 			indirect = 1'b0;
 			read = 1;
 			write = 0;
-			mem_byte_sig = 2'b11;
+			mem_byte_sig = 0;
 			regfilemux_sel = 1'b0;
 			
 			/* WB */
@@ -177,7 +177,7 @@ begin
 			indirect = 1'b0;
 			read = 0;
 			write = 1;
-			mem_byte_sig = 2'b11;
+			mem_byte_sig = 0;
 			regfilemux_sel = 1'bz;
 			
 			/* WB */
@@ -300,7 +300,7 @@ begin
 			indirect = 1'b0;
 			read = 1;
 			write = 0;
-			mem_byte_sig = 2'b11;
+			mem_byte_sig = 1;
 			regfilemux_sel = 1'b0;
 			
 			/* WB */
@@ -328,7 +328,7 @@ begin
 			indirect = 1'b1;
 			read = 1;
 			write = 0;
-			mem_byte_sig = 2'b11;
+			mem_byte_sig = 0;
 			regfilemux_sel = 1'b0;
 			
 			/* WB */
@@ -451,7 +451,7 @@ begin
 			indirect = 1'b1;
 			read = 0;
 			write = 1;
-			mem_byte_sig = 2'b11;
+			mem_byte_sig = 0;
 			regfilemux_sel = 1'bz;
 			
 			/* WB */
@@ -479,7 +479,7 @@ begin
 			indirect = 1'b0;
 			read = 1;
 			write = 0;
-			mem_byte_sig = 2'b11;
+			mem_byte_sig = 0;
 			regfilemux_sel = 1'b1;
 			
 			/* WB */
@@ -508,7 +508,7 @@ begin
 			indirect = 0;
 			read = 0;
 			write = 0;
-			mem_byte_sig = 2'b11;
+			mem_byte_sig = 0;
 			regfilemux_sel = 0;
 			
 			/* WB */

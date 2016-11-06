@@ -59,7 +59,7 @@ lc3b_aluop aluop_id;
 logic indirect_id;
 logic mem_read_id;
 logic mem_write_id;
-logic [1:0] mem_byte_enable_id;
+logic mem_byte_enable_id;
 logic regfilemux_sel_id;
 logic memread_sel_id;
 logic load_cc_id;
@@ -95,7 +95,7 @@ logic load_regfile_ex;
 logic indirect_ex;
 logic mem_read_ex;
 logic mem_write_ex;
-logic [1:0] mem_byte_enable_ex;
+logic mem_byte_enable_ex;
 logic regfilemux_sel_ex;
 logic memread_sel_ex;
 logic load_cc_ex;
@@ -137,7 +137,7 @@ logic [15:0] sr2_mem;
 logic indirect_mem;
 logic mem_read_mem;
 logic mem_write_mem;
-logic [1:0] mem_byte_enable_mem;
+logic mem_byte_enable_mem;
 /* Future stages */
 logic regfilemux_sel_mem;
 logic memread_sel_mem;
@@ -162,6 +162,7 @@ logic [15:0] regfilemux_out_wb;
 logic [15:0] memreadmux_out_wb;
 logic pcmux_sel_out_sel_wb;
 logic load_regfile_wb;
+logic mem_byte_enable_wb;
 
 /* WB Outputs to IF stage which is buffered by PC register*/
 /* WB Internal Signals */
@@ -555,7 +556,9 @@ assign P_mem_address = alu_out_mem;
 assign P_mem_wdata = sr2_mem;
 assign P_mem_read = mem_read_mem;
 assign P_mem_write = mem_write_mem;
-assign P_mem_byte_enable = mem_byte_enable_mem;  // change when Dcache Interfacae implemented
+//assign P_mem_byte_enable = mem_byte_enable_mem;  // change when Dcache Interfacae implemented
+assign P_mem_byte_enable[0] = ~(mem_byte_enable_mem & alu_out_mem[0]);
+assign P_mem_byte_enable[1] = ~mem_byte_enable_mem | alu_out_mem[0];
 assign indirect = indirect_mem;
 
 mux2 regfilemux
@@ -581,6 +584,7 @@ begin
 	  load_regfile_wb <= 0;
      regfilemux_out_wb <= 0;
      memread_sel_wb <= 0;
+     mem_byte_enable_wb <= 0;
 	end
 	else if(!stall_D & !stall_I) begin
 		alu_out_wb <= alu_out_mem;
@@ -595,6 +599,7 @@ begin
 	  load_regfile_wb <= load_regfile_mem;
       regfilemux_out_wb <= regfilemux_out_mem;
       memread_sel_wb <= memread_sel_mem;
+     mem_byte_enable_wb <= mem_byte_enable_mem;
 	end	
 end
 
@@ -603,6 +608,7 @@ end
 
 /******** WB stage ********/
 /* Modules */
+
 mux2 memreadmux
 (
     .sel(memread_sel_wb),
