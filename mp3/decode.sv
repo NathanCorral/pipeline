@@ -58,7 +58,7 @@ begin
 			destmux_sel = 0;
 			
 			/* MEM */
-			indirect = 1'bz;
+			indirect = 1'b0;
 			read = 0;
 			write = 0;
 			mem_byte_sig = 0;
@@ -89,7 +89,7 @@ begin
 			destmux_sel = 0;
 			
 			/* MEM */
-			indirect = 1'bz;
+			indirect = 1'b0;
 			read = 0;
 			write = 0;
 			mem_byte_sig = 0;
@@ -118,7 +118,7 @@ begin
 
 			
 			/* MEM */
-			indirect = 1'bz;
+			indirect = 1'b0;
 			read = 0;
 			write = 0;
 			mem_byte_sig = 0;
@@ -202,7 +202,7 @@ begin
 			destmux_sel = 1'b0;
 			
 			/* MEM */
-			indirect = 1'bz;
+			indirect = 1'b0;
 			read = 0;
 			write = 0;
 			mem_byte_sig = 0;
@@ -230,23 +230,23 @@ begin
 			destmux_sel = 1'bz;
 			
 			/* MEM */
-			indirect = 1'bz;
+			indirect = 1'b0;
 			read = 0;
 			write = 0;
 			mem_byte_sig = 0;
-			regfilemux_sel = 1'bz;
+			regfilemux_sel = 1'b1;
 			
 			/* WB */
 			load_regfile = 0;
 			load_cc = 0;
-			memread_sel = 1'bz;
+			memread_sel = 1'b0;
 			pcmux_sel = 2'b01;
 			pcmux_sel_out_sel = 0;
 		end
 		
 		op_jsr: begin
 			/* ID */
-			sr1_sel = 1'bz;
+			sr1_sel = 1'b0;
 			sr2_sel = 1'bz;
 			sh6_sel = 1'bz; 
 			imm_sel = 1'bz;
@@ -300,7 +300,7 @@ begin
 			indirect = 1'b0;
 			read = 1;
 			write = 0;
-			mem_byte_sig = 1;
+			mem_byte_sig = 2'b11;
 			regfilemux_sel = 1'b0;
 			
 			/* WB */
@@ -328,7 +328,7 @@ begin
 			indirect = 1'b1;
 			read = 1;
 			write = 0;
-			mem_byte_sig = 0;
+			mem_byte_sig = 2'b11;
 			regfilemux_sel = 1'b0;
 			
 			/* WB */
@@ -451,7 +451,7 @@ begin
 			indirect = 1'b1;
 			read = 0;
 			write = 1;
-			mem_byte_sig = 0;
+			mem_byte_sig = 2'b11;
 			regfilemux_sel = 1'bz;
 			
 			/* WB */
@@ -477,9 +477,9 @@ begin
 			
 			/* MEM */
 			indirect = 1'b0;
-			read = 0;
+			read = 1;
 			write = 0;
-			mem_byte_sig = 0;
+			mem_byte_sig = 2'b11;
 			regfilemux_sel = 1'b1;
 			
 			/* WB */
@@ -508,7 +508,7 @@ begin
 			indirect = 0;
 			read = 0;
 			write = 0;
-			mem_byte_sig = 0;
+			mem_byte_sig = 2'b11;
 			regfilemux_sel = 0;
 			
 			/* WB */
