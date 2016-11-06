@@ -13,7 +13,8 @@ module cache_control
 	input mem_write,
 	input hit,
 	input dirty,
-	input pmem_resp
+	input pmem_resp,
+	output logic mem_resp
 );
 
 enum int unsigned {
@@ -31,9 +32,14 @@ begin : state_actions
     pmem_mux_sel = 1'b0;
     pmem_read = 1'b0;
     pmem_write = 1'b0;
+	mem_resp = 0;
 
 	case(state)
 		check: begin
+			if(hit)
+				mem_resp = 1;
+			else
+				mem_resp = 0;
 		end
 		
 		write_back: begin

@@ -22,7 +22,7 @@ module cache_datapath #(parameter way = 2, data_words = 8, lines = 8)
 	 output logic hit,
 	 input sel_way_mux,
 	 input pmem_mux_sel,
-	 output logic mem_resp
+	 input mem_resp
 );
 
 
@@ -197,7 +197,7 @@ mux2 #(.width(128)) SEL_WDATA_MUX
 always_ff @(posedge clk or posedge reset)
 begin
 	/* Set the responce every clock cycle */
-	mem_resp <= mem_resp_reg;
+	//mem_resp <= mem_resp_reg;
 	/* Invalidate the data */
 	if(reset)
 	 begin
