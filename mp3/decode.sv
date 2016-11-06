@@ -377,7 +377,7 @@ begin
 			
 			/* EX */
 			alumux1_sel = 2'b00;
-			alumux2_sel = 2'bzz;
+			alumux2_sel = 2'b11;
 			if(ir4 == 0)
 			begin
 				alu_ctrl = alu_sll;
@@ -387,7 +387,7 @@ begin
 				if(ir5 == 0)
 				alu_ctrl = alu_srl; //DR = SR >> IMM4,0
 				else
-				alu_ctrl = alu_srl; //DR = SR >> IMM4, SR[15]
+				alu_ctrl = alu_sra; //DR = SR >> IMM4, SR[15]
 			end
 			destmux_sel = 1'b0;
 			
