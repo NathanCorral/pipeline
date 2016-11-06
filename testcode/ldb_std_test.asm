@@ -32,7 +32,9 @@ rabbit_hole:
     STB R2, R0, 5
     STB R2, R0, 6
     LDR R5, R0, FS
-    LDR R6, R0, RES1     
+    LDR R6, R0, RES1
+    LDB R3, R0, 4
+    LDB R4, R0, 5     
     RET
 
 mangos:
