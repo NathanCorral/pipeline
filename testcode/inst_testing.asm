@@ -1,6 +1,7 @@
 ORIGIN 4x0000
 SEGMENT CodeSegment:
     LEA R0, DataSegment
+    LDR R3, R0, FOURI
     ADD R1, R0, 7
     LDI R2, R0, FOURI
     AND R3, R2, R1
