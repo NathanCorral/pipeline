@@ -84,6 +84,7 @@ logic [2:0] sr1mux_out;
 logic [2:0] sr2mux_out;
 
 /* EX Control Signals */
+logic flush_all;
 logic [1:0] fwd1_sel_ex;
 logic [1:0] fwd2_sel_ex;
 logic [1:0] alumux1_sel_ex;
@@ -239,6 +240,11 @@ begin
 		pc_id <= 0;
 		ir_id <= 0;
 	end
+	else if(flush_all)
+	begin
+		pc_id <= 0;
+		ir_id <= 0;
+	end
 	else if (!stall_I & !stall_D & !stall_load) begin
 		ir_id <= I_mem_rdata;
 		pc_id <= pc_plus2_out; 
@@ -353,6 +359,11 @@ hazard HDETECTOR
 	 .stall_load(stall_load)
 );
 
+flush FLUSH
+(
+	 .pcmux_sel_out(pcmux_sel_out),
+    .flush_all(flush_all)
+);
 
 
 /* Update Registers */
@@ -360,25 +371,64 @@ always_ff @(posedge clk or posedge reset)
 begin
 	if(reset)
 	begin
-        sr1id_ex <= 0;
-        sr2id_ex <= 0;
-        alumux1_sel_ex <= 0;
-        alumux2_sel_ex <= 0;
-        aluop_ex <= alu_pass;
-        indirect_ex <= 0;
-        mem_byte_enable_ex <= 0;
-        regfilemux_sel_ex <= 0;
-        memread_sel_ex <= 0;
-        load_cc_ex <= 0;
-        //branch_enable_ex <= 0;
-        destmux_sel_ex <= 0;
-        pcmux_sel_ex <= 0;
+        sr1_ex <= 0;
+		  adj9_out_ex <= 0;
+		  adj11_out_ex <= 0;
+		  trapvect_ex <= 0;
+		  sr2_ex <= 0;
+		  adj6_out_ex <= 0;
+		  pc_ex <= 0;
+		  immmux_out_ex <= 0;	
+		  sr1id_ex <= 0;
+		  sr2id_ex <= 0;
+		  alumux1_sel_ex <= 0;
+		  alumux2_sel_ex <= 0;
+		  aluop_ex <= alu_pass;
+		  indirect_ex <= 0;
+		  mem_byte_enable_ex <= 0;
+		  regfilemux_sel_ex <= 0;
+		  memread_sel_ex <= 0;
+		  load_cc_ex <= 0;
+		  destmux_sel_ex <= 0;
+		  pcmux_sel_ex <= 0;
 		  dest_ex <= 0;
 		  mem_read_ex <= 0;
 		  mem_write_ex <= 0;
 		  load_regfile_ex <= 0;
 		  fwd1_sel_ex <= 0;
 		  fwd2_sel_ex <= 0;
+		  opcode_ex <= op_br;
+		  pcmux_sel_out_sel_ex <= 0;
+	end
+	else if(flush_all) begin	
+	  sr1_ex <= 0;
+	  adj9_out_ex <= 0;
+	  adj11_out_ex <= 0;
+	  trapvect_ex <= 0;
+	  sr2_ex <= 0;
+	  adj6_out_ex <= 0;
+	  pc_ex <= 0;
+	  immmux_out_ex <= 0;	
+	  sr1id_ex <= 0;
+	  sr2id_ex <= 0;
+	  alumux1_sel_ex <= 0;
+	  alumux2_sel_ex <= 0;
+	  aluop_ex <= alu_pass;
+	  indirect_ex <= 0;
+	  mem_byte_enable_ex <= 0;
+	  regfilemux_sel_ex <= 0;
+	  memread_sel_ex <= 0;
+	  load_cc_ex <= 0;
+	  destmux_sel_ex <= 0;
+	  pcmux_sel_ex <= 0;
+	  dest_ex <= 0;
+	  mem_read_ex <= 0;
+	  mem_write_ex <= 0;
+	  load_regfile_ex <= 0;
+	  fwd1_sel_ex <= 0;
+	  fwd2_sel_ex <= 0;
+	  opcode_ex <= op_br;
+	  pcmux_sel_out_sel_ex <= 0;
 	end
 	else if (!stall_D & !stall_I & !stall_load) begin
         /* data signal assignments */
@@ -406,7 +456,6 @@ begin
         destmux_sel_ex <= destmux_sel_id;
         pcmux_sel_ex <= pcmux_sel_id;
 		  pcmux_sel_out_sel_ex <= pcmux_sel_out_sel_id;
-		  dest_ex <= dest_id;
 		  mem_read_ex <= mem_read_id;
 		  mem_write_ex <= mem_write_id;
 		  dest_ex <= dest_id;
@@ -480,12 +529,40 @@ always_ff @(posedge clk or posedge reset)
 begin
 	if(reset)
 	begin
+		pc_mem <= 0;
 		alu_out_mem <= 0;
 		sr2_mem <= 0;
-       indirect_mem <= 0;
-		 load_regfile_mem <= 0;
-         mem_read_mem <= 0;
-         mem_write_mem <= 0;
+		/* control signal assignments */
+		indirect_mem <= 0;
+		mem_read_mem <= 0;
+		mem_write_mem <= 0;
+		mem_byte_enable_mem <= 0;
+		regfilemux_sel_mem <= 0;
+      memread_sel_mem <= 0;
+		load_cc_mem <= 0;
+		destmux_out_mem <= 0;
+		pcmux_sel_mem <= 0;
+		pcmux_sel_out_sel_mem <= 0;
+		opcode_mem <= op_br;
+		load_regfile_mem <= 0;
+	end
+	else if(flush_all) begin
+		pc_mem <= 0;
+		alu_out_mem <= 0;
+		sr2_mem <= 0;
+		/* control signal assignments */
+		indirect_mem <= 0;
+		mem_read_mem <= 0;
+		mem_write_mem <= 0;
+		mem_byte_enable_mem <= 0;
+		regfilemux_sel_mem <= 0;
+      memread_sel_mem <= 0;
+		load_cc_mem <= 0;
+		destmux_out_mem <= 0;
+		pcmux_sel_mem <= 0;
+		pcmux_sel_out_sel_mem <= 0;
+		opcode_mem <= op_br;
+		load_regfile_mem <= 0;
 	end
 	else if (!stall_D & !stall_I & !stall_load) begin
 		pc_mem <= pc_ex;
@@ -544,6 +621,26 @@ begin
 		alu_out_wb <= 0;
 		mem_wb <= 0;
 		opcode_wb <= op_br;
+	  load_cc_wb <= 0;
+	  destmux_out_wb <= 0;
+	  pcmux_sel_wb <= 0;
+	  pcmux_sel_out_sel_wb <= 0;
+	  load_regfile_wb <= 0;
+     regfilemux_out_wb <= 0;
+     memread_sel_wb <= 0;
+	end
+	else if(flush_all)
+	begin
+		alu_out_wb <= 0;
+		mem_wb <= 0;
+		opcode_wb <= op_br;
+	  load_cc_wb <= 0;
+	  destmux_out_wb <= 0;
+	  pcmux_sel_wb <= 0;
+	  pcmux_sel_out_sel_wb <= 0;
+	  load_regfile_wb <= 0;
+     regfilemux_out_wb <= 0;
+     memread_sel_wb <= 0;
 	end
 	else if(!stall_D & !stall_I & !stall_load) begin
 		alu_out_wb <= alu_out_mem;

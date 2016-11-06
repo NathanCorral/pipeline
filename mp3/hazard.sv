@@ -18,6 +18,7 @@ module hazard
 
 
 
+
 always_comb 
 begin
 	if(load_regfile_mem & (sr1 == destmux_out_mem)) 
