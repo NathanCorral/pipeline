@@ -521,7 +521,7 @@ begin
 	else if (!stall_D & !stall_I) begin
 		pc_mem <= pc_ex;
 		alu_out_mem <= alu_out;
-		sr2_mem <= sr2_ex;
+		sr2_mem <= fwdmux2_out;
 		/* control signal assignments */
 		indirect_mem <= indirect_ex;
 		mem_read_mem <= mem_read_ex;

@@ -24,11 +24,6 @@ rabbit_hole:
     LEA R7, continue0
     LDB R2, R0, 0 
     LSHF R2, R2, 4
-    NOP
-    NOP
-    NOP
-    NOP
-    NOP
     STB R2, R0, 5
     STB R2, R0, 6
     LDR R5, R0, FS
