@@ -349,6 +349,7 @@ hazard HDETECTOR
 	 .load_regfile_mem(load_regfile_mem),
 	 .load_regfile_wb(load_regfile_wb),
      .pmem_resp(P_mem_resp),
+     .stall_I(stall_I),
     .mem_read_mem(mem_read_mem),
 	 .fwd1_sel(fwd1_sel_ex),
 	 .fwd2_sel(fwd2_sel_ex),

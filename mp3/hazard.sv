@@ -11,6 +11,7 @@ module hazard
 	 input load_regfile_mem,
 	 input load_regfile_wb,
      input pmem_resp,
+     input stall_I,
     output lc3b_forward fwd1_sel,
     output lc3b_forward fwd2_sel,
     output logic stall_load
@@ -46,7 +47,7 @@ begin
 		begin
 			fwd2_sel = none;
 		end
-	if(((sr1 == destmux_out_mem) | (sr2 == destmux_out_mem)) && (mem_read_mem) & pmem_resp)
+	if(((sr1 == destmux_out_mem) | (sr2 == destmux_out_mem)) && (mem_read_mem) & pmem_resp & ~stall_I)
         begin
             stall_load = 1;
         end
