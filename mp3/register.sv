@@ -32,8 +32,9 @@ begin
 end
 
 always_comb
-begin
-    out = data;
+begin		
+   out = data;
 end
+
 
 endmodule : register

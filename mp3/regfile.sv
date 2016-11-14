@@ -17,7 +17,7 @@ lc3b_word data [7:0] /* synthesis ramstyle = "logic" */;
  * so that Modelsim works as expected.
  */
 
-always_ff @(posedge clk or posedge reset)
+always_ff @(negedge clk or posedge reset)
 begin
 	if(reset == 1)
 	 begin
