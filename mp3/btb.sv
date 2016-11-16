@@ -50,20 +50,5 @@ always_comb begin
 	end
 end
 
-/* not sure whether it is right */
-/* LRU */
-logic temp[3];
-integer way_out;
-always_comb begin
-	temp = LRU[index];
-	if(hit) begin
-		case(way_sel)
-		0: begin
-		LRU[index][0] = 1'b0;
-		LRU[index][1] = 1'b0;
-		
 
-
-
-
-endmodule: btb		
+endmodule: btb
