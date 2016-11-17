@@ -234,7 +234,7 @@ assign I_mem_read = ~I_mem_resp & ~stall_D;
 
 /* Update Registers */
 logic zero;
-assign zero = reset | (flush_all & (~stall_I | ~stall_D));
+assign zero = reset | (flush_all & (~stall_I & ~stall_D));
 always_ff @(posedge clk)
 begin
 	if(zero)
