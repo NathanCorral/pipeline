@@ -187,8 +187,7 @@ logic [15:0] alu_out_wb;
 
 /**********IF stage***************/
 
-assign load_pc = ~stall_I & ~stall_D & ~stall_load | flush_all;
-
+assign load_pc = ~stall_I & ~stall_D & (~stall_load | flush_all);
 
 
 /* Modules */
@@ -235,7 +234,7 @@ assign I_mem_read = ~I_mem_resp & ~stall_D;
 
 /* Update Registers */
 logic zero;
-assign zero = reset | flush_all & ~stall_I;
+assign zero = reset | (flush_all & (~stall_I | ~stall_D));
 always_ff @(posedge clk)
 begin
 	if(zero)
@@ -497,7 +496,7 @@ mux2 #(.width(3)) destmux
 
 /* Update Registers */
 logic zero2;
-assign zero2 = zero | stall_load;
+assign zero2 = zero | (stall_load & ~stall_I);
 always_ff @(posedge clk)
 begin
 	if(zero2)

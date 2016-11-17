@@ -77,14 +77,18 @@ begin : next_state_logic
 		  end
 		  
         write_back : begin
-        	if(pmem_resp) 
+		   if(~(mem_read | mem_write))
+				next_state <= check;
+        	else if(pmem_resp) 
         		next_state <= allocate;
         	else 
         		next_state <= write_back;
         end
 
         allocate : begin
-        	if(pmem_resp) 
+		   if(~(mem_read | mem_write))
+				next_state <= check;
+        	else if(pmem_resp) 
         		next_state <= check;
         	else 
         		next_state <= allocate;
