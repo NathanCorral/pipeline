@@ -21,20 +21,20 @@ module arbiter
     output lc3b_block l2_pmem_wdata
 );
 
-always_ff @(posedge clk)
+always_comb
 begin
-    dcache_mem_rdata <= l2_pmem_rdata;
-    icache_mem_rdata <= l2_pmem_rdata;
-    dcache_mem_resp <= (dcache_pmem_read | dcache_pmem_write) & l2_pmem_resp;
-    icache_mem_resp <= (~dcache_pmem_read | ~dcache_pmem_write) & l2_pmem_resp;
-    l2_pmem_read <= dcache_pmem_read | (icache_pmem_read & ~dcache_pmem_write);
-    l2_pmem_write <= dcache_pmem_write;
-    l2_pmem_wdata <= dcache_pmem_wdata;
+    dcache_mem_rdata = l2_pmem_rdata;
+    icache_mem_rdata = l2_pmem_rdata;
+    dcache_mem_resp = (dcache_pmem_read | dcache_pmem_write) & l2_pmem_resp;
+    icache_mem_resp = (~dcache_pmem_read & ~dcache_pmem_write) & l2_pmem_resp & icache_pmem_read;
+    l2_pmem_read = dcache_pmem_read | (icache_pmem_read & ~dcache_pmem_write);
+    l2_pmem_write = dcache_pmem_write;
+    l2_pmem_wdata = dcache_pmem_wdata;
     if(dcache_pmem_read || dcache_pmem_write) begin
-        l2_pmem_address <= dcache_pmem_address;
+        l2_pmem_address = dcache_pmem_address;
     end
     else begin
-        l2_pmem_address <= icache_pmem_address;
+        l2_pmem_address = icache_pmem_address;
     end
 end
 

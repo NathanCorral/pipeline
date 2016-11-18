@@ -27,7 +27,7 @@ logic hit;
 logic dirty;
 logic real_mem_resp;
 
-assign mem_resp = real_mem_resp;
+assign mem_resp = real_mem_resp & (mem_read | mem_write);
 
 l2_cache_control CACHE_CONTROL (
 	.*
