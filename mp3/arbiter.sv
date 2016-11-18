@@ -9,32 +9,32 @@ module arbiter
     input dcache_pmem_write,
     input lc3b_word dcache_pmem_address,
     input lc3b_block dcache_pmem_wdata,
-    input pmem_resp,
-    input lc3b_block pmem_rdata,
+    input l2_pmem_resp,
+    input lc3b_block l2_pmem_rdata,
     output lc3b_block dcache_mem_rdata,
     output lc3b_block icache_mem_rdata,
     output logic dcache_mem_resp,
     output logic icache_mem_resp,
-    output logic pmem_read,
-    output logic pmem_write,
-    output lc3b_word pmem_address,
-    output lc3b_block pmem_wdata
+    output logic l2_pmem_read,
+    output logic l2_pmem_write,
+    output lc3b_word l2_pmem_address,
+    output lc3b_block l2_pmem_wdata
 );
 
 always_ff @(posedge clk)
 begin
-    dcache_mem_rdata <= pmem_rdata;
-    icache_mem_rdata <= pmem_rdata;
-    dcache_mem_resp <= (dcache_pmem_read | dcache_pmem_write) & pmem_resp;
-    icache_mem_resp <= (~dcache_pmem_read | ~dcache_pmem_write) & pmem_resp;
-    pmem_read <= dcache_pmem_read | (icache_pmem_read & ~dcache_pmem_write);
-    pmem_write <= dcache_pmem_write;
-    pmem_wdata <= dcache_pmem_wdata;
+    dcache_mem_rdata <= l2_pmem_rdata;
+    icache_mem_rdata <= l2_pmem_rdata;
+    dcache_mem_resp <= (dcache_pmem_read | dcache_pmem_write) & l2_pmem_resp;
+    icache_mem_resp <= (~dcache_pmem_read | ~dcache_pmem_write) & l2_pmem_resp;
+    l2_pmem_read <= dcache_pmem_read | (icache_pmem_read & ~dcache_pmem_write);
+    l2_pmem_write <= dcache_pmem_write;
+    l2_pmem_wdata <= dcache_pmem_wdata;
     if(dcache_pmem_read || dcache_pmem_write) begin
-        pmem_address <= dcache_pmem_address;
+        l2_pmem_address <= dcache_pmem_address;
     end
     else begin
-        pmem_address <= icache_pmem_address;
+        l2_pmem_address <= icache_pmem_address;
     end
 end
 

@@ -55,7 +55,12 @@ lc3b_word I_pmem_address;
 logic reset;
 
 /* L2 Cache In/Out */
-
+logic L2_mem_resp;
+logic L2_mem_read;
+logic L2_mem_write;
+lc3b_word L2_mem_address;
+logic [127:0] L2_mem_wdata;
+logic [127:0] L2_mem_rdata;
 
 /* Reset Control */
 enum int unsigned {
@@ -95,16 +100,16 @@ arbiter MEM_ARBITER
     .dcache_pmem_write(D_pmem_write),
     .dcache_pmem_address(D_pmem_address),
     .dcache_pmem_wdata(D_pmem_wdata),
-    .pmem_resp(pmem_resp),
-    .pmem_rdata(pmem_rdata),
-	 .dcache_mem_rdata(D_pmem_rdata),
+    .dcache_mem_rdata(D_pmem_rdata),
     .icache_mem_rdata(I_pmem_rdata),
     .dcache_mem_resp(D_pmem_resp),
     .icache_mem_resp(I_pmem_resp),
-    .pmem_read(pmem_read),
-    .pmem_write(pmem_write),
-    .pmem_address(pmem_address),
-    .pmem_wdata(pmem_wdata)
+    .l2_pmem_read(L2_mem_read),
+    .l2_pmem_resp(L2_mem_resp),
+    .l2_pmem_rdata(L2_mem_rdata),
+    .l2_pmem_write(L2_mem_write),
+    .l2_pmem_address(L2_mem_address),
+    .l2_pmem_wdata(L2_mem_wdata)
 );
 
 datapath DATAPATH (
@@ -136,6 +141,31 @@ cache D_CACHE (
 	.pmem_write(D_pmem_write),
 	.pmem_address(D_pmem_address),
 	.pmem_wdata(D_pmem_wdata)
+
+);
+
+
+
+l2_cache L2_CACHE (
+	/* clk, reset */
+	.clk(clk),
+	.reset(reset),
+
+	/* L2__Cache to/from Arbitor */
+	.mem_resp(L2_mem_resp),
+	.mem_rdata(L2_mem_rdata),
+	.mem_read(L2_mem_read),
+	.mem_write(L2_mem_write),
+	.mem_address(L2_mem_address),
+	.mem_wdata(L2_mem_wdata),
+
+	/* L2_Cache to/from phys mem */
+	.pmem_resp(pmem_resp),
+	.pmem_rdata(pmem_rdata),
+	.pmem_read(pmem_read),
+	.pmem_write(pmem_write),
+	.pmem_address(pmem_address),
+	.pmem_wdata(pmem_wdata)
 
 );
 
