@@ -554,8 +554,8 @@ stall STALLD
 );
 assign P_mem_address = alu_out_mem;
 assign P_mem_wdata = sr2_mem;
-assign P_mem_read = mem_read_mem;
-assign P_mem_write = mem_write_mem;
+assign P_mem_read = mem_read_mem & !flush_all;
+assign P_mem_write = mem_write_mem & !flush_all;
 //assign P_mem_byte_enable = mem_byte_enable_mem;  // change when Dcache Interfacae implemented
 assign P_mem_byte_enable[0] = ~(mem_byte_enable_mem & alu_out_mem[0]);
 assign P_mem_byte_enable[1] = ~mem_byte_enable_mem | alu_out_mem[0];
