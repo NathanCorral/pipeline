@@ -2966,8 +2966,8 @@
      inkscape:object-nodes="false"
      inkscape:snap-object-midpoints="true"
      inkscape:zoom="1"
-     inkscape:cx="500.68381"
-     inkscape:cy="376.71449"
+     inkscape:cx="502.68381"
+     inkscape:cy="296.71449"
      inkscape:window-x="0"
      inkscape:window-y="27"
      inkscape:window-maximized="1"
@@ -3573,4 +3573,28 @@
          id="tspan18868-7-5-5-2-4-3"
          x="66.799583"
          y="-490.39993">is_branch_inst_id</tspan></text>
+<text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:10px;line-height:125%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="55.599892"
+       y="-39.99979"
+       id="text18866-4-07-3-1-3-6-0-3-2-9-3"
+       sodipodi:linespacing="125%"
+       transform="scale(1,-1)"><tspan
+         sodipodi:role="line"
+         x="55.599892"
+         y="-39.99979"
+         id="tspan4976-3">in terms of adding the predictor to the machine, first try making the &quot;flush&quot; signal a true flush signal, let's try and get rid of these weird &quot;zero&quot;</tspan><tspan
+         sodipodi:role="line"
+         x="55.599892"
+         y="-27.49979"
+         id="tspan4148">signals as much as we can (I think this is possible by resetting the caches using the reset signal, we should test this before moving on though).</tspan><tspan
+         sodipodi:role="line"
+         x="55.599892"
+         y="-14.99979"
+         id="tspan4150">Once the zero signals are gone, we need to set pcmux_sel_out to 2 in the case of a misprediction (since 2 will cause it to load in the original</tspan><tspan
+         sodipodi:role="line"
+         x="55.599892"
+         y="-2.4997902"
+         id="tspan4152">PC+2 value based on my current diagram)</tspan></text>
 </g></svg>
