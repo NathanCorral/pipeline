@@ -257,6 +257,21 @@ assign trapvect_id = {7'b0, ir_id[7:0], 1'b0};
 assign dest_id = ir_id[11:9];
 assign opcode_id = lc3b_opcode'(ir_id[15:12]);
 
+branch_predictor bp
+(
+    .clk(clk),
+    .reset(reset),
+    .PC_id(pc_id),
+    .PC_wb(pc_wb),
+    .pcmux_sel_out(pcmux_sel_out),
+    .opcode_wb(opcode_wb),
+    .opcode_id(opcode_id),
+    .enable(),
+    .branch_hist_wb(),
+    .predict_taken(),
+    .branch_hist_id()
+);
+
 adj #(.width(9)) ADJ9
 (
     .in(ir_id[8:0]),
