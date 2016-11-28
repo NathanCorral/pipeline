@@ -10,18 +10,14 @@ module btb #(parameter way = 4, lines = 1024)
  input pc_sel_out_sel,
  output lc3b_word branch_address
 );
-logic offset;
-logic [10:0]index;
-logic [19:0]tag;
-logic offset_wb;
-logic [10:0]imdex_wb;
-logic [19:0]tag_wb;
+logic [9:0]index_id;
+logic [20:0]tag_id;
+logic [9:0]index_wb;
+logic [20:0]tag_wb;
 
 /* pc */
-assign offset_id = pc_id[0];
 assign index_id = pc_id[10:1];
 assign tag_id = pc_id[31:11];
-assign offset_wb = pc_wb[0];
 assign index_wb = pc_wb[10:1];
 assign tag_wb = pc_wb[31:11];
 
@@ -71,6 +67,18 @@ always_comb begin
 		end
 	if(sel_id[0] == 0 && sel_id[1] ==0 && sel_id[2] == 0 && sel_id[3] == 0)
 	hit_id = 1'b0;
+	end
+end
+
+always_comb begin
+	for(integer i = 0; i<way; i++) begin
+		sel_wb[i] = valid[index_wb][i] & compare_out_wb[i];
+		if(sel_wb[i] != 0) begin
+		hit_wb = 1'b1;
+		way_sel_wb = i;
+		end
+	if(sel_wb[0] == 0 && sel_wb[1] ==0 && sel_wb[2] == 0 && sel_wb[3] == 0)
+	hit_wb = 1'b0;
 	end
 end
 
