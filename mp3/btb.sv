@@ -91,7 +91,7 @@ begin
 	if(hit_id == 1'b1)
 	branch_address = br_address[index_id][way_sel_id];
 	else
-	branch_address = branch_address + 16'h0002;
+	branch_address = branch_address;
 end
 
 
