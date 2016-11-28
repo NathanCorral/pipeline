@@ -1,4 +1,5 @@
-import lc3b_type::*;
+import lc3b_types::*;
+
 module btb #(parameter way = 4, lines = 1024)
 (
  input clk,
@@ -24,7 +25,7 @@ logic [20:0] tag_data[lines][way];
 logic sel[way];
 logic hit;
 integer way_sel;
-
+logic compare_out[way];
 
 /* compare the tag */
 generate
