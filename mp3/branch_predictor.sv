@@ -7,6 +7,7 @@ module branch_predictor #(parameter hist_reg_width = 4, parameter index_bits = 5
     input lc3b_word PC_id,
     input lc3b_word PC_wb,
     input [1:0] pcmux_sel_out,
+    input pcmux_sel_out_sel,
     input lc3b_opcode opcode_wb,
     input lc3b_opcode opcode_id,
     input enable,
@@ -21,7 +22,7 @@ logic wr_enable;
 logic taken_wb;
 
 assign taken_wb = pcmux_sel_out != 2'b0;
-assign wr_enable = enable & (opcode_wb == op_br);
+assign wr_enable = enable & (opcode_wb == op_br & pcmux_sel_out_sel);
 
 // predictor array signals
 logic [index_bits-1:0] r1_idx;
@@ -58,7 +59,7 @@ register #(.width(hist_reg_width)) branch_hist_reg
 // get a bit messy if I don't figure out a nice way to increment
 // and decrement the counters though
 // TODO: initialize array counters to weakly not taken
-array #(.width(2), .index_bits(index_bits))
+array #(.width(2), .index_bits(index_bits)) counters
 (
     .clk(clk),
     .write(wr_enable),
@@ -69,5 +70,8 @@ array #(.width(2), .index_bits(index_bits))
     .data1_out(r1data_out),
     .data2_out(r2data_out)
 );
+
+assign predict_taken = r1data_out[1];
+assign branch_hist_id = branch_hist_reg_out;
 
 endmodule : branch_predictor
