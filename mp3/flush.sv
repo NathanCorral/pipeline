@@ -2,8 +2,12 @@ import lc3b_types::*;
 
 module flush
 (
-	input [1:0] pcmux_sel_out,
-	output logic flush_all	
+    input [1:0] pcmux_sel_out,
+    input lc3b_word pcmux_out,
+    input lc3b_word taken_pc_wb,
+    input predict_taken_wb,
+    output logic flush_all,
+    output logic [1:0] flushmux_sel
 );
 
 // check me on this one, but I believe the formula for calculating
@@ -22,13 +26,27 @@ module flush
 // choosing between 1) the normal pc+2 value, or 2) the pc+2 value
 // coming from the wb stage. We'll need to add another mux or two
 // to the datapath to make this happen.
-always_comb
-begin
-	if(pcmux_sel_out != 0)
-		flush_all = 1;
-	else
-		flush_all = 0;
-end
 
+// predict_taken_wb     pcmux_sel_out   taken_pc_wb == pcmux_out    next_pc flush
+//                0                 0                          0       pc+2     0 (in these two cases pc+2 is equal to pcmux_out since
+//                0                 0                          1       pc+2     0  pcmux_sel_out is 0)
+//                0                 1                          0  pcmux_out     1
+//                0                 1                          1  pcmux_out     1 (I think we could set flush = 0 and next_pc = pc+2 here,
+//                                                                                 but I'm not even sure if this case can happen and this
+//                                                                                 is safer I think)
+//                1                 0                          0      pc_wb     1
+//                1                 0                          1      pc_wb     1 (similar situation to above comment)
+//                1                 1                          0  pcmux_out     1
+//                1                 1                          1       pc+2     0
+logic ptw;
+logic pso;
+logic tep;
+
+assign ptw = predict_taken_wb;
+assign pso = pcmux_sel_out != 2'b00;
+assign tep = taken_pc_wb == pcmux_out;
+assign flush_all = (ptw & pso & tep) | (~ptw & ~pso & ~tep) | (~ptw & ~pso & tep);
+assign flushmux_sel[0] = ptw & pso;
+assign flushmux_sel[1] = flush_all;
 
 endmodule : flush

@@ -30,6 +30,7 @@ module datapath
 /* IF Control Signals */
 logic load_pc;
 logic[1:0] pcmux_sel_out;
+logic[1:0] flushmux_sel;
 logic stall_I;
 
 /* IF Output Signals */
@@ -37,6 +38,7 @@ logic [15:0] ir_id;
 
 /* IF Internal Signals */
 logic [15:0] pcmux_out;
+logic [15:0] flushmux_out;
 logic [15:0] pc_out;
 logic [15:0] predict_taken_mux_out;
 logic [15:0] pc_plus2_out;
@@ -225,12 +227,22 @@ mux4 pcmux
 	.f(pcmux_out)
 );
 
+mux4 flushmux
+(
+    .sel(flushmux_sel),
+    .a(pc_plus2_out),
+    .b(),
+    .c(pcmux_out),
+    .d(pc_wb),
+    .f(flushmux_out)
+);
+
 register pc
 (
 	.clk,
 	.reset,
 	.load(load_pc),
-	.in(pcmux_out),
+	.in(flushmux_out),
 	.out(pc_out)
 );
 
@@ -421,8 +433,12 @@ hazard HDETECTOR
 
 flush FLUSH
 (
-	 .pcmux_sel_out(pcmux_sel_out),
-    .flush_all(flush_all)
+    .pcmux_sel_out(pcmux_sel_out),
+    .pcmux_out(pcmux_out),
+    .taken_pc_wb(taken_pc_wb),
+    .predict_taken_wb(predict_taken_wb),
+    .flush_all(flush_all),
+    .flushmux_sel(flushmux_sel)
 );
 
 
