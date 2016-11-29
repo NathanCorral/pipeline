@@ -477,6 +477,7 @@ begin
 		  pcmux_sel_out_sel_ex <= 0;
           branch_hist_ex <= 0;
           predict_taken_ex <= 0;
+          taken_pc_ex <= 0;
 	end
 	else if (!stall_D & !stall_I & !stall_load) begin
         /* data signal assignments */
@@ -510,6 +511,7 @@ begin
 		  load_regfile_ex <= load_regfile_id;
           branch_hist_ex <= branch_hist_id;
           predict_taken_ex <= predict_taken_if_br;
+          taken_pc_ex <= taken_pc_id;
 		 // fwd1_sel_ex <= fwd1_sel_id;
 		  //fwd2_sel_ex <= fwd2_sel_id;
 	end	
@@ -603,6 +605,7 @@ begin
 		load_regfile_mem <= 0;
         branch_hist_mem <= 0;
         predict_taken_mem <= 0;
+        taken_pc_mem <= 0;
 	end
 	else if (!stall_D & !stall_I) begin
 		pc_mem <= pc_ex;
@@ -624,6 +627,7 @@ begin
 		load_regfile_mem <= load_regfile_ex;
         branch_hist_mem <= branch_hist_ex;
         predict_taken_mem <= predict_taken_ex;
+        taken_pc_mem <= taken_pc_ex;
 	end	
 end
 /**************************/
@@ -676,6 +680,7 @@ begin
      mem_byte_enable_wb <= 0;
      branch_hist_wb <= 0;
      predict_taken_wb <= 0;
+     taken_pc_wb <= 0;
 	end
 	else if(!stall_D & !stall_I) begin
      pc_wb <= pc_mem;
@@ -694,6 +699,7 @@ begin
      mem_byte_enable_wb <= mem_byte_enable_mem;
      branch_hist_wb <= branch_hist_mem;
      predict_taken_wb <= predict_taken_mem;
+     taken_pc_wb <= taken_pc_mem;
 	end	
 end
 
