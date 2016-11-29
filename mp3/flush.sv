@@ -38,6 +38,7 @@ module flush
 //                1                 0                          1      pc_wb     1 (similar situation to above comment)
 //                1                 1                          0  pcmux_out     1
 //                1                 1                          1       pc+2     0
+
 logic ptw;
 logic pso;
 logic tep;
@@ -45,8 +46,12 @@ logic tep;
 assign ptw = predict_taken_wb;
 assign pso = pcmux_sel_out != 2'b00;
 assign tep = taken_pc_wb == pcmux_out;
-assign flush_all = (ptw & pso & tep) | (~ptw & ~pso & ~tep) | (~ptw & ~pso & tep);
-assign flushmux_sel[0] = ptw & pso;
-assign flushmux_sel[1] = flush_all;
+
+always_comb
+begin
+    flush_all = ~((ptw & pso & tep) | (~ptw & ~pso & ~tep) | (~ptw & ~pso & tep));
+    flushmux_sel[0] = ptw & ~pso;
+    flushmux_sel[1] = flush_all;
+end
 
 endmodule : flush
