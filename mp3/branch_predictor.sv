@@ -4,16 +4,15 @@ module branch_predictor #(parameter hist_reg_width = 4, parameter index_bits = 5
 (
     input clk,
     input reset,
-    input lc3b_word PC_id,
+    input lc3b_word PC_if,
     input lc3b_word PC_wb,
     input [1:0] pcmux_sel_out,
     input pcmux_sel_out_sel,
     input lc3b_opcode opcode_wb,
-    input lc3b_opcode opcode_id,
     input enable,
     input [hist_reg_width-1:0] branch_hist_wb,
     output logic predict_taken,
-    output logic [hist_reg_width-1:0] branch_hist_id
+    output logic [hist_reg_width-1:0] branch_hist_if
 );
 
 // branch_hist_reg related signals
@@ -31,7 +30,7 @@ logic [1:0] r1data_out;
 logic [1:0] r2data_out;
 logic [1:0] wr_data;
 
-assign r1_idx = {PC_id[index_bits-1:index_bits-hist_reg_width] ^ branch_hist_reg_out, PC_id[index_bits-hist_reg_width-1:0]};
+assign r1_idx = {PC_if[index_bits-1:index_bits-hist_reg_width] ^ branch_hist_reg_out, PC_if[index_bits-hist_reg_width-1:0]};
 assign rw_idx = {PC_wb[index_bits-1:index_bits-hist_reg_width] ^ branch_hist_wb, PC_wb[index_bits-hist_reg_width-1:0]};
 // truth table for wr_data:
 // ReadData    Taken   WriteData
@@ -72,6 +71,6 @@ array #(.width(2), .index_bits(index_bits)) counters
 );
 
 assign predict_taken = r1data_out[1];
-assign branch_hist_id = branch_hist_reg_out;
+assign branch_hist_if = branch_hist_reg_out;
 
 endmodule : branch_predictor

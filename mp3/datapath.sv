@@ -174,17 +174,21 @@ logic branch_enable_wb;
 
 // branch_hist_reg pipeline values
 localparam N = 2;
+logic [N-1:0] branch_hist_if;
 logic [N-1:0] branch_hist_id;
 logic [N-1:0] branch_hist_ex;
 logic [N-1:0] branch_hist_mem;
 logic [N-1:0] branch_hist_wb;
 
 // predict taken pipeline values
+logic predict_taken_if;
 logic predict_taken_id;
 logic predict_taken_ex;
 logic predict_taken_mem;
 logic predict_taken_wb;
+logic predict_taken_if_br;
 
+lc3b_word taken_pc_if;
 lc3b_word taken_pc_id;
 lc3b_word taken_pc_ex;
 lc3b_word taken_pc_mem;
@@ -232,7 +236,7 @@ register pc
 
 mux2 predict_taken_mux
 (
-    .sel(predict_taken_id),
+    .sel(predict_taken_if_br),
     .a(pc_out),
     .b(taken_pc_id),
     .f(predict_taken_mux_out)
@@ -255,6 +259,31 @@ stall STALLI
 	.stall(stall_I)
 );
 
+btb BTB
+(
+    .clk(clk),
+    .pc_if(pc_plus2_out),
+    .pc_wb(pc_wb),
+    .pc_mux_out(pcmux_out),
+    .opcode_wb(opcode_wb),
+    .pc_sel_out_sel(pcmux_sel_out_sel_wb),
+    .branch_address(taken_pc_if)
+);
+
+branch_predictor #(.hist_reg_width(N), .index_bits(5)) bp
+(
+    .clk(clk),
+    .reset(reset),
+    .PC_if(pc_plus2_out),
+    .PC_wb(pc_wb),
+    .pcmux_sel_out(pcmux_sel_out),
+    .pcmux_sel_out_sel(pcmux_sel_out_sel_wb),
+    .opcode_wb(opcode_wb),
+    .enable(!stall_I & !stall_D & !stall_load),
+    .branch_hist_wb(branch_hist_wb),
+    .predict_taken(predict_taken_if),
+    .branch_hist_if(branch_hist_if)
+);
 
 	 /* I_Cache signals */
 assign I_mem_address = predict_taken_mux_out;
@@ -269,10 +298,16 @@ begin
 	begin
 		pc_id <= 0;
 		ir_id <= 0;
+        taken_pc_id <= 0;
+        predict_taken_id <= 0;
+        branch_hist_id <= 0;
 	end
 	else if (!stall_I & !stall_D & !stall_load) begin
 		ir_id <= I_mem_rdata;
 		pc_id <= pc_plus2_out; 
+        taken_pc_id <= taken_pc_if;
+        predict_taken_id <= predict_taken_if;
+        branch_hist_id <= branch_hist_if;
 	end	
 	
 end
@@ -284,33 +319,7 @@ end
 assign trapvect_id = {7'b0, ir_id[7:0], 1'b0};
 assign dest_id = ir_id[11:9];
 assign opcode_id = lc3b_opcode'(ir_id[15:12]);
-
-btb BTB
-(
-    .clk(clk),
-    .pc_id(pc_id),
-    .pc_wb(pc_wb),
-    .pc_mux_out(pcmux_out),
-    .opcode_wb(opcode_wb),
-    .pc_sel_out_sel(pcmux_sel_out_sel_wb),
-    .branch_address(taken_pc_id)
-);
-
-branch_predictor #(.hist_reg_width(N), .index_bits(5)) bp
-(
-    .clk(clk),
-    .reset(reset),
-    .PC_id(pc_id),
-    .PC_wb(pc_wb),
-    .pcmux_sel_out(pcmux_sel_out),
-    .pcmux_sel_out_sel(pcmux_sel_out_sel_wb),
-    .opcode_wb(opcode_wb),
-    .opcode_id(opcode_id),
-    .enable(!stall_I & !stall_D & !stall_load),
-    .branch_hist_wb(branch_hist_wb),
-    .predict_taken(predict_taken_id),
-    .branch_hist_id(branch_hist_id)
-);
+assign predict_taken_if_br = predict_taken_id & (opcode_id == op_br) & pcmux_sel_out_sel_id;
 
 adj #(.width(9)) ADJ9
 (
@@ -484,7 +493,7 @@ begin
 		  dest_ex <= dest_id;
 		  load_regfile_ex <= load_regfile_id;
           branch_hist_ex <= branch_hist_id;
-          predict_taken_ex <= predict_taken_id;
+          predict_taken_ex <= predict_taken_if_br;
 		 // fwd1_sel_ex <= fwd1_sel_id;
 		  //fwd2_sel_ex <= fwd2_sel_id;
 	end	

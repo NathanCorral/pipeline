@@ -3,7 +3,7 @@ import lc3b_types::*;
 module btb #(parameter way = 4, lines = 32)
 (
  input clk,
- input lc3b_word pc_id,
+ input lc3b_word pc_if,
  input lc3b_word pc_wb,
  input lc3b_word pc_mux_out,
  input lc3b_opcode opcode_wb,
@@ -16,8 +16,8 @@ logic [4:0]index_wb;
 logic [9:0]tag_wb;
 
 /* pc */
-assign index_id = pc_id[5:1];
-assign tag_id = pc_id[15:6];
+assign index_id = pc_if[5:1];
+assign tag_id = pc_if[15:6];
 assign index_wb = pc_wb[5:1];
 assign tag_wb = pc_wb[15:6];
 
