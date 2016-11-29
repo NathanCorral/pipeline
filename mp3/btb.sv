@@ -36,6 +36,11 @@ integer way_sel_wb;
 logic compare_out_id[way];
 logic compare_out_wb[way];
 
+initial
+begin
+    branch_address = 16'h0000;
+end
+
 /* compare the tag */
 generate
 genvar i;
