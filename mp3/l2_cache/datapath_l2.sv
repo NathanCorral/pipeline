@@ -1,6 +1,6 @@
 import lc3b_types::*;
 
-module l2_cache_datapath #(parameter way = 2, data_words = 8, lines = 8)
+module cache_datapath_l2 #(parameter way = 2, data_words = 8, lines = 8)
 (
 	 input clk,
 
@@ -63,7 +63,7 @@ logic compare_out[way];		// Compare Array
 logic [way-1:0] sel;
 
 /* Assign the pmem write from cache data */
-assign pmem_wdata = cache_data[index][sel_way];
+assign pmem_wdata = cache_data[index][!LRU[index]];
 
 /* Compare the tags */
 generate
@@ -188,4 +188,4 @@ begin
 	end
 end
 
-endmodule : l2_cache_datapath
+endmodule : cache_datapath_l2

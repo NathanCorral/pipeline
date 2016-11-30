@@ -1,4 +1,4 @@
-module l2_cache_control
+module cache_control_l2
 (
     /* Input and output port declarations */
 
@@ -106,4 +106,4 @@ begin: next_state_assignment
     state <= next_state;
 end
 
-endmodule : l2_cache_control
+endmodule : cache_control_l2

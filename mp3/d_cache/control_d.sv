@@ -1,4 +1,4 @@
-module cache_control
+module cache_control_d
 (
     /* Input and output port declarations */
 
@@ -14,7 +14,7 @@ module cache_control
 	input hit,
 	input dirty,
 	input pmem_resp,
-	output logic real_mem_resp
+	output logic mem_resp
 );
 
 enum int unsigned {
@@ -32,14 +32,14 @@ begin : state_actions
     pmem_mux_sel = 1'b0;
     pmem_read = 1'b0;
     pmem_write = 1'b0;
-	real_mem_resp = 0;
+	mem_resp = 0;
 
 	case(state)
 		check: begin
 			if(hit)
-				real_mem_resp = 1;
+				mem_resp = 1;
 			else
-				real_mem_resp = 0;
+				mem_resp = 0;
 		end
 		
 		write_back: begin
@@ -106,4 +106,4 @@ begin: next_state_assignment
     state <= next_state;
 end
 
-endmodule : cache_control
+endmodule : cache_control_d
