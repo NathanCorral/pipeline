@@ -16,11 +16,11 @@ module cache_datapath_d #(parameter way = 2, data_words = 8, log_word = 3, lines
     input lc3b_block pmem_rdata,
 	input pmem_read,
     output logic [15:0] pmem_address,
-    output logic lc3b_block pmem_wdata,
+    output lc3b_block pmem_wdata,
 	 
 	 output logic dirty,
 	 output logic hit,
-	 input sel_way_mux,
+	input sel_way_mux,
 	 input pmem_mux_sel,
 	 input mem_resp
 );
@@ -32,7 +32,7 @@ logic cache_in_mux_sel;
 // Address Division
 logic [11:0] tag;   
 logic [log_word-1:0] word_offset;
-logic [log_word-1:0] index;
+logic [log_line-1:0] index;
 
 assign word_offset = mem_address[log_word:1];
 assign index = mem_address[log_line+3:4];
@@ -73,7 +73,7 @@ logic [way-1:0] sel;
 logic [15:0] word_data[way];
 
 /* Assign the pmem write from cache data */
-assign pmem_wdata = cache_data[index][!LRU[index]];
+assign pmem_wdata =cache_data[index][!LRU[index]];
 
 /* Compare the tags */
 generate
@@ -125,11 +125,11 @@ mux2 #(.width(1)) SEL_WAY_MUX
 	.f(sel_way)
 );
 
+
+
 /* Select Dirty */
 assign dirty = dirty_data[index][!LRU[index]];
 
-/* Select the correct tag for computing pmem_address */
-assign pmem_mux_out = tag_data[index][!LRU[index]];
 
 
 /* Choose pmem_address source */
@@ -164,6 +164,7 @@ begin
 	/* Invalidate the data */
 	if(reset)
 	 begin
+		pmem_mux_out = 0;
 		for (int line = 0; line < lines; line++)
 		 begin
 			LRU[line] = 0;
@@ -178,21 +179,25 @@ begin
    else if (load_cache)
     begin
 		/* Check for load LRU */
-		if(mem_resp) begin
+		if(hit) begin
 			LRU[index] = sel_way;
 		end
-		
+	
 		cache_data[index][sel_way] = wdata;
 		valid_data[index][sel_way] = 1;
 		tag_data[index][sel_way] = tag;
 		/* Only set dirty on a mem_write */
-		if(mem_write)
+		if(!pmem_read)
 			dirty_data[index][sel_way] = 1;
 		
     end
     /* Load the LRU */
 	else if(mem_resp) begin
 		LRU[index] = sel_way;
+	end
+	else begin
+		/* Select the correct tag for computing pmem_address */
+		pmem_mux_out = tag_data[index][!LRU[index]];
 	end
 end
 

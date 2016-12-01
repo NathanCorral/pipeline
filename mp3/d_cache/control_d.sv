@@ -5,7 +5,6 @@ module cache_control_d
     input clk,
 	 input reset,
 	/* Datapath controls */
-	output logic sel_way_mux,
 	output logic pmem_mux_sel,
 	output logic pmem_read,
 	output logic pmem_write,
@@ -14,6 +13,7 @@ module cache_control_d
 	input hit,
 	input dirty,
 	input pmem_resp,
+	output logic sel_way_mux,
 	output logic mem_resp
 );
 
@@ -28,7 +28,7 @@ always_comb
 begin : state_actions
     /* Default output assignments */
     /* Actions for each state */
-	 sel_way_mux = 1'b0;
+    sel_way_mux = 1'b0;
     pmem_mux_sel = 1'b0;
     pmem_read = 1'b0;
     pmem_write = 1'b0;
@@ -36,22 +36,19 @@ begin : state_actions
 
 	case(state)
 		check: begin
-			if(hit)
-				mem_resp = 1;
-			else
-				mem_resp = 0;
+			mem_resp = hit;
 		end
 		
 		write_back: begin
 			/* MAR <= PC */
-			sel_way_mux = 1'b1;
+			 sel_way_mux= 1'b1;
 			pmem_mux_sel = 1'b1;
 			pmem_write = 1'b1;
 		end
 
 		allocate: begin
 			/* Read memory */
-			sel_way_mux = 1'b1;
+			 sel_way_mux= 1'b1;
 			pmem_read = 1'b1;
 		end
 		

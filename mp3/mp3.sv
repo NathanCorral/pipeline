@@ -120,7 +120,7 @@ indirect INDIRECT (
 	.*
 );
 
-cache_d #(.lines(16)) D_CACHE (
+cache_d  #(.way(2), .data_words(8), .log_word(3), .lines(32), .log_line(5)) D_CACHE (
 	/* clk, reset */
 	.clk(clk),
 	.reset(reset),

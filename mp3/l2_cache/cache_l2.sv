@@ -1,6 +1,6 @@
 import lc3b_types::*;
 
-module cache_l2 #(parameter way = 2, data_words = 128, lines = 8)
+module cache_l2 #(parameter way = 2, lines = 8, log_line = 3)
 (
 	 input clk,
 	 input reset,
@@ -29,12 +29,12 @@ logic real_mem_resp;
 
 assign mem_resp = real_mem_resp & (mem_read | mem_write);
 
-cache_control_l2 CACHE_CONTROL (
+cache_control_l2 L2_CACHE_CONTROL (
 	.*
 );
 
 
-cache_datapath_l2 #(.way(way), .data_words(data_words), .lines(lines)) CACHE_DATAPATH (
+cache_datapath_l2 #(.way(way), .lines(lines), .log_line(log_line)) L2_CACHE_DATAPATH (
 	.*
 );
 

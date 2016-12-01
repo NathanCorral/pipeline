@@ -22,10 +22,10 @@ module cache_d #(parameter way = 2, data_words = 8, log_word = 3, lines = 8, log
     output lc3b_block pmem_wdata
 );
 
-logic sel_way_mux;
 logic pmem_mux_sel;
 logic hit;
 logic dirty;
+logic sel_way_mux;
 
 
 cache_control_d D_CACHE_CONTROL (
