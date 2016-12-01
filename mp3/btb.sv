@@ -5,9 +5,9 @@ module btb #(parameter way = 4, lines = 32)
  input clk,
  input lc3b_word pc_if,
  input lc3b_word pc_wb,
- input lc3b_word pc_mux_out,
+ input lc3b_word alu_out_wb,
  input lc3b_opcode opcode_wb,
- input pc_sel_out_sel,
+ input is_valid_inst_wb,
  output lc3b_word branch_address
 );
 logic [4:0]index_id;
@@ -38,7 +38,21 @@ logic compare_out_wb[way];
 
 initial
 begin
-    branch_address = 16'h0000;
+    for (int i = 0; i < lines; i++)
+    begin
+        LRU[i][0] = 1'b0;
+        LRU[i][1] = 1'b0;
+        LRU[i][2] = 1'b0;
+    end
+
+    for (int i = 0; i < lines; i++)
+    begin
+        for (int j = 0; j < way; j++)
+        begin
+            br_address[i][j] = 16'h0;
+            valid[i][j] = 1'b0;
+        end
+    end
 end
 
 /* compare the tag */
@@ -103,7 +117,7 @@ end
 /* LRU and output*/
 always_ff @(posedge clk)
 begin
-	if(opcode_wb == 4'b0000 && pc_sel_out_sel == 1) begin
+	if(opcode_wb == 4'b0000 && is_valid_inst_wb == 1) begin
 	if(hit_wb) 
 	/* if hit, update the LRU*/
 	/* the address depends on whether it is taken  */
@@ -137,7 +151,7 @@ begin
 	if(LRU[index_wb][2] == 1 && LRU[index_wb][1] == 1) begin
 	LRU[index_wb][2] = 0;
 	LRU[index_wb][1] = 0;
-	br_address[index_wb][0] = pc_mux_out;
+	br_address[index_wb][0] = alu_out_wb;
 	valid[index_wb][0] = 1;
 	tag_data[index_wb][0] = tag_wb;
 
@@ -147,7 +161,7 @@ begin
 	if(LRU[index_wb][2] == 1 && LRU[index_wb][1] == 0) begin
 	LRU[index_wb][2] = 0;
 	LRU[index_wb][1] = 1;
-	br_address[index_wb][1] = pc_mux_out;
+	br_address[index_wb][1] = alu_out_wb;
 	valid[index_wb][1] = 1;
 	tag_data[index_wb][1] = tag_wb;
 
@@ -157,7 +171,7 @@ begin
 	if(LRU[index_wb][2] == 0 && LRU[index_wb][0] == 1) begin
 	LRU[index_wb][2] = 1;
 	LRU[index_wb][0] = 0;
-	br_address[index_wb][2] = pc_mux_out;
+	br_address[index_wb][2] = alu_out_wb;
 	valid[index_wb][2] = 1;
 	tag_data[index_wb][2] = tag_wb;
 
@@ -168,7 +182,7 @@ begin
 	if(LRU[index_wb][2] == 0 && LRU[index_wb][1] == 0) begin
 	LRU[index_wb][2] = 1;
 	LRU[index_wb][0] = 1;
-	br_address[index_wb][3] = pc_mux_out;
+	br_address[index_wb][3] = alu_out_wb;
 	valid[index_wb][3] = 1;
 	tag_data[index_wb][3] = tag_wb;
 
