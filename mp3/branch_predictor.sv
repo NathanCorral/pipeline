@@ -7,7 +7,7 @@ module branch_predictor #(parameter hist_reg_width = 4, parameter index_bits = 5
     input lc3b_word PC_if,
     input lc3b_word PC_wb,
     input [1:0] pcmux_sel_out,
-    input pcmux_sel_out_sel,
+    input is_valid_inst_wb,
     input lc3b_opcode opcode_wb,
     input enable,
     input [hist_reg_width-1:0] branch_hist_wb,
@@ -21,7 +21,7 @@ logic wr_enable;
 logic taken_wb;
 
 assign taken_wb = pcmux_sel_out != 2'b0;
-assign wr_enable = enable & (opcode_wb == op_br & pcmux_sel_out_sel);
+assign wr_enable = enable & (opcode_wb == op_br & is_valid_inst_wb);
 
 // predictor array signals
 logic [index_bits-1:0] r1_idx;
@@ -30,8 +30,8 @@ logic [1:0] r1data_out;
 logic [1:0] r2data_out;
 logic [1:0] wr_data;
 
-assign r1_idx = {PC_if[index_bits-1:index_bits-hist_reg_width] ^ branch_hist_reg_out, PC_if[index_bits-hist_reg_width-1:0]};
-assign rw_idx = {PC_wb[index_bits-1:index_bits-hist_reg_width] ^ branch_hist_wb, PC_wb[index_bits-hist_reg_width-1:0]};
+assign r1_idx = {PC_if[index_bits:index_bits-hist_reg_width+1] ^ branch_hist_reg_out, PC_if[index_bits-hist_reg_width:1]};
+assign rw_idx = {PC_wb[index_bits:index_bits-hist_reg_width+1] ^ branch_hist_wb, PC_wb[index_bits-hist_reg_width:1]};
 // truth table for wr_data:
 // ReadData    Taken   WriteData
 // 00          0       00
@@ -50,7 +50,7 @@ register #(.width(hist_reg_width)) branch_hist_reg
     .clk(clk),
     .reset(reset),
     .load(wr_enable),
-    .in({branch_hist_reg_out[hist_reg_width-1:1], taken_wb}),
+    .in({branch_hist_reg_out[hist_reg_width-2:0], taken_wb}),
     .out(branch_hist_reg_out)
 );
 
