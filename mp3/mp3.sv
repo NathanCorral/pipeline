@@ -95,7 +95,7 @@ arbiter MEM_ARBITER
 (
 	 .clk(clk),
     .icache_pmem_read(I_pmem_read),
-    .icache_pmem_address(I_pmem_address),
+    .icache_pmem_address(I_mem_address),
     .dcache_pmem_read(D_pmem_read),
     .dcache_pmem_write(D_pmem_write),
     .dcache_pmem_address(D_pmem_address),
@@ -120,7 +120,7 @@ indirect INDIRECT (
 	.*
 );
 
-cache_d  #(.way(2), .data_words(8), .log_word(3), .lines(32), .log_line(5)) D_CACHE (
+cache_d  #(.way(2), .data_words(8), .log_word(3), .lines(16), .log_line(4)) D_CACHE (
 	/* clk, reset */
 	.clk(clk),
 	.reset(reset),
@@ -146,7 +146,7 @@ cache_d  #(.way(2), .data_words(8), .log_word(3), .lines(32), .log_line(5)) D_CA
 
 
 
-cache_l2 L2_CACHE (
+cache_l2 #(.way(2), .lines(32), .log_line(5)) L2_CACHE (
 	/* clk, reset */
 	.clk(clk),
 	.reset(reset),
@@ -169,7 +169,7 @@ cache_l2 L2_CACHE (
 
 );
 
-cache_i I_CACHE (
+cache_i #(.way(2), .data_words(8), .log_word(3), .lines(16), .log_line(4)) I_CACHE (
 		/* clk, reset */
 	.clk(clk),
 	.reset(reset),

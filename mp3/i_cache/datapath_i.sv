@@ -125,7 +125,7 @@ begin
 			LRU[index] = sel_way;
 		end
 		
-		cache_data[index][!LRU[index]] = pmem_rdata;
+		cache_data[index][sel_way] = pmem_rdata;
 		valid_data[index][sel_way] = 1;
 		tag_data[index][sel_way] = tag;
 		
