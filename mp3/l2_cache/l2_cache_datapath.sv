@@ -146,7 +146,7 @@ mux2 #(.width(128)) SEL_WDATA_MUX
 (
 	.sel(cache_in_mux_sel),
 	.a(pmem_rdata),
-	.b(mem_rdata),
+	.b(mem_wdata),
 	.f(wdata)
 );
 

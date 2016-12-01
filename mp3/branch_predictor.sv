@@ -58,7 +58,7 @@ register #(.width(hist_reg_width)) branch_hist_reg
 // get a bit messy if I don't figure out a nice way to increment
 // and decrement the counters though
 // TODO: initialize array counters to weakly not taken
-array #(.width(2), .index_bits(index_bits))
+array #(.width(2), .index_bits(index_bits)) ARRAY
 (
     .clk(clk),
     .write(wr_enable),
