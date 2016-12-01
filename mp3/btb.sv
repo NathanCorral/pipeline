@@ -80,15 +80,15 @@ endgenerate
 always_comb begin
 	for(integer i = 0; i<way; i++) begin
 		sel_id[i] = valid[index_id][i] & compare_out_id[i];
-		if(sel_id[i] != 0) 
-		way_sel_id = i;
         // branch predictions seem to be a little bit off unless we include
         // a break statement after way_sel_id is set. Unfortunately break
         // doesn't seem to be synthesizable
         // taking out the else clause also works, but is also not synthesizable
-		else 
-		way_sel_id = 0;
 		end
+	if(sel_id[1]) way_sel_id = 1;
+	else if(sel_id[2]) way_sel_id = 2;
+	else if(sel_id[3]) way_sel_id = 3;
+	else way_sel_id = 0;
 	if(sel_id[0] == 0 && sel_id[1] ==0 && sel_id[2] == 0 && sel_id[3] == 0)
 	hit_id = 1'b0;
 	else 
@@ -98,11 +98,11 @@ end
 always_comb begin
 	for(integer i = 0; i<way; i++) begin
 		sel_wb[i] = valid[index_wb][i] & compare_out_wb[i];
-		if(sel_wb[i] != 0) 
-		way_sel_wb = i;
-		else 
-		way_sel_wb = 0;
 		end
+	if(sel_wb[1]) way_sel_wb = 1;
+	else if(sel_wb[2]) way_sel_wb = 2;
+	else if(sel_wb[3]) way_sel_wb = 3;
+	else way_sel_wb = 0;
 	if(sel_wb[0] == 0 && sel_wb[1] ==0 && sel_wb[2] == 0 && sel_wb[3] == 0)
 	hit_wb = 1'b0;
 	else 
@@ -132,7 +132,7 @@ end
 /* LRU and output*/
 always_ff @(posedge clk)
 begin
-	if(opcode_wb == 4'b0000 && is_valid_inst_wb == 1) begin
+	if(((opcode_wb == 4'b0000) || (opcode_wb == 4'b1100) || (opcode_wb == 4'b0100) || (opcode_wb == 4'b1111)) && is_valid_inst_wb == 1) begin
 	if(hit_wb) 
 	/* if hit, update the LRU*/
 	/* the address depends on whether it is taken  */
