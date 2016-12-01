@@ -82,6 +82,10 @@ always_comb begin
 		sel_id[i] = valid[index_id][i] & compare_out_id[i];
 		if(sel_id[i] != 0) 
 		way_sel_id = i;
+        // branch predictions seem to be a little bit off unless we include
+        // a break statement after way_sel_id is set. Unfortunately break
+        // doesn't seem to be synthesizable
+        // taking out the else clause also works, but is also not synthesizable
 		else 
 		way_sel_id = 0;
 		end
@@ -105,12 +109,23 @@ always_comb begin
 	hit_wb = 1'b1;
 end
 
-always_ff @(posedge clk)
+// if we want this clocked, it needs to be clocked based on hit_id or something,
+// but not the actual clock, actual clock causes it to lag 1 cycle and gives
+// horrible prediction results
+// if we don't want it clocked, we can set branch address to pc_if on a miss
+// basically, it has to be always_comb with branch_address = pc_if, or
+// always_ff @(posedge hit_id) with branch_address = branch_address
+
+//always_ff @(posedge clk)
+always_comb
+//always_ff @(posedge hit_id)
 begin
 	if(hit_id == 1'b1)
 	branch_address = br_address[index_id][way_sel_id];
 	else
-	branch_address = branch_address;
+    //used to be branch_address = branch_address
+	branch_address = pc_if;
+    //branch_address = branch_address;
 end
 
 
