@@ -284,6 +284,7 @@ btb BTB
     .pc_if(pc_plus2_out),
     .pc_wb(pc_wb),
     .alu_out_wb(alu_out_wb),
+    .mem_wb(mem_wb),
     .opcode_wb(opcode_wb),
     .is_valid_inst_wb(is_valid_inst_wb),
     .branch_address(taken_pc_if)

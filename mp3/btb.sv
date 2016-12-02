@@ -6,6 +6,7 @@ module btb #(parameter way = 4, lines = 32)
  input lc3b_word pc_if,
  input lc3b_word pc_wb,
  input lc3b_word alu_out_wb,
+ input lc3b_word mem_wb,
  input lc3b_opcode opcode_wb,
  input is_valid_inst_wb,
  output lc3b_word branch_address
@@ -166,7 +167,10 @@ begin
 	if(LRU[index_wb][2] == 1 && LRU[index_wb][1] == 1) begin
 	LRU[index_wb][2] = 0;
 	LRU[index_wb][1] = 0;
-	br_address[index_wb][0] = alu_out_wb;
+    if(opcode_wb == op_trap)
+	    br_address[index_wb][0] = mem_wb;
+    else
+	    br_address[index_wb][0] = alu_out_wb;
 	valid[index_wb][0] = 1;
 	tag_data[index_wb][0] = tag_wb;
 
@@ -176,6 +180,9 @@ begin
 	if(LRU[index_wb][2] == 1 && LRU[index_wb][1] == 0) begin
 	LRU[index_wb][2] = 0;
 	LRU[index_wb][1] = 1;
+    if(opcode_wb == op_trap)
+	br_address[index_wb][1] = mem_wb;
+    else
 	br_address[index_wb][1] = alu_out_wb;
 	valid[index_wb][1] = 1;
 	tag_data[index_wb][1] = tag_wb;
@@ -186,6 +193,9 @@ begin
 	if(LRU[index_wb][2] == 0 && LRU[index_wb][0] == 1) begin
 	LRU[index_wb][2] = 1;
 	LRU[index_wb][0] = 0;
+    if(opcode_wb == op_trap)
+	br_address[index_wb][2] = mem_wb;
+    else
 	br_address[index_wb][2] = alu_out_wb;
 	valid[index_wb][2] = 1;
 	tag_data[index_wb][2] = tag_wb;
@@ -197,6 +207,9 @@ begin
 	if(LRU[index_wb][2] == 0 && LRU[index_wb][0] == 0) begin
 	LRU[index_wb][2] = 1;
 	LRU[index_wb][0] = 1;
+    if(opcode_wb == op_trap)
+	br_address[index_wb][3] = mem_wb;
+    else
 	br_address[index_wb][3] = alu_out_wb;
 	valid[index_wb][3] = 1;
 	tag_data[index_wb][3] = tag_wb;
