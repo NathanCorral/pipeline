@@ -2878,7 +2878,7 @@
      inkscape:object-nodes="false"
      inkscape:snap-object-midpoints="true"
      inkscape:zoom="1"
-     inkscape:cx="704.4552"
+     inkscape:cx="706.4552"
      inkscape:cy="393.9602"
      inkscape:window-x="0"
      inkscape:window-y="27"
@@ -5574,7 +5574,7 @@
          sodipodi:role="line"
          x="238.98016"
          y="-515.3042"
-         id="tspan4523">(opcode == op_br) &amp; pcmux_sel_out_sel</tspan></text>
+         id="tspan4523">(opcode == op_br) &amp; is_valid_inst_id</tspan></text>
 <path
        style="fill:none;stroke:#000000;stroke-width:0.40000001;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#Arrow2Lend-36)"
        d="m 100.80001,370.4 9.59999,0"
