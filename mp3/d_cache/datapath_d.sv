@@ -1,8 +1,9 @@
 import lc3b_types::*;
 
-module cache_datapath #(parameter way = 2, data_words = 8, lines = 8)
+module cache_datapath_d #(parameter way = 2, data_words = 8, log_word = 3, lines = 8, log_line = 3, line_size = 128)
 (
 	 input clk,
+	 input reset,
 
     output lc3b_word mem_rdata,
     input mem_read,
@@ -10,19 +11,18 @@ module cache_datapath #(parameter way = 2, data_words = 8, lines = 8)
     input lc3b_mem_wmask mem_byte_enable,
     input lc3b_word mem_address,
     input lc3b_word mem_wdata,
-	 input reset,
 	 input pmem_resp,
 	 
-    input [127:0] pmem_rdata,
+    input lc3b_block pmem_rdata,
 	input pmem_read,
     output logic [15:0] pmem_address,
-    output logic [127:0] pmem_wdata,
+    output lc3b_block pmem_wdata,
 	 
 	 output logic dirty,
 	 output logic hit,
-	 input sel_way_mux,
+	input sel_way_mux,
 	 input pmem_mux_sel,
-	 input real_mem_resp
+	 input mem_resp
 );
 
 
@@ -30,32 +30,34 @@ module cache_datapath #(parameter way = 2, data_words = 8, lines = 8)
 logic cache_in_mux_sel;
 
 // Address Division
-logic [11:0] tag;   
-logic [2:0] word_offset;
-logic [2:0] index;
+logic [(14-log_word):0] tag;   
+logic [log_word-1:0] word_offset;
+logic [log_line-1:0] index;
 
-assign word_offset = mem_address[3:1];
-assign index = mem_address[6:4];
-assign tag = mem_address[15:4];
+assign word_offset = mem_address[log_word:1];
+assign index = mem_address[log_line+4:log_word+1];
+assign tag = mem_address[15:log_word+1];
 
 
 /* Arrays for the Cache */
-logic [127: 0] cache_data[lines][way];  	// Data
+lc3b_block cache_data[lines][way];  	// Data
 logic LRU[lines];  							// LRU
 logic valid_data[lines][way];				// Valid
 logic dirty_data[lines][way];				// Dirty
-logic [11:0] tag_data[lines][way];			// Tag
+logic [(14-log_word):0] tag_data[lines][way];			// Tag
 
 /* Used to select the way of the cache */
 logic sel_way;
 
 /* Address for pmem computed from tag output */
-logic [11:0] pmem_mux_out;
+logic [(14-log_word):0] pmem_mux_out;
 
 /* data into the cache */
-logic [127: 0] wdata;
+lc3b_block wdata;
 /* Data from the cache with swapped word for mem_write */
-logic [127: 0] swap_data;
+lc3b_block swap_data;
+/* Data from the cache with swapped word for mem_write */
+lc3b_block swap[way];
 
 /* load data, valid, dirty, and tag arrays */
 /* mem_resp loads the LRU array */
@@ -67,18 +69,32 @@ logic compare_out[way];		// Compare Array
 /* Select valid data from compare_out */
 logic [way-1:0] sel;
 
+/* Read data for each way */
+logic [15:0] word_data[way];
+
 /* Assign the pmem write from cache data */
-assign pmem_wdata = cache_data[index][sel_way];
+lc3b_block pmem_wdata_reg;
+assign pmem_wdata = pmem_wdata_reg;
 
 /* Compare the tags */
 generate
 genvar i;
-for(i=0; i < way; i++) begin: COMPARE
-	compare #(.width(12)) COMPAREi
+for(i=0; i < way; i++) begin: COMPARE_D
+	compare #(.width(15 - log_word)) COMPAREi
 	(
 		.a(tag_data[index][i]),
 		.b(tag),
 		.out(compare_out[i])
+	);
+
+	swap_word #(.data_words(data_words), .log_word(log_word)) SWAP_WORDi
+	(
+		.mem_byte_enable(mem_byte_enable),
+		.word_offset(word_offset),
+		.data_out(cache_data[index][i]),
+		.out_word(word_data[i]),
+		.swap_word(mem_wdata),
+		.swap_data(swap[i])
 	);
 end
 endgenerate
@@ -92,10 +108,6 @@ end
 
 /* Assign hit */
 assign hit = |sel;
-
-/* Mem response Reg */
-logic mem_resp_reg;
-assign mem_resp_reg = hit & (mem_read | mem_write);
 
 /* Assign Cache Load */
 assign cache_in_mux_sel = (hit & mem_write);
@@ -114,30 +126,19 @@ mux2 #(.width(1)) SEL_WAY_MUX
 	.f(sel_way)
 );
 
-/* Select Dirty */
-mux2 #(.width(1)) DIRTY_MUX
-(
-	.sel(!LRU[index]),
-	.a(dirty_data[index][0]),
-	.b(dirty_data[index][1]),
-	.f(dirty)
-);
 
-/* Select the correct tag for computing pmem_address */
-mux2 #(.width(12)) TAG_MUX
-(
-	.sel(!LRU[index]),
-	.a(tag_data[index][0]),
-	.b(tag_data[index][1]),
-	.f(pmem_mux_out)
-);
+
+/* Select Dirty */
+assign dirty = dirty_data[index][!LRU[index]];
+
+
 
 /* Choose pmem_address source */
 mux2 #(.width(16)) PMEM_MUX
 (
 	.sel(pmem_mux_sel),
 	.a(mem_address),
-	.b({pmem_mux_out, 4'b0}),
+	.b({pmem_mux_out, 5'b0}), //log_word
 	.f(pmem_address)
 );
 
@@ -145,48 +146,13 @@ mux2 #(.width(16)) PMEM_MUX
 * Choose the word/byte for mem_rdata (with word_offset and mem_byte_enable)
 * Swap the correct word for a mem_write (with word_offset)
 */
-logic [15:0] mem_rdata0;
-logic [15:0] mem_rdata1;
-logic [127:0] swap_data0;
-logic [127:0] swap_data1;
-swap_word SWAP_WORD0
-(
-	.mem_byte_enable(mem_byte_enable),
-	.word_offset(word_offset),
-	.data_out(cache_data[index][0]),
-	.out_word(mem_rdata0),
-	.swap_word(mem_wdata),
-	.swap_data(swap_data0)
-);
-swap_word SWAP_WORD1
-(
-	.mem_byte_enable(mem_byte_enable),
-	.word_offset(word_offset),
-	.data_out(cache_data[index][1]),
-	.out_word(mem_rdata1),
-	.swap_word(mem_wdata),
-	.swap_data(swap_data1)
-);
+assign mem_rdata = word_data[sel_way];
+
+/* Select swap data to write to cache */
+assign swap_data = swap[sel_way];
 
 /* Select data to write to cache */
-mux2 #(.width(16)) SEL_RDATA
-(
-	.sel(sel_way),
-	.a(mem_rdata0),
-	.b(mem_rdata1),
-	.f(mem_rdata)
-);
-
-mux2 #(.width(128)) SEL_SWAPDATA
-(
-	.sel(sel_way),
-	.a(swap_data0),
-	.b(swap_data1),
-	.f(swap_data)
-);
-
-/* Select data to write to cache */
-mux2 #(.width(128)) SEL_WDATA_MUX
+mux2 #(line_size) SEL_WDATA_MUX
 (
 	.sel(cache_in_mux_sel),
 	.a(pmem_rdata),
@@ -196,11 +162,10 @@ mux2 #(.width(128)) SEL_WDATA_MUX
 
 always_ff @(posedge clk or posedge reset)
 begin
-	/* Set the responce every clock cycle */
-	//mem_resp <= mem_resp_reg;
 	/* Invalidate the data */
 	if(reset)
 	 begin
+		pmem_mux_out = 0;
 		for (int line = 0; line < lines; line++)
 		 begin
 			LRU[line] = 0;
@@ -215,10 +180,10 @@ begin
    else if (load_cache)
     begin
 		/* Check for load LRU */
-		if(real_mem_resp) begin
+		if(hit) begin
 			LRU[index] = sel_way;
 		end
-		
+	
 		cache_data[index][sel_way] = wdata;
 		valid_data[index][sel_way] = 1;
 		tag_data[index][sel_way] = tag;
@@ -228,9 +193,14 @@ begin
 		
     end
     /* Load the LRU */
-	else if(real_mem_resp) begin
+	else if(mem_resp) begin
 		LRU[index] = sel_way;
+	end
+	else begin
+		/* Select the correct tag for computing pmem_address */
+		pmem_mux_out = tag_data[index][!LRU[index]];
+		pmem_wdata_reg = cache_data[index][!LRU[index]]; 
 	end
 end
 
-endmodule : cache_datapath
+endmodule : cache_datapath_d
