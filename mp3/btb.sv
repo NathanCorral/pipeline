@@ -134,7 +134,7 @@ end
 /* LRU and output*/
 always_ff @(posedge clk)
 begin
-	if(((opcode_wb == 4'b0000) || (opcode_wb == 4'b1100) || (opcode_wb == 4'b0100) || (opcode_wb == 4'b1111)) && is_valid_inst_wb == 1) begin
+	if(((opcode_wb == 4'b0000) || (opcode_wb == 4'b0100) || (opcode_wb == 4'b1111)) && is_valid_inst_wb == 1) begin
 	if(hit_wb) 
 	/* if hit, update the LRU*/
 	/* the address depends on whether it is taken  */
