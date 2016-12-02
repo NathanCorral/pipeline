@@ -1,24 +1,24 @@
 import lc3b_types::*;
 
-module l2_cache #(parameter way = 2, data_words = 128, lines = 8)
+module cache_l2 #(parameter way = 2, lines = 8, log_line = 3, line_size = 128, log_word = 3)
 (
 	 input clk,
 	 input reset,
 	 
 	    /* Memory signals */
     output logic mem_resp,
-    output logic [127:0] mem_rdata,
+    output lc3b_block mem_rdata,
     input mem_read,
     input mem_write,
     input lc3b_word mem_address,
-    input logic [127:0] mem_wdata,
+    input lc3b_block mem_wdata,
 	 
 	 input pmem_resp,
-    input [127:0] pmem_rdata,
+    input lc3b_block pmem_rdata,
 	 output logic pmem_read,
     output logic pmem_write,
     output logic [15:0] pmem_address,
-    output logic [127:0] pmem_wdata
+    output lc3b_block pmem_wdata
 );
 
 logic sel_way_mux;
@@ -29,13 +29,13 @@ logic real_mem_resp;
 
 assign mem_resp = real_mem_resp & (mem_read | mem_write);
 
-l2_cache_control CACHE_CONTROL (
+cache_control_l2 L2_CACHE_CONTROL (
 	.*
 );
 
 
-l2_cache_datapath #(.way(way), .data_words(data_words), .lines(lines)) CACHE_DATAPATH (
+cache_datapath_l2 #(.way(way), .lines(lines), .log_line(log_line), .line_size(line_size), .log_word(log_word)) L2_CACHE_DATAPATH (
 	.*
 );
 
-endmodule : l2_cache
+endmodule : cache_l2
