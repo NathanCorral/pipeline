@@ -40,6 +40,8 @@ mp?/simulation/modelsim/rtl_work
 mp?/simulation/modelsim/gate_work
 mp?/simulation/modelsim/verilog_libs
 mp?/simulation/modelsim/vsim.wlf
+mp?/simulation/modelsim/*.do
+
 
 # Memory initialization file
 mp?/simulation/modelsim/*ram*.hdl.mif
