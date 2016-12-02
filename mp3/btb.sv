@@ -194,7 +194,7 @@ begin
 
 	end
 	
-	if(LRU[index_wb][2] == 0 && LRU[index_wb][1] == 0) begin
+	if(LRU[index_wb][2] == 0 && LRU[index_wb][0] == 0) begin
 	LRU[index_wb][2] = 1;
 	LRU[index_wb][0] = 1;
 	br_address[index_wb][3] = alu_out_wb;
