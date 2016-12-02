@@ -9,7 +9,8 @@ module btb #(parameter way = 4, lines = 32)
  input lc3b_word mem_wb,
  input lc3b_opcode opcode_wb,
  input is_valid_inst_wb,
- output lc3b_word branch_address
+ output lc3b_word branch_address,
+ output logic btb_hit
 );
 logic [4:0]index_id;
 logic [9:0]tag_id;
@@ -222,7 +223,7 @@ begin
 end
 end
 
-
+assign btb_hit = hit_id;
 
 
 endmodule: btb

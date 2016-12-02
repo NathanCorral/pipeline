@@ -196,6 +196,10 @@ lc3b_word taken_pc_ex;
 lc3b_word taken_pc_mem;
 lc3b_word taken_pc_wb;
 
+// used to decide whether to branch on unconditional jumps
+logic btb_hit_if;
+logic btb_hit_id;
+
 // used to decide whether an instruction is valid or whether
 // it is a fake branch instruction
 logic is_valid_inst_id;
@@ -287,7 +291,8 @@ btb BTB
     .mem_wb(mem_wb),
     .opcode_wb(opcode_wb),
     .is_valid_inst_wb(is_valid_inst_wb),
-    .branch_address(taken_pc_if)
+    .branch_address(taken_pc_if),
+    .btb_hit(btb_hit_if)
 );
 
 branch_predictor #(.hist_reg_width(N), .index_bits(5)) bp
@@ -322,6 +327,7 @@ begin
         predict_taken_id <= 0;
         branch_hist_id <= 0;
         is_valid_inst_id <= 0;
+        btb_hit_id <= 0;
 	end
 	else if (!stall_I & !stall_D & !stall_load) begin
 		ir_id <= I_mem_rdata;
@@ -330,6 +336,7 @@ begin
         predict_taken_id <= predict_taken_if;
         branch_hist_id <= branch_hist_if;
         is_valid_inst_id <= 1;
+        btb_hit_id <= btb_hit_if;
 	end	
 	
 end
@@ -341,7 +348,10 @@ end
 assign trapvect_id = {7'b0, ir_id[7:0], 1'b0};
 assign dest_id = ir_id[11:9];
 assign opcode_id = lc3b_opcode'(ir_id[15:12]);
-assign predict_taken_if_br = predict_taken_id & (opcode_id == op_br) & is_valid_inst_id;
+assign predict_taken_if_br = (predict_taken_id & (opcode_id == op_br) & is_valid_inst_id) |
+                             (((opcode_id == op_jsr | opcode_id == op_trap) |
+                             (opcode_id == op_br & ir_id[11:9] == 3'b111 & is_valid_inst_id)) &
+                             btb_hit_id);
 
 adj #(.width(9)) ADJ9
 (
