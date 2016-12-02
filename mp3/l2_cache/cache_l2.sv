@@ -23,7 +23,7 @@ module cache_l2 #(parameter way = 2, lines = 8, log_line = 3, line_size = 128, l
     /* Prefetch Signals */
     input prefetch_ready,
     input prefetch_busy,
-    input lc3b_block prefetch_rdata,
+    input lc3b_block prefetch_wdata,
     input logic [15:0] prefetch_address,
     output logic dont_prefetch
 );
@@ -45,6 +45,15 @@ mux2 #(.width(16)) L2_ADDR_MUX
 	.a(mem_address),
 	.b(prefetch_address)
 	.f(addr)
+);
+
+
+mux2 #(.width(16)) L2_WDATA_MUX
+(
+	.sel(prefetch),
+	.a(mem_wdata),
+	.b(prefetch_wdata)
+	.f(ready_wdata)
 );
 
 cache_control_l2 L2_CACHE_CONTROL (
