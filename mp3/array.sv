@@ -26,7 +26,7 @@ begin
 
     begin
 
-        data[i] = 1'b0;
+        data[i] = 2'b01;
 
     end
 

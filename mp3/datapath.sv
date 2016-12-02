@@ -30,6 +30,7 @@ module datapath
 /* IF Control Signals */
 logic load_pc;
 logic[1:0] pcmux_sel_out;
+logic[1:0] flushmux_sel;
 logic stall_I;
 
 /* IF Output Signals */
@@ -37,7 +38,9 @@ logic [15:0] ir_id;
 
 /* IF Internal Signals */
 logic [15:0] pcmux_out;
+logic [15:0] flushmux_out;
 logic [15:0] pc_out;
+logic [15:0] predict_taken_mux_out;
 logic [15:0] pc_plus2_out;
 logic [15:0] i_cache_out;
 
@@ -171,6 +174,39 @@ logic [2:0] gencc_out;
 logic [2:0] cc_out;
 logic branch_enable_wb;
 
+// branch_hist_reg pipeline values
+localparam N = 4;
+logic [N-1:0] branch_hist_if;
+logic [N-1:0] branch_hist_id;
+logic [N-1:0] branch_hist_ex;
+logic [N-1:0] branch_hist_mem;
+logic [N-1:0] branch_hist_wb;
+
+// predict taken pipeline values
+logic predict_taken_if;
+logic predict_taken_id;
+logic predict_taken_ex;
+logic predict_taken_mem;
+logic predict_taken_wb;
+logic predict_taken_if_br;
+
+lc3b_word taken_pc_if;
+lc3b_word taken_pc_id;
+lc3b_word taken_pc_ex;
+lc3b_word taken_pc_mem;
+lc3b_word taken_pc_wb;
+
+// used to decide whether to branch on unconditional jumps
+logic btb_hit_if;
+logic btb_hit_id;
+
+// used to decide whether an instruction is valid or whether
+// it is a fake branch instruction
+logic is_valid_inst_id;
+logic is_valid_inst_ex;
+logic is_valid_inst_mem;
+logic is_valid_inst_wb;
+
 /* Pass Through Signals */
 //logic [3:0] opcode_id;
 lc3b_opcode opcode_ex;
@@ -180,6 +216,7 @@ lc3b_opcode opcode_wb;
 logic [15:0] pc_id;
 logic [15:0] pc_ex;
 logic [15:0] pc_mem;
+logic [15:0] pc_wb;
 
 logic [2:0] dest_ex;
 
@@ -201,18 +238,36 @@ mux4 pcmux
 	.f(pcmux_out)
 );
 
+mux4 flushmux
+(
+    .sel(flushmux_sel),
+    .a(pc_plus2_out),
+    .b(),
+    .c(pcmux_out),
+    .d(pc_wb),
+    .f(flushmux_out)
+);
+
 register pc
 (
 	.clk,
 	.reset,
 	.load(load_pc),
-	.in(pcmux_out),
+	.in(flushmux_out),
 	.out(pc_out)
+);
+
+mux2 predict_taken_mux
+(
+    .sel(predict_taken_if_br),
+    .a(pc_out),
+    .b(taken_pc_id),
+    .f(predict_taken_mux_out)
 );
 
 plus2 #(.width(16)) pcplus2
 (
-	.in(pc_out),
+	.in(predict_taken_mux_out),
 	.out(pc_plus2_out) 
 );
 
@@ -227,9 +282,36 @@ stall STALLI
 	.stall(stall_I)
 );
 
+btb BTB
+(
+    .clk(clk),
+    .pc_if(pc_plus2_out),
+    .pc_wb(pc_wb),
+    .alu_out_wb(alu_out_wb),
+    .mem_wb(mem_wb),
+    .opcode_wb(opcode_wb),
+    .is_valid_inst_wb(is_valid_inst_wb),
+    .branch_address(taken_pc_if),
+    .btb_hit(btb_hit_if)
+);
+
+branch_predictor #(.hist_reg_width(N), .index_bits(5)) bp
+(
+    .clk(clk),
+    .reset(reset),
+    .PC_if(pc_plus2_out),
+    .PC_wb(pc_wb),
+    .pcmux_sel_out(pcmux_sel_out),
+    .is_valid_inst_wb(is_valid_inst_wb),
+    .opcode_wb(opcode_wb),
+    .enable(!stall_I & !stall_D & !stall_load),
+    .branch_hist_wb(branch_hist_wb),
+    .predict_taken(predict_taken_if),
+    .branch_hist_if(branch_hist_if)
+);
 
 	 /* I_Cache signals */
-assign I_mem_address = pc_out;
+assign I_mem_address = predict_taken_mux_out;
 assign I_mem_read = ~I_mem_resp & ~stall_D & !flush_all;
 
 /* Update Registers */
@@ -241,10 +323,20 @@ begin
 	begin
 		pc_id <= 0;
 		ir_id <= 0;
+        taken_pc_id <= 0;
+        predict_taken_id <= 0;
+        branch_hist_id <= 0;
+        is_valid_inst_id <= 0;
+        btb_hit_id <= 0;
 	end
 	else if (!stall_I & !stall_D & !stall_load) begin
 		ir_id <= I_mem_rdata;
 		pc_id <= pc_plus2_out; 
+        taken_pc_id <= taken_pc_if;
+        predict_taken_id <= predict_taken_if;
+        branch_hist_id <= branch_hist_if;
+        is_valid_inst_id <= 1;
+        btb_hit_id <= btb_hit_if;
 	end	
 	
 end
@@ -256,21 +348,10 @@ end
 assign trapvect_id = {7'b0, ir_id[7:0], 1'b0};
 assign dest_id = ir_id[11:9];
 assign opcode_id = lc3b_opcode'(ir_id[15:12]);
-
-branch_predictor bp
-(
-    .clk(clk),
-    .reset(reset),
-    .PC_id(pc_id),
-    .PC_wb(pc_wb),
-    .pcmux_sel_out(pcmux_sel_out),
-    .opcode_wb(opcode_wb),
-    .opcode_id(opcode_id),
-    .enable(),
-    .branch_hist_wb(),
-    .predict_taken(),
-    .branch_hist_id()
-);
+assign predict_taken_if_br = (predict_taken_id & (opcode_id == op_br) & is_valid_inst_id) |
+                             (((opcode_id == op_jsr | opcode_id == op_trap) |
+                             (opcode_id == op_br & ir_id[11:9] == 3'b111 & is_valid_inst_id)) &
+                             btb_hit_id);
 
 adj #(.width(9)) ADJ9
 (
@@ -372,8 +453,12 @@ hazard HDETECTOR
 
 flush FLUSH
 (
-	 .pcmux_sel_out(pcmux_sel_out),
-    .flush_all(flush_all)
+    .pcmux_sel_out(pcmux_sel_out),
+    .pcmux_out(pcmux_out),
+    .taken_pc_wb(taken_pc_wb),
+    .predict_taken_wb(predict_taken_wb),
+    .flush_all(flush_all),
+    .flushmux_sel(flushmux_sel)
 );
 
 
@@ -410,6 +495,10 @@ begin
 		 // fwd2_sel_ex <= 0;
 		  opcode_ex <= op_br;
 		  pcmux_sel_out_sel_ex <= 0;
+          branch_hist_ex <= 0;
+          predict_taken_ex <= 0;
+          taken_pc_ex <= 0;
+          is_valid_inst_ex <= 0;
 	end
 	else if (!stall_D & !stall_I & !stall_load) begin
         /* data signal assignments */
@@ -441,6 +530,10 @@ begin
 		  mem_write_ex <= mem_write_id;
 		  dest_ex <= dest_id;
 		  load_regfile_ex <= load_regfile_id;
+          branch_hist_ex <= branch_hist_id;
+          predict_taken_ex <= predict_taken_if_br;
+          taken_pc_ex <= taken_pc_id;
+          is_valid_inst_ex <= is_valid_inst_id;
 		 // fwd1_sel_ex <= fwd1_sel_id;
 		  //fwd2_sel_ex <= fwd2_sel_id;
 	end	
@@ -532,6 +625,10 @@ begin
 		pcmux_sel_out_sel_mem <= 0;
 		opcode_mem <= op_br;
 		load_regfile_mem <= 0;
+        branch_hist_mem <= 0;
+        predict_taken_mem <= 0;
+        taken_pc_mem <= 0;
+        is_valid_inst_mem <= 0;
 	end
 	else if (!stall_D & !stall_I) begin
 		pc_mem <= pc_ex;
@@ -551,6 +648,10 @@ begin
 		pcmux_sel_out_sel_mem <= pcmux_sel_out_sel_ex;
 		opcode_mem <= opcode_ex;
 		load_regfile_mem <= load_regfile_ex;
+        branch_hist_mem <= branch_hist_ex;
+        predict_taken_mem <= predict_taken_ex;
+        taken_pc_mem <= taken_pc_ex;
+        is_valid_inst_mem <= is_valid_inst_ex;
 	end	
 end
 /**************************/
@@ -589,6 +690,7 @@ always_ff @(posedge clk)
 begin
 	if(zero)
 	begin
+     pc_wb <= 0;
 		alu_out_wb <= 0;
 		mem_wb <= 0;
 		opcode_wb <= op_br;
@@ -600,8 +702,13 @@ begin
      regfilemux_out_wb <= 0;
      memread_sel_wb <= 0;
      mem_byte_enable_wb <= 0;
+     branch_hist_wb <= 0;
+     predict_taken_wb <= 0;
+     taken_pc_wb <= 0;
+     is_valid_inst_wb <= 0;
 	end
 	else if(!stall_D & !stall_I) begin
+     pc_wb <= pc_mem;
 		alu_out_wb <= alu_out_mem;
 		mem_wb <= P_mem_rdata;
 		opcode_wb <= opcode_mem;
@@ -615,6 +722,10 @@ begin
       regfilemux_out_wb <= regfilemux_out_mem;
       memread_sel_wb <= memread_sel_mem;
      mem_byte_enable_wb <= mem_byte_enable_mem;
+     branch_hist_wb <= branch_hist_mem;
+     predict_taken_wb <= predict_taken_mem;
+     taken_pc_wb <= taken_pc_mem;
+     is_valid_inst_wb <= is_valid_inst_mem;
 	end	
 end
 
