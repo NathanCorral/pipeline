@@ -1,6 +1,6 @@
 import lc3b_types::*;
 
-module cache_d #(parameter way = 2, data_words = 8, log_word = 3, lines = 8, log_line = 3)
+module cache_d #(parameter way = 2, data_words = 8, log_word = 3, lines = 8, log_line = 3, line_size = 128)
 (
 	 input clk,
 	 
@@ -33,7 +33,7 @@ cache_control_d D_CACHE_CONTROL (
 );
 
 
-cache_datapath_d #(.way(way), .data_words(data_words), .log_word(log_word), .lines(lines), .log_line(log_line)) D_CACHE_DATAPATH (
+cache_datapath_d #(.way(way), .data_words(data_words), .log_word(log_word), .lines(lines), .log_line(log_line), .line_size(line_size)) D_CACHE_DATAPATH (
 	.*
 );
 

@@ -1,6 +1,6 @@
 import lc3b_types::*;
 
-module cache_datapath_l2 #(parameter way = 2, lines = 8, log_line = 3)
+module cache_datapath_l2 #(parameter way = 2, lines = 8, log_line = 3, line_size = 128, log_word = 3)
 (
 	 input clk,
 
@@ -29,11 +29,11 @@ module cache_datapath_l2 #(parameter way = 2, lines = 8, log_line = 3)
 logic cache_in_mux_sel;
 
 // Address Division
-logic [11:0] tag;   
+logic [(14-log_word):0] tag;   
 logic [log_line-1:0] index;
 
-assign index = mem_address[log_line+3:4];
-assign tag = mem_address[15:4];
+assign index = mem_address[log_line+4:log_word+1];
+assign tag = mem_address[15:log_word+1];
 
 
 /* Arrays for the Cache */
@@ -41,7 +41,7 @@ lc3b_block cache_data[lines][way];  	// Data
 logic LRU[lines];  							// LRU
 logic valid_data[lines][way];				// Valid
 logic dirty_data[lines][way];				// Dirty
-logic [11:0] tag_data[lines][way];			// Tag
+logic [(14-log_word):0] tag_data[lines][way];			// Tag
 
 /* Used to select the way of the cache */
 logic sel_way;
@@ -63,13 +63,14 @@ logic compare_out[way];		// Compare Array
 logic [way-1:0] sel;
 
 /* Assign the pmem write from cache data */
-assign pmem_wdata =cache_data[index][!LRU[index]];
+lc3b_block pmem_wdata_reg;
+assign pmem_wdata = pmem_wdata_reg;
 
 /* Compare the tags */
 generate
 genvar i;
 for(i=0; i < way; i++) begin: COMPARE
-	compare #(.width(12)) COMPAREi
+	compare #(.width(15 - log_word)) COMPAREi
 	(
 		.a(tag_data[index][i]),
 		.b(tag),
@@ -121,7 +122,7 @@ mux2 #(.width(16)) PMEM_MUX
 assign mem_rdata = cache_data[index][sel_way];
 
 /* Select data to write to cache */
-mux2 #(.width(128)) SEL_WDATA_MUX
+mux2 #(.width(line_size)) SEL_WDATA_MUX
 (
 	.sel(cache_in_mux_sel),
 	.a(pmem_rdata),
@@ -167,7 +168,8 @@ begin
 		LRU[index] = sel_way;
 	end
 	else begin
-		pmem_mux_out = {tag_data[index][!LRU[index]],4'b0};
+		pmem_mux_out = {tag_data[index][!LRU[index]],5'b0}; //log_word
+		pmem_wdata_reg = cache_data[index][!LRU[index]];
 	end
 end
 

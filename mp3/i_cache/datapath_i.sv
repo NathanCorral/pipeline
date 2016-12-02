@@ -16,25 +16,26 @@ module cache_datapath_i #(parameter way = 2, data_words =8, log_word = 3, lines 
 	input pmem_read,
     output logic [15:0] pmem_address,
 	 
-	 output logic hit
+	 output logic hit,
+	input sel_way_mux
 );
 
 
 // Address Division
-logic [11:0] tag;   
+logic [(14-log_word):0] tag;   
 logic [log_word-1:0] word_offset;
 logic [log_line-1:0] index;
 
 assign word_offset = mem_address[log_word:1];
-assign index = mem_address[log_line+3:4];
-assign tag = mem_address[15:4];
+assign index = mem_address[log_line+4:log_word+1];
+assign tag = mem_address[15:log_word+1];
 
 
 /* Arrays for the Cache */
 lc3b_block cache_data[lines][way];  	// Data
 logic LRU[lines];  							// LRU
 logic valid_data[lines][way];				// Valid
-logic [11:0] tag_data[lines][way];			// Tag
+logic [(14-log_word):0] tag_data[lines][way];			// Tag
 
 /* Used to select the way of the cache */
 logic sel_way;
@@ -57,7 +58,7 @@ generate
 genvar i;
 for(i=0; i < way; i++) begin: COMPARE_I
 	/* Compare for every way */
-	compare #(.width(12)) COMPAREi
+	compare #(.width(15 - log_word)) COMPAREi
 	(
 		.a(tag_data[index][i]),
 		.b(tag),
@@ -93,8 +94,14 @@ assign load_cache =(pmem_read & pmem_resp);
 * with sel[1] and therefore only sel[0] is needed to select the correct way.
 * need to add encoder for more ways
 */
-assign sel_way = !sel[0];
-
+mux2 #(.width(1)) SEL_WAY_MUX
+(
+	.sel(sel_way_mux),
+	.a(!sel[0]),
+	.b(!LRU[index]),
+	.f(sel_way)
+);
+ 
 /* No write backs */
 assign pmem_address = mem_address;
 

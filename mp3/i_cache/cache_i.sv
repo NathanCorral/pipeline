@@ -18,6 +18,7 @@ module cache_i #(parameter way = 2, data_words = 8, log_word = 3, lines = 8, log
 );
 
 logic hit;
+logic sel_way_mux;
 
 cache_control_i I_CACHE_CONTROL (
 	.*

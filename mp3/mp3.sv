@@ -6,11 +6,11 @@ module mp3
 	
 	/* Switch to 256 bit at some point */
 	input pmem_resp,
-    input [127:0] pmem_rdata,
+    input lc3b_block pmem_rdata,
 	output logic pmem_read,
     output logic pmem_write,
     output logic [15:0] pmem_address,
-    output logic [127:0] pmem_wdata
+    output lc3b_block pmem_wdata
 
 );
 
@@ -41,14 +41,14 @@ logic indirect;
 
 /* Arbitor In/Out */
 logic D_pmem_resp;
-logic [127:0] D_pmem_rdata;
+lc3b_block D_pmem_rdata;
 logic D_pmem_read;
 logic D_pmem_write;
 lc3b_word D_pmem_address;
-logic [127:0] D_pmem_wdata;
+lc3b_block D_pmem_wdata;
 
 logic I_pmem_resp;
-logic [127:0] I_pmem_rdata;
+lc3b_block I_pmem_rdata;
 logic I_pmem_read;
 lc3b_word I_pmem_address;
 
@@ -59,8 +59,8 @@ logic L2_mem_resp;
 logic L2_mem_read;
 logic L2_mem_write;
 lc3b_word L2_mem_address;
-logic [127:0] L2_mem_wdata;
-logic [127:0] L2_mem_rdata;
+lc3b_block L2_mem_wdata;
+lc3b_block L2_mem_rdata;
 
 /* Reset Control */
 enum int unsigned {
@@ -120,7 +120,7 @@ indirect INDIRECT (
 	.*
 );
 
-cache_d  #(.way(2), .data_words(8), .log_word(3), .lines(16), .log_line(4)) D_CACHE (
+cache_d  #(.way(2), .data_words(16), .log_word(4), .lines(16), .log_line(4), .line_size(256)) D_CACHE (
 	/* clk, reset */
 	.clk(clk),
 	.reset(reset),
@@ -146,7 +146,7 @@ cache_d  #(.way(2), .data_words(8), .log_word(3), .lines(16), .log_line(4)) D_CA
 
 
 
-cache_l2 #(.way(2), .lines(32), .log_line(5)) L2_CACHE (
+cache_l2 #(.way(2), .lines(32), .log_line(5), .line_size(256), .log_word(4)) L2_CACHE (
 	/* clk, reset */
 	.clk(clk),
 	.reset(reset),
@@ -169,7 +169,7 @@ cache_l2 #(.way(2), .lines(32), .log_line(5)) L2_CACHE (
 
 );
 
-cache_i #(.way(2), .data_words(8), .log_word(3), .lines(16), .log_line(4)) I_CACHE (
+cache_i #(.way(2), .data_words(16), .log_word(4), .lines(8), .log_line(3)) I_CACHE (
 		/* clk, reset */
 	.clk(clk),
 	.reset(reset),

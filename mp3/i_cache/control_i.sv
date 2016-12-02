@@ -9,7 +9,8 @@ module cache_control_i
 	input mem_read,
 	input hit,
 	input pmem_resp,
-	output logic mem_resp
+	output logic mem_resp,
+	output logic sel_way_mux
 );
 
 enum int unsigned {
@@ -24,6 +25,7 @@ begin : state_actions
     /* Actions for each state */
     pmem_read = 1'b0;
 	mem_resp = 0;
+	sel_way_mux = 0;
 
 	case(state)
 		check: begin
@@ -36,6 +38,7 @@ begin : state_actions
 		allocate: begin
 			/* Read memory */
 			pmem_read = 1'b1;
+			sel_way_mux = 1;
 		end
 		
 		default: /* Do nothing */;
@@ -58,7 +61,7 @@ begin : next_state_logic
 		  end
 		  
         allocate : begin
-		if(~(mem_read) | pmem_resp)
+		if(pmem_resp)
 			next_state <= check;
         	else 
         		next_state <= allocate;

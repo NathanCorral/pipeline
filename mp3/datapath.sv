@@ -230,7 +230,7 @@ stall STALLI
 
 	 /* I_Cache signals */
 assign I_mem_address = pc_out;
-assign I_mem_read = ~I_mem_resp & ~stall_D;
+assign I_mem_read = ~I_mem_resp & ~stall_D & ~flush_all;
 
 /* Update Registers */
 logic zero;
