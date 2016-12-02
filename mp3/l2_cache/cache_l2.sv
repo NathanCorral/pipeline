@@ -18,7 +18,14 @@ module cache_l2 #(parameter way = 2, lines = 8, log_line = 3, line_size = 128, l
 	 output logic pmem_read,
     output logic pmem_write,
     output logic [15:0] pmem_address,
-    output lc3b_block pmem_wdata
+    output lc3b_block pmem_wdata,
+
+    /* Prefetch Signals */
+    input prefetch_ready,
+    input prefetch_busy,
+    input lc3b_block prefetch_rdata,
+    input logic [15:0] prefetch_address,
+    output logic dont_prefetch
 );
 
 logic sel_way_mux;
@@ -26,8 +33,19 @@ logic pmem_mux_sel;
 logic hit;
 logic dirty;
 logic real_mem_resp;
+logic prefetch;
+logic [15:0] addr;
+lc3b_block prefetch_rdata;
 
 assign mem_resp = real_mem_resp & (mem_read | mem_write);
+
+mux2 #(.width(16)) L2_ADDR_MUX
+(
+	.sel(prefetch),
+	.a(mem_address),
+	.b(prefetch_address)
+	.f(addr)
+);
 
 cache_control_l2 L2_CACHE_CONTROL (
 	.*

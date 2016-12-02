@@ -14,12 +14,16 @@ module cache_control_l2
 	input hit,
 	input dirty,
 	input pmem_resp,
-	output logic real_mem_resp
+	input prefetch_ready,
+	input prefetch_busy,
+	output logic real_mem_resp,
+	output logic prefetch
 );
 
 enum int unsigned {
     /* List of states */
-	 check,
+	idle,
+	 hit_s,
     write_back,
     allocate
 } state, next_state;
@@ -33,13 +37,19 @@ begin : state_actions
     pmem_read = 1'b0;
     pmem_write = 1'b0;
 	real_mem_resp = 0;
+	prefetch = 0;
 
-	case(state)
-		check: begin
-			if(hit)
+	case(state)	
+		idle: begin
+		end
+	
+		prefetch_s: begin
+			sel_way_mux = 1'b1;
+			prefetch = 1;
+		end
+	
+		hit_s: begin
 				real_mem_resp = 1;
-			else
-				real_mem_resp = 0;
 		end
 		
 		write_back: begin
@@ -67,18 +77,30 @@ begin : next_state_logic
      * for transitioning between states */
      next_state  = state;
      unique case (state)		 
-		  check : begin
-				if( !hit && dirty && (mem_read | mem_write))
+		  idle : begin
+				if(hit && (mem_read | mem_write))
+					next_state <=hit_s;
+				else if(prefetch_ready && !(mem_read | mem_write))
+					next_state <= prefetch_s;
+				else if(!prefetch_busy && !hit && dirty && (mem_read | mem_write))
 					next_state <= write_back;
-				else if ( !hit && !dirty && (mem_read | mem_write))
+				else if (!prefetch_busy && !hit && !dirty && (mem_read | mem_write))
 					next_state <= allocate;
 				else
-					next_state <= check;
+					next_state <= idle;
+		  end
+
+		  hit_s: begin
+					next_state <= idle;
+		  end
+
+		  prefetch_s : begin
+					next_state <= idle;
 		  end
 		  
         write_back : begin
 		   if(~(mem_read | mem_write))
-				next_state <= check;
+				next_state <=idle ;
         	else if(pmem_resp) 
         		next_state <= allocate;
         	else 
@@ -87,9 +109,9 @@ begin : next_state_logic
 
         allocate : begin
 		   if(~(mem_read | mem_write))
-				next_state <= check;
+				next_state <=idle ;
         	else if(pmem_resp) 
-        		next_state <= check;
+        		next_state <=idle ;
         	else 
         		next_state <= allocate;
         end

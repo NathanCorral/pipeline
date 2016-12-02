@@ -21,7 +21,8 @@ module cache_datapath_l2 #(parameter way = 2, lines = 8, log_line = 3, line_size
 	 output logic hit,
 	 input sel_way_mux,
 	 input pmem_mux_sel,
-	 input real_mem_resp
+	 input real_mem_resp,
+	input prefetch
 );
 
 
@@ -90,7 +91,7 @@ end
 assign hit = |sel;
 
 /* Assign Cache Load */
-assign cache_in_mux_sel = (hit & mem_write);
+assign cache_in_mux_sel = (hit & mem_write) | prefetch;
 assign load_cache = cache_in_mux_sel | (pmem_read & pmem_resp);
 
 /* Select the way */
@@ -159,7 +160,7 @@ begin
 		valid_data[index][sel_way] = 1;
 		tag_data[index][sel_way] = tag;
 		/* Only set dirty on a mem_write */
-		if(!pmem_read)
+		if(!pmem_read & !prefetch)
 			dirty_data[index][sel_way] = 1;
 		
     end
@@ -167,10 +168,8 @@ begin
 	else if(real_mem_resp) begin
 		LRU[index] = sel_way;
 	end
-	else begin
-		pmem_mux_out = {tag_data[index][!LRU[index]],5'b0}; //log_word
-		pmem_wdata_reg = cache_data[index][!LRU[index]];
-	end
+    pmem_mux_out = {tag_data[index][!LRU[index]],5'b0}; //log_word
+    pmem_wdata_reg = cache_data[index][!LRU[index]];
 end
 
 endmodule : cache_datapath_l2
