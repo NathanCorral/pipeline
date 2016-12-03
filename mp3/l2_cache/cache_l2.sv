@@ -15,6 +15,7 @@ module cache_l2 #(parameter way = 2, lines = 8, log_line = 3, line_size = 128, l
 	 
 	 input pmem_resp,
     input lc3b_block pmem_rdata,
+    input wait_l2,
 	 output logic pmem_read,
     output logic pmem_write,
     output logic [15:0] pmem_address,

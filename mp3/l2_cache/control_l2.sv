@@ -14,6 +14,7 @@ module cache_control_l2
 	input hit,
 	input dirty,
 	input pmem_resp,
+	input wait_l2,
 	output logic real_mem_resp
 );
 
@@ -68,7 +69,7 @@ begin : next_state_logic
      next_state  = state;
      unique case (state)		 
 		  check : begin
-				if( !hit && dirty && (mem_read | mem_write))
+				if( !hit && dirty && (mem_read | mem_write) && !wait_l2)
 					next_state <= write_back;
 				else if ( !hit && !dirty && (mem_read | mem_write))
 					next_state <= allocate;

@@ -62,6 +62,18 @@ lc3b_word L2_mem_address;
 lc3b_block L2_mem_wdata;
 lc3b_block L2_mem_rdata;
 
+logic L2_pmem_read;
+logic [15:0] L2_pmem_address;
+lc3b_block L2_pmem_rdata;
+logic L2_pmem_resp;
+
+
+/* Prefetch Signals */
+logic I_prefetch;
+logic [15:0] I_prefetch_address;
+logic wait_l2;
+
+
 /* Reset Control */
 enum int unsigned {
 	 s_reset,
@@ -146,7 +158,7 @@ cache_d  #(.way(2), .data_words(16), .log_word(4), .lines(8), .log_line(3), .lin
 
 
 
-cache_l2 #(.way(2), .lines(16), .log_line(4), .line_size(256), .log_word(4)) L2_CACHE (
+cache_l2 #(.way(2), .lines(8), .log_line(3), .line_size(256), .log_word(4)) L2_CACHE (
 	/* clk, reset */
 	.clk(clk),
 	.reset(reset),
@@ -160,14 +172,41 @@ cache_l2 #(.way(2), .lines(16), .log_line(4), .line_size(256), .log_word(4)) L2_
 	.mem_wdata(L2_mem_wdata),
 
 	/* L2_Cache to/from phys mem */
-	.pmem_resp(pmem_resp),
-	.pmem_rdata(pmem_rdata),
-	.pmem_read(pmem_read),
+	.pmem_resp(L2_pmem_resp),
+	.pmem_rdata(L2_pmem_rdata),
+	.pmem_read(L2_pmem_read),
 	.pmem_write(pmem_write),
-	.pmem_address(pmem_address),
-	.pmem_wdata(pmem_wdata)
+	.pmem_address(L2_pmem_address),
+	.pmem_wdata(pmem_wdata),
+	.wait_l2(wait_l2)
 
 );
+
+assign I_prefetch_address = I_pmem_address + 16'h20; 
+prefetch #(.lines(8), .log_line(3), .line_size(256), .log_word(4)) PREFETCH 
+(
+	/* clk, reset */
+	.clk(clk),
+	.reset(reset),
+
+	.l2_pmem_address(L2_pmem_address),
+	.l2_pmem_read(L2_pmem_read),
+	.l2_pmem_rdata(L2_pmem_rdata),
+	.l2_pmem_resp(L2_pmem_resp),
+	/* To check for invalidation */
+	.pmem_write(pmem_write),
+	
+	/* Phys mem */
+	.pmem_read(pmem_read),
+	.pmem_address(pmem_address),
+	.pmem_rdata(pmem_rdata),
+	.pmem_resp(pmem_resp),
+	
+	.I_prefetch_address(I_prefetch_address),
+	.D_resp(D_pmem_resp),
+	.I_resp(I_pmem_resp),
+	.wait_l2(wait_l2)
+);	
 
 cache_i #(.way(2), .data_words(16), .log_word(4), .lines(8), .log_line(3)) I_CACHE (
 		/* clk, reset */
