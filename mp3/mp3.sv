@@ -52,9 +52,6 @@ lc3b_block I_pmem_rdata;
 logic I_pmem_read;
 lc3b_word I_pmem_address;
 
-logic I_prefetch;
-logic [15:0] I_prefetch_address;
-
 logic reset;
 
 /* L2 Cache In/Out */
@@ -67,28 +64,13 @@ lc3b_block L2_mem_rdata;
 
 logic L2_pmem_read;
 logic [15:0] L2_pmem_address;
+lc3b_block L2_pmem_rdata;
+logic L2_pmem_resp;
 
 
 /* Prefetch Signals */
-logic prefetch_ready;
-logic prefetch_busy;
-lc3b_block prefetch_wdata;
-logic no_prefetch;
-logic done_prefetch;
-
-logic prefetch_read;
-logic [15:0] prefetch_address;
-
-
-/* Decide prefetch vs L@ ready/addr */
-assign pmem_read = L2_pmem_read | prefetch_read;
-mux2 #(.width(16)) PHYS_ADDR_MUX
-(
-	.sel(!no_prefetch),
-	.a(L2_pmem_address),
-	.b(prefetch_address),
-	.f(pmem_address)
-);
+logic I_prefetch;
+logic [15:0] I_prefetch_address;
 
 /* Reset Control */
 enum int unsigned {
@@ -174,7 +156,7 @@ cache_d  #(.way(2), .data_words(16), .log_word(4), .lines(8), .log_line(3), .lin
 
 
 
-cache_l2 #(.way(2), .lines(16), .log_line(4), .line_size(256), .log_word(4)) L2_CACHE (
+cache_l2 #(.way(2), .lines(8), .log_line(3), .line_size(256), .log_word(4)) L2_CACHE (
 	/* clk, reset */
 	.clk(clk),
 	.reset(reset),
@@ -188,19 +170,12 @@ cache_l2 #(.way(2), .lines(16), .log_line(4), .line_size(256), .log_word(4)) L2_
 	.mem_wdata(L2_mem_wdata),
 
 	/* L2_Cache to/from phys mem */
-	.pmem_resp(pmem_resp),
-	.pmem_rdata(pmem_rdata),
-	.pmem_read( L2_pmem_read),
+	.pmem_resp(L2_pmem_resp),
+	.pmem_rdata(L2_pmem_rdata),
+	.pmem_read(L2_pmem_read),
 	.pmem_write(pmem_write),
 	.pmem_address(L2_pmem_address),
-	.pmem_wdata(pmem_wdata),
-	
-	.prefetch_ready(prefetch_ready),
-	.prefetch_busy(prefetch_busy),
-	.prefetch_wdata(prefetch_wdata),
-	.prefetch_address(prefetch_address),
-	.no_prefetch(no_prefetch),
-	.done_prefetch(done_prefetch)
+	.pmem_wdata(pmem_wdata)
 
 );
 
@@ -210,17 +185,22 @@ prefetch PREFETCH
 	.clk(clk),
 	.reset(reset),
 	/* L2_Control */
-	.no_prefetch(no_prefetch),
-	.busy(prefetch_busy),
-	.ready(prefetch_ready),
-	.done(done_prefetch),
-	.pmem_write(pmem_write),
 	.l2_pmem_address(L2_pmem_address),
+	.l2_pmem_read(L2_pmem_read),
+	.l2_pmem_rdata(L2_pmem_rdata),
+	.l2_pmem_resp(L2_pmem_resp),
+	/* To check for invalidation */
+	.pmem_write(pmem_write),
 	
-	.read(prefetch_read),
-	.address(prefetch_address),
+	/* Phys mem */
+	.pmem_read(pmem_read),
+	.pmem_address(pmem_address),
 	.pmem_rdata(pmem_rdata),
-	.wdata(prefetch_wdata)
+	.pmem_resp(pmem_resp),
+	
+	
+	.I_prefetch(I_prefetch),
+	.I_prefetch_address(I_prefetch_address)
 );	
 
 cache_i #(.way(2), .data_words(16), .log_word(4), .lines(8), .log_line(3)) I_CACHE (
