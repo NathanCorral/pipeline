@@ -68,7 +68,7 @@ mux2 #(.width(256)) L2_RDATA_MUX
 
 mux2 #(.width(1)) L2_RESP_MUX
 (
-	.sel(l2_resp_sel | pmem_write),
+	.sel(l2_resp_sel),
 	.a(pre_resp),
 	.b(pmem_resp),
 	.f(l2_pmem_resp)

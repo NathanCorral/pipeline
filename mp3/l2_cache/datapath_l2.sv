@@ -161,6 +161,8 @@ begin
 		/* Only set dirty on a mem_write */
 		if(!pmem_read)
 			dirty_data[index][sel_way] = 1;
+		else
+			dirty_data[index][sel_way] = 0;
 		
     end
     /* Load the LRU */
