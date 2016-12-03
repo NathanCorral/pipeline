@@ -77,8 +77,8 @@ begin : next_state_logic
      next_state  = state;
      unique case (state)		 
 		  check : begin
-				if(pmem_write)
-					next_state <= allocate;
+				if (pmem_write)
+					next_state <= allocate; 
 				else if (I_resp)
 					next_state <= prefetch;
 				else if (l2_pmem_read & !hit)
@@ -97,7 +97,9 @@ begin : next_state_logic
       		  end
 
 		  prefetch : begin
-				if (pmem_resp | hit)
+				if (l2_pmem_read | pmem_write)
+					next_state <= check;
+				else if (pmem_resp | hit)
 					next_state <= check;
 				else 
 					next_state <= prefetch;
