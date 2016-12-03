@@ -17,6 +17,8 @@ module cache_control_l2
 	input prefetch_ready,
 	input prefetch_busy,
 	output logic real_mem_resp,
+	output logic no_prefetch,
+	output logic done_prefetch,
 	output logic prefetch
 );
 
@@ -24,6 +26,8 @@ enum int unsigned {
     /* List of states */
 	idle,
 	 hit_s,
+	prefetch_s,
+	prefetch_done_s,
     write_back,
     allocate
 } state, next_state;
@@ -38,6 +42,8 @@ begin : state_actions
     pmem_write = 1'b0;
 	real_mem_resp = 0;
 	prefetch = 0;
+     no_prefetch= 1'b0;
+      done_prefetch= 1'b0;
 
 	case(state)	
 		idle: begin
@@ -46,6 +52,11 @@ begin : state_actions
 		prefetch_s: begin
 			sel_way_mux = 1'b1;
 			prefetch = 1;
+		end
+
+
+		prefetch_done_s: begin
+			done_prefetch= 1'b1;
 		end
 	
 		hit_s: begin
@@ -57,12 +68,14 @@ begin : state_actions
 			sel_way_mux = 1'b1;
 			pmem_mux_sel = 1'b1;
 			pmem_write = 1'b1;
+			no_prefetch= 1'b1;
 		end
 
 		allocate: begin
 			/* Read memory */
 			sel_way_mux = 1'b1;
 			pmem_read = 1'b1;
+			no_prefetch= 1'b1;
 		end
 		
 		default: /* Do nothing */;
@@ -95,6 +108,17 @@ begin : next_state_logic
 		  end
 
 		  prefetch_s : begin
+					next_state <= prefetch_done_s;
+		  end
+
+		   prefetch_done_s : begin
+				if(hit && (mem_read | mem_write))
+					next_state <=hit_s;
+				else if(!prefetch_busy && !hit && dirty && (mem_read | mem_write))
+					next_state <= write_back;
+				else if (!prefetch_busy && !hit && !dirty && (mem_read | mem_write))
+					next_state <= allocate;
+				else
 					next_state <= idle;
 		  end
 		  
