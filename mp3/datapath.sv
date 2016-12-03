@@ -74,6 +74,7 @@ logic [1:0] fwd1_sel_id;
 logic [1:0] fwd2_sel_id;
 
 /* ID Internal Signals */
+logic [15:0] r7_opaque_id;
 logic [15:0] adj6_out_id;
 logic [15:0] adj9_out_id;
 logic [15:0] adj11_out_id;
@@ -192,6 +193,7 @@ logic predict_taken_if_br;
 
 lc3b_word taken_pc_if;
 lc3b_word taken_pc_id;
+lc3b_word taken_pc_id_jmp;
 lc3b_word taken_pc_ex;
 lc3b_word taken_pc_mem;
 lc3b_word taken_pc_wb;
@@ -261,7 +263,7 @@ mux2 predict_taken_mux
 (
     .sel(predict_taken_if_br),
     .a(pc_out),
-    .b(taken_pc_id),
+    .b(taken_pc_id_jmp),
     .f(predict_taken_mux_out)
 );
 
@@ -351,7 +353,28 @@ assign opcode_id = lc3b_opcode'(ir_id[15:12]);
 assign predict_taken_if_br = (predict_taken_id & (opcode_id == op_br) & is_valid_inst_id) |
                              (((opcode_id == op_jsr | opcode_id == op_trap) |
                              (opcode_id == op_br & ir_id[11:9] == 3'b111 & is_valid_inst_id)) &
-                             btb_hit_id);
+                             btb_hit_id) | (opcode_id == op_jmp & is_valid_inst_id);
+logic is_ret_inst;
+assign is_ret_inst_id = opcode_id == op_jmp;
+
+mux2 #(.width(16)) JMPDESTMUX
+(
+    .sel(is_ret_inst_id),
+    .a(taken_pc_id),
+    .b(r7_opaque_id),
+    .f(taken_pc_id_jmp)
+);
+
+logic load_r7;
+assign load_r7 = load_regfile_wb & destmux_out_wb == 3'b111;
+register #(.width(16)) R7_OPAQUE
+(
+    .clk(clk),
+    .reset(reset),
+    .load(load_r7),
+    .in(memreadmux_out_wb),
+    .out(r7_opaque_id)
+);
 
 adj #(.width(9)) ADJ9
 (
@@ -532,7 +555,7 @@ begin
 		  load_regfile_ex <= load_regfile_id;
           branch_hist_ex <= branch_hist_id;
           predict_taken_ex <= predict_taken_if_br;
-          taken_pc_ex <= taken_pc_id;
+          taken_pc_ex <= taken_pc_id_jmp;
           is_valid_inst_ex <= is_valid_inst_id;
 		 // fwd1_sel_ex <= fwd1_sel_id;
 		  //fwd2_sel_ex <= fwd2_sel_id;
