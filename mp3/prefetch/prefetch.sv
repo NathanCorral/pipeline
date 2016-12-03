@@ -15,7 +15,11 @@ module prefetch
 	output read,
 	output [15:0] address,
 	input lc3b_block pmem_rdata,
-	output lc3b_block wdata
+	input pmem_resp,
+	output lc3b_block wdata,
+
+	input I_prefetch,
+	input [15:0] I_prefetch_address
 );
 
 endmodule : prefetch
