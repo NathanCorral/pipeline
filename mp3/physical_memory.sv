@@ -48,6 +48,10 @@ begin
         end
 
         busy: begin
+	    if(!(read | write)) begin
+		next_state = respond;
+	    end
+
             if (ready == 1) begin
                 if (write) begin
                     mem[internal_address] = wdata;
