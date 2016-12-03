@@ -52,6 +52,9 @@ lc3b_block I_pmem_rdata;
 logic I_pmem_read;
 lc3b_word I_pmem_address;
 
+logic I_prefetch;
+logic [15:0] I_prefetch_address;
+
 logic reset;
 
 /* L2 Cache In/Out */
@@ -61,6 +64,31 @@ logic L2_mem_write;
 lc3b_word L2_mem_address;
 lc3b_block L2_mem_wdata;
 lc3b_block L2_mem_rdata;
+
+logic L2_pmem_read;
+logic [15:0] L2_pmem_address;
+
+
+/* Prefetch Signals */
+logic prefetch_ready;
+logic prefetch_busy;
+lc3b_block prefetch_wdata;
+logic no_prefetch;
+logic done_prefetch;
+
+logic prefetch_read;
+logic [15:0] prefetch_address;
+
+
+/* Decide prefetch vs L@ ready/addr */
+assign pmem_read = L2_pmem_read | prefetch_read;
+mux2 #(.width(16)) PHYS_ADDR_MUX
+(
+	.sel(!no_prefetch),
+	.a(L2_pmem_address),
+	.b(prefetch_address),
+	.f(pmem_address)
+);
 
 /* Reset Control */
 enum int unsigned {
@@ -162,12 +190,38 @@ cache_l2 #(.way(2), .lines(16), .log_line(4), .line_size(256), .log_word(4)) L2_
 	/* L2_Cache to/from phys mem */
 	.pmem_resp(pmem_resp),
 	.pmem_rdata(pmem_rdata),
-	.pmem_read(pmem_read),
+	.pmem_read( L2_pmem_read),
 	.pmem_write(pmem_write),
-	.pmem_address(pmem_address),
-	.pmem_wdata(pmem_wdata)
+	.pmem_address(L2_pmem_address),
+	.pmem_wdata(pmem_wdata),
+	
+	.prefetch_ready(prefetch_ready),
+	.prefetch_busy(prefetch_busy),
+	.prefetch_wdata(prefetch_wdata),
+	.prefetch_address(prefetch_address),
+	.no_prefetch(no_prefetch),
+	.done_prefetch(done_prefetch)
 
 );
+
+prefetch PREFETCH 
+(
+	/* clk, reset */
+	.clk(clk),
+	.reset(reset),
+	/* L2_Control */
+	.no_prefetch(no_prefetch),
+	.busy(prefetch_busy),
+	.ready(prefetch_ready),
+	.done(done_prefetch),
+	.pmem_write(pmem_write),
+	.l2_pmem_address(L2_pmem_address),
+	
+	.read(prefetch_read),
+	.address(prefetch_address),
+	.pmem_rdata(pmem_rdata),
+	.wdata(prefetch_wdata)
+);	
 
 cache_i #(.way(2), .data_words(16), .log_word(4), .lines(8), .log_line(3)) I_CACHE (
 		/* clk, reset */
