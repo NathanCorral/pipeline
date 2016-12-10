@@ -60,7 +60,7 @@ begin
 				P_mem_rdata = D_mem_rdata;
 				mem_byte_enable = P_mem_byte_enable;
 				finished_indirect_next = 1;
-				if(D_mem_resp)
+				if(D_mem_resp | !(P_mem_read | P_mem_write))
 					next_state <= idle;
 				else
 					next_state <= i1;
