@@ -30,7 +30,7 @@ internal_word_track = 'z;
 					end
 
 				2'b10 :	begin
-						swap_data[(16*i)+7 -: 8] = data_out[16*(i+1)-1 -: 8];
+						swap_data[(16*i)+7 -: 8] = data_out[(16*i)+7 -: 8];
 						swap_data[16*(i+1)-1 -: 8] = swap_word[7:0];
 					end
 
