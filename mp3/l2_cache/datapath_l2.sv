@@ -29,11 +29,11 @@ module cache_datapath_l2 #(parameter way = 2, lines = 8, log_line = 3, line_size
 logic cache_in_mux_sel;
 
 // Address Division
-logic [(14-log_word):0] tag;   
+logic [10-log_line:0] tag;   
 logic [log_line-1:0] index;
 
-assign index = mem_address[log_line+4:log_word+1];
-assign tag = mem_address[15:log_word+1];
+assign index = mem_address[log_line+4:5];
+assign tag = mem_address[15:log_line+5];
 
 
 /* Arrays for the Cache */
@@ -41,7 +41,7 @@ lc3b_block cache_data[lines][way];  	// Data
 logic LRU[lines];  							// LRU
 logic valid_data[lines][way];				// Valid
 logic dirty_data[lines][way];				// Dirty
-logic [(14-log_word):0] tag_data[lines][way];			// Tag
+logic [10-log_line:0] tag_data[lines][way];			// Tag
 
 /* Used to select the way of the cache */
 logic sel_way;
@@ -70,7 +70,7 @@ assign pmem_wdata = pmem_wdata_reg;
 generate
 genvar i;
 for(i=0; i < way; i++) begin: COMPARE
-	compare #(.width(15 - log_word)) COMPAREi
+	compare #(.width(11-log_line)) COMPAREi
 	(
 		.a(tag_data[index][i]),
 		.b(tag),
@@ -98,6 +98,7 @@ assign load_cache = cache_in_mux_sel | (pmem_read & pmem_resp);
 * This method only works for 2-way and is a sort of hack that abuses hit being set 
 * with sel[1] and therefore only sel[0] is needed to select the correct way.
 */
+
 mux2 #(.width(1)) SEL_WAY_MUX
 (
 	.sel(sel_way_mux),
@@ -139,7 +140,7 @@ begin
 		pmem_mux_out = 0;
 		for (int line = 0; line < lines; line++)
 		 begin
-			LRU[line] = 0;
+			LRU[line]= 0;
 			for (int w = 0; w < way; w++)
 			begin
 				valid_data[line][w] = 0;
@@ -167,10 +168,10 @@ begin
     end
     /* Load the LRU */
 	else if(real_mem_resp) begin
-		LRU[index] = sel_way;
+			LRU[index] = sel_way;
 	end
 	else begin
-		pmem_mux_out = {tag_data[index][!LRU[index]],5'b0}; //log_word
+		pmem_mux_out = {tag_data[index][!LRU[index]],index,5'b0}; //log_word
 		pmem_wdata_reg = cache_data[index][!LRU[index]];
 	end
 end

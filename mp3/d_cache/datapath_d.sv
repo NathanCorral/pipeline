@@ -30,13 +30,13 @@ module cache_datapath_d #(parameter way = 2, data_words = 8, log_word = 3, lines
 logic cache_in_mux_sel;
 
 // Address Division
-logic [(14-log_word):0] tag;   
+logic [10-log_line:0] tag;   
 logic [log_word-1:0] word_offset;
 logic [log_line-1:0] index;
 
 assign word_offset = mem_address[log_word:1];
-assign index = mem_address[log_line+4:log_word+1];
-assign tag = mem_address[15:log_word+1];
+assign index = mem_address[log_line+4:5];
+assign tag = mem_address[15:log_line+5];
 
 
 /* Arrays for the Cache */
@@ -44,13 +44,13 @@ lc3b_block cache_data[lines][way];  	// Data
 logic LRU[lines];  							// LRU
 logic valid_data[lines][way];				// Valid
 logic dirty_data[lines][way];				// Dirty
-logic [(14-log_word):0] tag_data[lines][way];			// Tag
+logic [10-log_line:0] tag_data[lines][way];			// Tag
 
 /* Used to select the way of the cache */
 logic sel_way;
 
 /* Address for pmem computed from tag output */
-logic [(14-log_word):0] pmem_mux_out;
+logic [15:0] pmem_mux_out;
 
 /* data into the cache */
 lc3b_block wdata;
@@ -80,7 +80,7 @@ assign pmem_wdata = pmem_wdata_reg;
 generate
 genvar i;
 for(i=0; i < way; i++) begin: COMPARE_D
-	compare #(.width(15 - log_word)) COMPAREi
+	compare #(.width(11 - log_line)) COMPAREi
 	(
 		.a(tag_data[index][i]),
 		.b(tag),
@@ -138,7 +138,7 @@ mux2 #(.width(16)) PMEM_MUX
 (
 	.sel(pmem_mux_sel),
 	.a(mem_address),
-	.b({pmem_mux_out, 5'b0}), //log_word
+	.b(pmem_mux_out), //log_word
 	.f(pmem_address)
 );
 
@@ -190,6 +190,8 @@ begin
 		/* Only set dirty on a mem_write */
 		if(!pmem_read)
 			dirty_data[index][sel_way] = 1;
+		else
+			dirty_data[index][sel_way] = 0;
 		
     end
     /* Load the LRU */
@@ -198,7 +200,7 @@ begin
 	end
 	else begin
 		/* Select the correct tag for computing pmem_address */
-		pmem_mux_out = tag_data[index][!LRU[index]];
+		pmem_mux_out = {tag_data[index][!LRU[index]],index,5'b0};
 		pmem_wdata_reg = cache_data[index][!LRU[index]]; 
 	end
 end
